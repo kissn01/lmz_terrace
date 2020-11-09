@@ -1,0 +1,396 @@
+#include "../../CommProto/CSProto/CSCommStruct.tars"
+#include "../../Protocol/Data/CommData.tars"
+#include "../../Protocol/CondSvr/RouterServer.tars"
+
+module Account 
+{
+
+ 
+    //玩家在所有游戏中的数据
+    struct TPlayerRoleInfo
+    {
+		0	optional 	unsigned int           uUin;                            //基本数据
+		1   optional    int                    iZoneID;                         //区id
+		2   optional    string                 sZoneName;                       //区名字
+		3   optional    unsigned int           uLastTM;                         //最后登录时间
+		4   optional    int                    iLvl;                            //玩家等级
+    };
+    
+	//基础属性
+	struct TDBBaseInfo
+	{
+		0	 optional    int                   iNumber = 0;                     //当前属性数量
+		1    optional    vector<int>           BaseValue;                       //玩家基础数据 DB_MAX_BASE_INFO_COUNT
+	};
+	
+	
+	
+	//个人基础信息
+	struct TUserBaseInfo
+	{
+		0 	optional 	string                          sName="";              	// 昵称
+		1 	optional 	short              	            nGeneder;             	// 性别
+		2	optional 	string      	                sFaceUrl;             	// 头像URL
+		3   optional    TDBBaseInfo                     BaseInfo;               // 角色基础数据信息
+		4   optional    string                          sSign;                  // 个性签名
+		5   optional    string                          sSecondName;            // 小名
+		6   optional    string                          sFaceFrame;             // 头像框
+		7   optional    int                             iSuffixName=0;          // 有重名的时候返回后缀
+		8   optional    int                          	iCurrFaceID;            // 当前内部头像ID
+		9   optional    int                             iCurrFrameID;           // 当前内部相框ID
+		10  optional    unsigned int                    uiLastZeroTime;         // 最后一次经历的0点跨天时间
+		11  optional    vector<YOOOUM::TGameData>       aGameData;              // 游戏数据 [0]单机 [1]组队
+		12  optional    int                             iCumulativeLoginDays;   // 累计登录天数
+	};
+	
+	
+	
+	//激活码
+	struct TActiveBatchDb
+	{
+		0 optional string                              sActiveCode;           //激活码
+		1 optional long                                lUseTime;              //兑换时间
+		2 optional string                              sBatch;                //礼包批次
+	};
+	struct TActiveCodeDb
+	{
+		0 optional    map<string,vector<TActiveBatchDb>>  mActiveBatchDb;     //激活码使用信息 
+	};
+	
+	
+	
+	//玩家购买限制的记录
+    struct TBuyStatusDb
+    {
+        0 optional int                                  iPeriodBuyNum;         //周期内的购买次数
+        1 optional int                                  iLastBuyTime;          //最后一次购买时间
+    };
+	
+	struct TBuyLimitItemStatusDb
+	{
+		0 optional int                                  iSaleId;               //商品ID
+        1 optional long                                 lCreateTime;           //出现时间
+	};
+	
+	struct TChargeStatusDb
+	{
+		0 optional string                               sOrderId;              //订单ID
+		1 optional int                                  iOrderState;           //订单状态
+        2 optional int                                  iLastBuyTime;          //最后一次购买时间
+	};
+	
+	//新手引导信息
+	struct TDBNewbieData
+	{
+		0   require    vector<short>                   vecCurrFinishedStep;    //当前强制引导已完成的节点
+		1   require    map<short,vector<short>>        mapFinishedSteps;       //强制引导已完成的步骤
+	};
+
+    //作坊
+	struct TDBWorkshopInfo
+	{
+		0  optional    short                           shLevel = 0;       //等级
+        1  optional    vector<int>                     vecUnlockRecipe;   //已解锁配方
+	};
+	
+	struct TExtData1
+	{
+		0  optional    TActiveCodeDb                   stActiveCodeDb;        //激活码
+		1  optional    map<int, TBuyStatusDb>          mBuyItemStatDb;        //购买限制记录
+		2  optional    map<int, TBuyStatusDb>          mFirstBuyItemStatDb;   //首充物品购买限制记录,永远不会清除记录
+		3  optional    TDBNewbieData                   stNewbieData;          //新手引导信息
+		4  optional    vector<int>                     vecAllSvrMailRecord;   //全服邮件记录
+		5  optional    map<int, vector<TChargeStatusDb> > mChargeStatusDb;    //充值订单状态
+        6  optional    map<byte, TDBWorkshopInfo>      mWorkshop;             //作坊  key = E_WORKSHOP_TYPE
+	};
+	
+	
+	//DB资源物品
+	struct TDBBagResource
+	{
+		0  optional     int                             iResID;                //资源ID
+		1  optional     int                             iCount;                //叠加个数
+		2  optional     short                           shWear;                //耐久度
+		3  optional     long                             lUniqID;              //唯一ID
+	};
+	
+	//DB有时间周期的资源物品
+	struct TDBBagTimerResource
+	{
+		0  optional     int                             iResID;                //资源ID
+		1  optional     unsigned int                    uTime;                 //有效时间
+	};
+	
+	//仓库
+	struct TDBStoreData
+	{
+		0  optional     short                       usLevel = 1;                //仓库等级
+		1  optional     vector<TDBBagResource>               vecResource;               //物品列表
+	};
+	    
+	//背包
+	struct TDBBag
+	{
+		1  optional     vector<TDBBagResource>               vecSlot;               //背包
+	};
+	
+	//背包中物品信息
+	struct TDBBagInfo
+	{	
+		0  optional     vector<TDBBagResource>               vecResource;          //背包礼物物品 DB_BAG_RESOURCE_MAX
+		1  optional     vector<TDBBagTimerResource>          vecTimerResource;     //有时间周期的背包礼物物品 DB_BAG_RESOURCE_MAX
+		2  optional     TDBStoreData                         stStoreData;          //仓库
+		3  optional     TDBBag                               stBag;                 //背包
+		4  optional     unsigned int                         uiUniqIDFlag;            //生成唯一ID标志
+	};
+	
+
+	//装备
+	struct  TEquipmentItemDb
+	{
+		0   optional   string              sUniqID;          //装备唯一编号ID
+		1   optional   int                 iEquipID;         //装备ID
+		2   optional   int                 iLevel;            //等级
+		3   optional   int                 iPos;              //位置
+		4   optional   bool                bNew = true;      //"新"状态标志
+		
+	};
+	
+	struct TEquipmentGridDb
+	{
+		0   optional   int                 iLvl;             //等级
+	};
+	
+	struct TEquipmentInfo
+	{
+		0  optional    vector<map<int, TEquipmentItemDb>> vRoleEquipGrid;     //英雄部位装备,[身体位置,装备]
+        1  optional    map<int, vector<TEquipmentItemDb>> mEquipStore;        //装备库,key为身体位置
+		2  optional    map<int, TEquipmentGridDb>         mGridDB;            //部位信息
+		
+	};
+	
+	
+	//角色数据
+	struct TRoleDB
+	{
+		0 optional  int                                iID;                     //英雄ID
+		1 optional  int                                iExp;                    //英雄经验
+        2 optional  short                              nLvl;                    //英雄等级
+		3 optional  int                                iCurSkinID;              //皮肤ID
+		4 optional  vector<int>                        vecSkinList;             //皮肤列表
+		5 optional  vector<YOOOUM::TProperty>          vecUpgradeProperty;      //升级属性
+	};
+	
+	//角色数据
+	struct TRoleInfo
+	{
+		0 optional  int                                iCurRoleID;             //当前正在使用的角色ID
+		1 optional  vector<TRoleDB>                    vecRoleList;            //角色列表
+	};
+	
+	struct TSoil
+	{
+		0  optional      byte                      cStatus;         //土地状态 EN_SOIL_STATUS
+		1  optional      int                       iPlantID;        //植物ID
+		2  optional      byte                      cPlantStatus;    //植物生长状态 EN_PLANT_STATUS
+		3  optional      unsigned int              uiNextStageTime; //到达下阶段的时间
+		4  optional      unsigned int              uiStartTime;     //当前阶段开始时间
+		5  optional      int                       iLastGrowSpeed;  //最后一次计算的成长速度
+	};
+
+	struct TPastureSlotInfo
+	{
+		0  optional      int                       iAnimalID;            //动物ID
+		1  optional      byte                      cAnimalStatus;         //动物生长状态 EN_ANIMAL_STATUS
+		2  optional      unsigned int              uiNextHungerTime;     //下一次饥饿时间点
+		3  optional      unsigned int              uiNeedGrownSec;      //还需成长的秒数
+		4  optional      unsigned int              uiGrazeTime;         //放养时间
+	};
+
+	struct TDBPastureData
+	{
+		0  optional      short             usLevel = 0;         //牧场等级
+		1  optional      vector<TPastureSlotInfo>   vPastureSlot;    //动物容器列表
+		2  optional      short             usShitNum;       //粪便数量
+		3  optional      int                        iFodderNum;      //当前饲料数量
+	};
+
+	//农场 牧场
+	struct TFarmData
+	{
+		1   optional    vector<TSoil>               vecSoilList;            //土地列表
+		//2   optional    int                         iLastGrowSpeed;         //最后一次计算的成长速度
+		3   optional    TDBPastureData              stPastureData;            //牧场
+	};
+
+    struct TBaseAchiInfo
+	{
+		0   optional    int                         iAchiID;                //成就ID
+        1   optional    int                         iActivateTime;          //激活时间
+	};
+
+    struct TShowAchiInfo
+	{
+		0   optional    int                         iPos;                   //位置
+		1   optional    int                         iAchiID;                //成就ID
+	};
+
+    struct TOneTypeAchiList
+	{
+		0   optional    int                         iProgress;              //进度
+		1   optional    vector<TBaseAchiInfo>       vBaseAchiList;          //基础成就
+	};
+
+    struct TDBCupInfo
+	{
+		0   optional    short                  usCupID;              //奖杯ID
+		1   optional    int                             iGetTime;            //激活时间
+	};
+
+    //成就
+    struct TDBAchiData
+	{
+        1   optional    int                             iHonorValue;            //荣耀值
+        2   optional    vector<int>                     vHonorGetList;          //荣耀奖励领取列表
+        //3   optional    int                             iCupLevel = 1;          //奖杯等级
+        4   optional    vector<TShowAchiInfo>           vShowAchi;              //展示成就
+        5   optional    map<int,TOneTypeAchiList>       mapAchiList;            //成就列表   key 成就类型 
+        6   optional    vector<TDBCupInfo>              vCupList;               //奖杯列表
+	};
+	
+	//任务结构数据
+    struct TTaskStatusDb
+	{
+		0   require    int                               iTaskId;              //任务ID
+		1   optional   unsigned int  	                 lAcceptTime;		   //任务领取时间
+		2   optional   short 		                     nTaskState;		   //任务状态 E_TASK_STATE
+		3   optional   map<int,int>                      mapCurTimes;  		   //任务的条件完成状态(动作类的相应次数)
+		4   optional   int                               iTargetProcess;       //任务进度
+	};
+	
+	//兔美美NPC信息
+	struct TTumeimeiDb
+	{
+		0  optional     byte                            Status=0;               //状态标志  0 初始状态(停留家园) 1 外出旅游
+		1  optional     vector<YOOOUM::TItemInfo>       vecDayAward;            //每日奖励
+		2  optional     unsigned int                    uLastRefreshTM;         //最后刷新奖励的时间(每个自然日的凌晨5点刷新)    
+        3  optional     byte                            AwardStatus=0;          //奖励状态	0 未领取 1 已领取	
+		4  optional     unsigned int                    uTourTM=0;              //外出旅游时间戳
+		5  optional     unsigned int                    uComeBackTM=0;          //回家时间戳
+		6  optional     vector<YOOOUM::TItemInfo>       vecTourAward;           //旅游携带奖励
+		7  optional     int                             iZoonID;                //小动物ID
+        8  optional     int                             iEventID;               //事件ID
+		9  optional     unsigned int                    uZoonEventTM=0;         //小动物产生时间戳
+	};
+	
+	
+	//乔伊
+	struct TQiaoYiDb
+	{
+		0  optional     unsigned int                    uLastRefreshTM;         //最后刷新奖励的时间(每个自然日的凌晨5点刷新)  
+		1  optional     map<int,TTaskStatusDb>          mapTaskData;            //悬赏任务数据
+	};
+
+    //黑胡子
+	struct THeiHuZiDb
+	{
+		0  optional     vector<int>                     vecSaleIDList;         //商品ID列表
+		1  optional     short                           shFreeUseCnt;          //已使用免费刷新次数
+		2  optional     short                           shMoneyCnt;           //已付费刷新次数
+		3  optional     byte                   ucAutoFreshCnt;        //购买商品自动刷新次数
+	};
+	
+	//NPC存储数据结构
+	struct TNpcDBInfo
+	{
+		0   optional    vector<YOOOUM::TBaseNpcInfo>    vNPCInfo;               //NPC基本信息
+		1   optional    TTumeimeiDb                     stTuMeimeiDb;           //兔妹妹NPC 
+		2   optional    TQiaoYiDb                       stQiaoYiDb;             //乔伊NPC
+        3   optional    THeiHuZiDb                      stHeiHuZi;              //黑胡子NPC
+	};
+	
+	
+	
+	//任务数据
+	struct TDBTaskData
+	{
+		0   optional   map<int,TTaskStatusDb>            mapTaskData;           //任务数据
+	};
+
+    //用户基础数据模块
+	struct TAccountData
+	{
+		0	require 	YOOOUM::TAccountID              stAccountID;            //玩家账号
+		1	require 	TUserBaseInfo                   stUserBaseInfo;         //玩家基础数据
+		2   require     long                            lLastLoginTm;           //上次登录时间
+		3   require     long                            lCreateTime = 0;        //创建角色时间
+		4   optional    long                            lLastLogoutTm;          //上次登出时间
+		5   optional    short                           nBan;                   //禁用
+		6   optional    long                            lBanTime;               //禁用时长
+		7   optional    TEquipmentInfo                  stEquipmentData;        //装备数据
+		8   optional    TDBBagInfo                      stBagInfo;              //资源物品
+		9   optional    TRoleInfo                       stRoleInfo;             //角色数据
+		10  optional    TExtData1                       stExtData1;             //激活码和小游戏
+		11  optional    TFarmData                       stFarmData;             //农场
+        12  optional    TDBAchiData                     stAchiData;             //成就相关数据
+		13  optional    TNpcDBInfo                      stNpcDbInfo;            //Npc相关数据
+		14   optional   TDBTaskData                     stTaskData;             //任务系统数据
+	}; 
+	
+	
+	//用户在线状态
+	struct TUserOnlineState
+	{
+		0   require     string                          sCondSvr;                //接入服务器地址
+		1   require     long                            lConnID;                 //CondSvr的接入ID
+		2   require     string                          sZoneSvr;                //ZoneSvr的服务器地址
+		3   require     int                             iState;                  //状态 EAccountStatus
+		4   require     long                            lTimeStamp;              //写入时间戳
+		5   require     int                             iLastZoneID;             //最后登录分区
+	};
+	
+	
+	//邮件附件
+	struct TAccessoryItem
+	{
+	    0   optional    int                              iItemID;         //物品ID
+		1   optional    int                              iItemNum;        //物品数量
+		2   optional    short                            shItemType;      //物品类型
+	};
+
+	
+	//邮件信息
+	struct TMailItem
+	{
+		0   optional    unsigned int                     iID;              //邮件ID
+		1   optional    short                            nMailType;        //邮件类型
+		2   optional    long                             lRetainTime;      //有效时间(0表示永久有效)
+		3   optional    long                             lShowTime;        //显示时间
+		4   optional    byte                             cStatus;          //邮件状态 E_MAIL_STATUS
+		5   optional    string                           sTitle;           //邮件标题
+		6   optional    string                           sContent;         //邮件内容
+		7   optional    vector<TAccessoryItem>           vAccessoryItem;   //邮件附件         
+        8   optional    long                             lSendTime;        //发送时间
+		9   optional    string                           sSender;          //发送者名字
+	};
+	
+	//邮件列表
+	struct TMailList
+	{
+	    0   optional   vector<TMailItem>                 vecMailItem;     //邮件列表
+	};
+
+    //平台全服邮件结构
+    struct ServerMail
+	{
+        0   optional    vector<int>                      vecZoneID;        //区ID
+        1   optional    long                             lSendTime;        //发送时间
+        2   optional    long                             lOverTime;        //结束时间
+        3   optional    string                           sTitle;           //标题
+        4   optional    string                           sContent;         //内容
+		5   optional    vector<TAccessoryItem>           vAccessoryItem;   //邮件附件         
+        6   optional    string                           sSender;          //发件人
+	};
+	
+
+};

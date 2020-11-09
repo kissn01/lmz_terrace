@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.TaskDao">
+
+    <!-- 委托关卡每日通过情况 -->
+    <select id="getEverydayPass" resultType="com.yoooum.entity.task.EveryPass">
+        SELECT m.taskID,m.openCount,n.passConut,
+        CONVERT(n.passConut*100/m.openCount,DECIMAL(12,2))AS passRate,
+        m.openCountAvg
+        FROM
+        (SELECT taskID,COUNT(*) AS openCount,
+        CONVERT(COUNT(*)/COUNT(DISTINCT uin),DECIMAL(12,2)) AS openCountAvg
+        FROM ${tbName}
+        WHERE operType = 1
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID) AS m
+        LEFT JOIN
+        (SELECT taskID,COUNT(*) AS passConut FROM ${tbName}
+        WHERE operType = 2
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID) AS n
+        ON m.taskID=n.taskID
+    </select>
+    <select id="getPassStar" resultType="com.yoooum.entity.task.PassStar">
+        SELECT taskID,star,COUNT(*) AS openCount
+        FROM ${tbName}
+        WHERE operType=2
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID,star
+    </select>
+
+
+    <select id="getUserEntrust" resultType="com.yoooum.entity.task.UserEntrust">
+    	SELECT a.taskID AS taskID,IFNULL(a.getNum,0),IFNULL(b.passNum,0)
+		FROM 
+			(SELECT taskID,COUNT(*) AS getNum
+			 FROM InforTaskFlow
+			 WHERE uin = #{playUin}
+			 AND operType = 1
+			 GROUP BY taskID) AS a
+		LEFT JOIN 
+			(SELECT taskID,COUNT(*) AS passNum
+			 FROM InforTaskFlow
+			 WHERE uin = #{playUin}
+			 AND operType = 2
+			 GROUP BY taskID) AS b
+		ON a.taskID = b.taskID
+    </select>
+    <select id="getEntrustProgress" resultType="com.yoooum.entity.task.UserEntrust">
+    	SELECT taskID AS taskID,IFNULL(Progress,0) 
+    	FROM  InforTaskFlow
+		WHERE uin = #{playUin}
+		AND operType = 2
+		AND taskID = (SELECT  taskID  FROM InforTaskFlow
+		WHERE uin = #{playUin}
+		ORDER BY dtEventTime DESC
+		LIMIT 1)
+    </select>
+
+    <select id="getEntrustFistPass" resultType="com.yoooum.entity.task.EntrustFistPass">
+        SELECT t1.taskID AS entrustID,t1.openNum,IFNULL(t2.onestarNum,0) AS onestarNum,
+        IFNULL(CONVERT(t2.onestarNum*100/t1.openNum,DECIMAL(12,2)),0.00) AS onePassRate
+        FROM
+        (SELECT taskID,COUNT(*) AS openNum FROM ${tbName}
+        WHERE operType = 1
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID) AS t1
+        LEFT JOIN
+        (SELECT taskID,COUNT(*) AS onestarNum FROM ${tbName}
+        WHERE star=1
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID) AS t2
+        ON t1.taskID = t2.taskID
+    </select>
+
+    <select id="getStarPassNum" resultType="com.yoooum.entity.task.StarPassNum">
+        SELECT t1.taskID AS entrustID,t1.openNum,IFNULL(t2.onestarNum,0) AS starNum,
+        IFNULL(CONVERT(t2.onestarNum*100/t1.openNum,DECIMAL(12,2)),0.00) AS passRate
+        FROM
+        (SELECT taskID,COUNT(*) AS openNum FROM ${tbName}
+        WHERE operType = 1
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID) AS t1
+        LEFT JOIN
+        (SELECT taskID,COUNT(*) AS onestarNum FROM ${tbName}
+        WHERE star=#{star}
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY taskID) AS t2
+        ON t1.taskID = t2.taskID
+    </select>
+
+    <select id="getCheckUser" resultType="com.yoooum.entity.task.InforTaskFlow">
+        SELECT gameSvrId as gameSvrId,dtEventTime,platformId,osType,zoneAreaID as izoneAreaID,
+        uin,lvl,inforLvl,taskID,operType,first,star, progress
+        FROM ${tbName}
+        WHERE uin = #{playUin}
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+    </select>
+
+
+    <select id="getUserLevel" resultType="com.yoooum.entity.task.UserLevel">
+        SELECT n.lvl AS lvl,m.taskID AS taskID,m.star AS star, n.total AS total, COUNT(Uin) AS userNum
+        FROM ${tbName} AS m
+        LEFT JOIN
+        (SELECT t.lvl, COUNT(t.uin) AS total FROM ${tbName} AS t
+        WHERE first = 1
+        <if test="platformId!=null and platformId!=1">
+            AND platformId = #{platformId}
+        </if>
+        GROUP BY t.lvl) AS n
+        ON m.Lvl = n.Lvl
+        WHERE m.FIRST = 1
+        <if test="platformId!=null and platformId!=1">
+            AND m.platformId = #{platformId}
+        </if>
+        GROUP BY n.lvl, n.total, m.taskID, m.star
+    </select>
+
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yoooum.dao.DungeonDao">
+    <!-- 茶楼参与人数次数 -->
+    <select id="teaHouse" resultType="com.yoooum.entity.dungeon.DungeonUtil">
+        SELECT COUNT(*) as reason ,
+        COUNT(DISTINCT uin) as sum
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+    </select>
+
+    <!-- 参与茶楼层数人数分布 -->
+    <select id="teaHouseList" resultType="com.yoooum.entity.dungeon.DungeonUtil">
+        SELECT levelid%10000%100 AS reason,
+        COUNT(DISTINCT uin) AS SUM
+        FROM ${tbName}
+        WHERE 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+        GROUP BY levelid%10000%100
+    </select>
+
+    <!-- 猫探险参与人数和人均参与次数 -->
+    <select id="catNumSum" resultType="com.yoooum.entity.dungeon.Cat">
+        SELECT COUNT(*) AS cutSum,
+        COUNT(DISTINCT uin) AS playSum
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+    </select>
+
+    <!--泥潭、溪涧、江河、湍流、寒水参与人数 -->
+    <select id="mapNumSum" resultType="com.yoooum.entity.dungeon.DungeonUtil">
+        SELECT copyid as reason,
+        COUNT(DISTINCT uin) as sum
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+        GROUP BY copyid
+    </select>
+
+    <!--八卦楼 总次数区间分布-->
+    <select id="baGuaLou" resultType="com.yoooum.entity.dungeon.BaGuaLou">
+        SELECT  SUM(cout) AS cutSum,
+        SUM(cout&gt;0)AS playSum,
+        IFNULL(FORMAT(SUM(cout)/SUM(cout>0),2),0) AS playSumAge,
+        SUM(cout&lt;=5)AS cut5,
+        SUM(5&lt;cout AND cout&lt;=10)AS cut10,
+        SUM(10&lt;cout AND cout&lt;=15)AS cut15,
+        SUM(15&lt;cout AND cout&lt;=20)AS cut20,
+        SUM(cout&gt;20)AS cuts
+        FROM
+        (SELECT COUNT(*) AS cout
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+        GROUP BY uin) AS t
+    </select>
+
+    <!--八卦楼 男主次数区间分布-->
+    <select id="hero" resultType="com.yoooum.entity.dungeon.StrTwos">
+        SELECT protagid AS reason,
+        CONVERT(COUNT(*)/COUNT(DISTINCT uin),DECIMAL(15,2)) AS  sum
+        FROM  ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+        GROUP BY protagid
+    </select>
+
+    <!-- 情报委托参与人数次数 -->
+    <select id="infoCountNum" resultType="com.yoooum.entity.dungeon.DungeonUtil">
+        SELECT COUNT(*) as reason,
+        COUNT(DISTINCT uin) as sum
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+    </select>
+
+
+    <!--  情报委托参与次数 -->
+    <select id="queryInfoCount" resultType="com.yoooum.entity.dungeon.DungeonUtil">
+        SELECT t.cut as reason,COUNT(*) as sum
+        FROM(
+        SELECT COUNT(*) AS cut
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            and platformId=#{platformId}
+        </if>
+        GROUP BY Uin) AS t
+        GROUP BY t.cut
+    </select>
+
+    <!-- 情报委托参与人数 -->
+    <select id="infoNum" resultType="com.yoooum.entity.dungeon.Info">
+        SELECT
+        SUM(cut) as countSum,
+        SUM(cut>0) AS participationSum,
+        SUM(t.cut=1) AS participation01,
+        SUM(t.cut=2) AS participation02,
+        SUM(t.cut=3) AS participation03,
+        SUM(t.cut=4) AS participation04,
+        SUM(t.cut>4) AS participation05
+        FROM(
+        SELECT COUNT(distinct uin) AS cut
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            and platformId=#{platformId}
+        </if>
+        GROUP BY Uin) AS t
+    </select>
+
+    <!--扫荡券使用次数和人数-->
+    <select id="speedTicket"  resultType="com.yoooum.entity.common.Item">
+        SELECT COUNT(*) AS levelId,
+        COUNT(DISTINCT uin) AS userNum
+        FROM ${tbName}
+        WHERE itemID=319
+        <if test="platformId!=null and platformId!=0">
+            AND platformId=#{platformId}
+        </if>
+    </select>
+
+    <!-- 精英副本(文书阁)挑战情况 -->
+    <select id="eliteCopy" resultType="com.yoooum.entity.dungeon.Elite">
+        SELECT  SUM(cout) AS cutSum,
+        SUM(cout&gt;0)AS playSum,
+        SUM(cout&lt;=5)AS cut5,
+        SUM(5&lt;cout AND cout&lt;=10)AS cut10,
+        SUM(10&lt;cout AND cout&lt;=15)AS cut15,
+        SUM(15&lt;cout AND cout&lt;=20)AS cut20,
+        SUM(20&lt;cout AND cout&lt;=25)AS cut25,
+        SUM(25&lt;cout AND cout&lt;=30)AS cut30,
+        SUM(cout&gt;30)AS cuts
+        FROM
+        (SELECT COUNT(*) AS cout
+        FROM ${tbName}
+        where 1=1
+        <if test="platformId!=null and platformId!=0">
+            AND   platformId=#{platformId}
+        </if>
+        GROUP BY uin) AS t
+    </select>
+
+</mapper>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>茶楼副本--灵猫传</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="灵猫传 经营分析系统."
+          name="description"/>
+    <meta content="" name="author"/>
+    <link rel="shortcut icon" th:href="@{favicon.ico}">
+    <!-- ========================================================================= -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
+    <link  th:href="@{/vendor/material-icons/material-icons.css}" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link th:href="@{/vendor/flags/css/flag-icon.min.css}"  rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link th:href="@{/vendor/daterangepicker-master/daterangepicker.css}" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link th:href="@{/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css}" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link th:href="@{/vendor/DataTables-1.10.18/css/dataTables.bootstrap4.min.css}" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link th:href="@{/vendor/DataTables-1.10.18/css/responsive.dataTables.min.css}" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" id="stylelink2">
+    <!-- ========================================================================= -->
+    <link th:href="@{/css/style-darkblue-dark.css}" rel="stylesheet" id="stylelink">
+    <!-- ========================================================================= -->
+</head>
+<body class="sidemenu-open header-fixed-top">
+<div th:replace="~{common/public_main::loader}"></div>
+
+<!-- 左侧菜单栏 -->
+<div th:replace="~{common/public_main::sidebar(isSelectParent='dungeon',isSelect='teaHouse')}"></div>
+
+<!-- 顶部+内容 -->
+<div class="wrapper">
+    <div class="content shadow-sm">
+        <div th:replace="~{common/public_main::heard}"></div>
+        <!-- 内容  -->
+        <div class="container main-container" id="main-container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <!--top-->
+                        <div class="card-header border-0 bg-none">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="fs15">茶楼折线图</p>
+                                </div>
+                                <form class="form-inline search align-self-center">
+                                    <input class="form-control form-control-sm" type="search" placeholder="搜索..."
+                                           aria-label="Search">
+                                    <button class="btn btn-link btn-sm" type="submit"><i
+                                            class="material-icons">search</i></button>
+                                </form>
+                                <div class="col-auto">
+                                    <button class="btn btn-sm btn-outline-template">
+                                        <i class="material-icons md-18 mr-2">print</i> 打印
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-template ml-2">
+                                        <i class="material-icons md-18 mr-2">cloud_download</i> 导出
+                                    </button>
+                                    <div class="dropdown d-inline-block  ml-2">
+                                        <button class="btn dropdown-toggle btn-sm btn-link" type="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="material-icons">more_horiz</i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">操作一</a>
+                                            <a class="dropdown-item" href="#">操作二</a>
+                                            <a class="dropdown-item" href="#">操作三</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--center-->
+                        <div class="card-body">
+                            <canvas id="dungeonDatasLine" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--2.table-->
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="card border-0 shadow-sm overflow-hidden mb-4">
+                        <div class="card-header border-0 bg-none">
+                            <div class="row">
+                                <div class="col-12 col-md">
+                                    <p class="fs15">茶楼</p>
+                                </div>
+                                <div th:replace="~{common/public_main::tbForm}"></div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="table_data" class="table datatable display responsive w-100"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md text-center text-md-left align-self-center">
+                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
+                </div>
+                <div class="col-12 col-md-auto text-center text-md-right">
+                    <ul class="nav justify-content-center justify-md-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">版权所有@2018--2098游梦初心文化网络有限公司</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!--QQ-->
+<div th:replace="~{common/public_main::qq}"></div>
+<!-- Setting -->
+<div th:replace="~{common/public_main::setting}"></div>
+<!-- Modal -->
+<div th:replace="~{common/public_main::modal}"></div>
+<div th:replace="~{common/public_main::warningModal(modalId='startDateModal',text='开始日期不能早于2020-01-01')}"></div>
+<div th:replace="~{common/public_main::warningModal(modalId='expirationDateModal',text='结束日期不能早于开始日期！')}"></div>
+<div th:replace="~{common/public_main::warningModal(modalId='noDateModal',text='所选日期暂无数据！')}"></div>
+
+<!-- ========================================================================= -->
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/js/popper.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/cookie/jquery.cookie.js}"></script>
+<!-- ========================================================================= -->
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/daterangepicker-master/moment.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/daterangepicker-master/daterangepicker.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/chartjs/Chart.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/chartjs/utils.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/circle-progress/circle-progress.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/sparklines/jquery.sparkline.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/gauge-chart/gauge.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/DataTables-1.10.18/js/jquery.dataTables.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/DataTables-1.10.18/js/dataTables.responsive.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/DataTables-1.10.18/js/dataTables.bootstrap4.min.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/jquery-jvectormap/jquery-jvectormap.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/vendor/jquery-jvectormap/jquery-jvectormap-world-mill-en.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/js/main.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/js/style-picker.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/js/networking-dashboard.js}"></script>
+<!-- ========================================================================= -->
+<script th:src="@{/custom/js/formatDate.js}"></script>
+<!-- ========================================================================= -->
+<script>
+    $(document).ready(function () {
+        window.table = $('#table_data').DataTable({
+            language: {
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sProcessing": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                },
+            },
+
+            fnServerData: function (sSource, aoData, fnCallback) {
+                //1.获取开始日期
+                var startDate = document.getElementById("startDate").value;
+                //2.获取截止日期
+                var expirationDate = document.getElementById("expirationDate").value;
+                //3.获取渠道
+                var platform = document.getElementById("platformId");
+                var index = platform.selectedIndex;
+                platformId = platform.options[index].value;
+                $.ajax({
+                    type: "post",
+                    url: '/dungeon/teaHouse',
+                    dataType: 'json',
+                    data: {
+                        startDate: startDate,
+                        expirationDate: expirationDate,
+                        platformId: platformId
+                    },
+                    success: function (data) {
+                        var labelList = [];
+                        var dataList = [];
+                        for (var i = 0; i < data.data.length; i++)
+                        {
+                            labelList.push(data.data[i].dateSign);
+                            dataList.push(data.data[i].playSum);
+                        }
+                        new Chart(document.getElementById('dungeonDatasLine').getContext('2d'),{
+                            type: 'line',
+                            data: {
+                                labels: labelList,
+                                datasets: [{
+                                    label: '参与人数',
+                                    borderWidth: '2',
+                                    borderColor: '#F85778',
+                                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                                    data: dataList,
+                                }]
+                            },
+                            options: {
+                                tooltips: {
+                                    intersect: false,
+                                    mode: 'index',
+                                },
+                            }
+                        });
+
+                        fnCallback(data);
+                    }
+                });
+            },
+            "bProcessing": true,
+            "searching": false,
+            "pagingType": "full_numbers",
+            "aLengthMenu": [5, 25, 50, 100, 500],
+            "columns":  [
+                {
+                    "data" : "dateSign",
+                    title : "日期",
+                    class : "info"
+                },
+                {
+                    "data" : "playSum",
+                    title : "参与人数",
+                    class : "info"
+                },
+                {
+                    "data" : "playDauAvg",
+                    title : "参与比例",
+                    class : "info"
+                },
+                {
+                    "data" : "playNumAvg",
+                    title : "人均次数",
+                    class : "info"
+                }, {
+                    "data" : "house01",
+                    title : "第一层",
+                    class : "info"
+                },
+                {
+                    "data" : "house02",
+                    title : "第二层",
+                    class : "info"
+                },
+                {
+                    "data" : "house03",
+                    title : "第三层",
+                    class : "info"
+                },
+                {
+                    "data" : "house04",
+                    title : "第四层",
+                    class : "info"
+                },
+                {
+                    "data" : "house05",
+                    title : "第五层",
+                    class : "info"
+                }, {
+                    "data" : "house06",
+                    title : "第六层",
+                    class : "info"
+                }
+                , {
+                    "data" : "house07",
+                    title : "第七层",
+                    class : "info"
+                }, {
+                    "data" : "house08",
+                    title : "第八层",
+                    class : "info"
+                }, {
+                    "data" : "house09",
+                    title : "第九层",
+                    class : "info"
+                }, {
+                    "data" : "house10",
+                    title : "第十层",
+                    class : "info"
+                }, {
+                    "data" : "house11",
+                    title : "第十一层",
+                    class : "info"
+                }, {
+                    "data" : "house12",
+                    title : "第十二层",
+                    class : "info"
+                }, {
+                    "data" : "house13",
+                    title : "第十三层",
+                    class : "info"
+                }, {
+                    "data" : "house14",
+                    title : "第十四层",
+                    class : "info"
+                }, {
+                    "data" : "house15",
+                    title : "第十五层",
+                    class : "info"
+                }, {
+                    "data" : "house16",
+                    title : "第十六层",
+                    class : "info"
+                }, {
+                    "data" : "house17",
+                    title : "第十七层",
+                    class : "info"
+                }, {
+                    "data" : "house18",
+                    title : "第十八层",
+                    class : "info"
+                }, {
+                    "data" : "house19",
+                    title : "第十九层",
+                    class : "info"
+                }, {
+                    "data" : "house20",
+                    title : "第二十层",
+                    class : "info"
+                }
+            ]
+        });
+    });
+</script>
+</body>
+
+
+
+</html>

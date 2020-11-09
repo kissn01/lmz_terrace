@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.PublicDao">
+
+    <!--注册玩家数量-->
+    <select id="queryRegisterSum" resultType="java.lang.Integer">
+        select IFNULL(count(*) , 0)
+        from ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId=#{platformId}
+            </if>
+        </where>
+    </select>
+
+    <!--活跃玩家数量-->
+    <select id="queryLoginSum" resultType="int" >
+        SELECT  IFNULL(count(distinct uin),0)
+        FROM ${tbName}
+        <where>
+            <if test="platformId != null and platformId != 0">
+                 platformId=#{platformId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增玩家uin-->
+    <select id="queryRegisterUin" resultType="java.lang.Integer">
+        SELECT uin FROM  ${tbName}
+        <where>
+            <if test="platformId != null and platformId != 0">
+                platformId=#{platformId}
+            </if>
+        </where>
+    </select>
+
+    <!--活跃玩家uin-->
+    <select id="queryLoginUin" resultType="java.lang.Integer">
+        SELECT uin FROM ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId=#{platformId}
+            </if>
+        </where>
+        GROUP BY uin
+        ORDER BY uin
+    </select>
+
+</mapper>

@@ -1,0 +1,30 @@
+#include "../Data/Account.tars"
+#include "../../CommProto/CSProto/CSCommStruct.tars"
+
+
+module YOOOUM
+{
+
+interface IdipServant
+{
+
+	
+	/**
+	 * 发送邮件
+	 * @param(input), vecAccountID 用户名
+	 * @param(input), stMailItem 邮件信息
+	 * @param(input), sSendName 发送者的名字
+	 * @param(output),  邮件
+	 * @返回值：返回 0 成功,   其它 失败
+	 */
+    int PlatSendMail(vector<YOOOUM::TAccountID> vecAccountID, Account::TMailItem stMailItem, string sSendName,
+     out vector<YOOOUM::TAccountID> vecSuccAccountID,out vector<YOOOUM::TAccountID> vecFailAccountID);
+     
+     /**
+     * 发送全服邮件
+     * @param(input), stServerMailData 邮件信息
+     */
+    int SendServerMail(Account::ServerMail stServerMailData); 
+};
+
+}; 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.ScenarioDao">
+    
+    <!-- 主线剧情流水 -->
+    <select id="mainStoryFlow" resultType="com.yoooum.entity.scenario.MainStoryFlow" >
+    	 SELECT t1.chapterID as chapterID,t1.sectionID as sectionID,
+    	 t1.passNum,(t2.playNum-t1.passNum) AS notPassNum,
+    	 CONVERT(t1.passNum*100/t2.playNum,DECIMAL(12,2))AS passingRate
+		  FROM
+		 (SELECT chapterID,sectionID,COUNT(DISTINCT uin) AS passNum FROM ${tbName}
+		  WHERE   type&gt;0 AND type&lt;3
+        <if test="platformId!=null and platformId!=0">
+		   		AND platformId = #{platformId} 
+		 </if>
+		 GROUP BY sectionID) AS t1
+		 LEFT JOIN 
+		 (SELECT sectionID,COUNT(DISTINCT uin) AS playNum FROM   ${tbName}
+		 where 1=1
+		 <if test="platformId!=null and platformId!=0">
+		   		and  platformId = #{platformId} 
+		 </if>
+		 GROUP BY sectionID) AS t2
+		 ON t1.sectionID = t2.sectionID
+    </select>
+    <!-- 主线多选一 -->
+    <select id="mainStorySelectFlow" resultType="com.yoooum.entity.scenario.MainStorySelectFlow" >
+    	SELECT dialogueID as idialogueID,preDialogueID as ipreDialogueID,
+    	COUNT(DISTINCT uin) selectNum,sectionID as isectionID,chapterID as ichapterID
+		FROM ${tbName}
+		<where>
+            <if test="platformId!=null and platformId!=0">
+				 platformId = #{platformId}
+			</if>
+		</where>
+		GROUP BY dialogueID
+		order by preDialogueID,dialogueID
+    </select>
+
+</mapper>

@@ -1,0 +1,1458 @@
+/*****************************************************************************************/
+/**    本文为客户端和服务器通信协议都用到的数据结构                                        **/
+/**    Add by wilson                                                                    **/
+/**    Date: 2020-04-11                                                                 **/
+/*****************************************************************************************/
+
+module YOOOUM
+{
+    /*************************************************************************************/
+    /**    枚举类型声明                                                                  **/
+    /*************************************************************************************/
+
+    //============================= FrameWork 系统枚举类型 开始 ==========================//
+
+    //网络类型
+	enum ENETWORK_TYPE 
+	{
+		NETWORK_TYPE_INVALID             = 0,
+		NETWORK_TYPE_2G                  = 1,
+		NETWORK_TYPE_3G                  = 2,
+		NETWORK_TYPE_4G                  = 3,
+		NETWORK_TYPE_WIFI                = 4,
+		NETWORK_TYPE_5G                  = 5,
+	};
+
+    //开放平台类型YOOOM
+	enum E_OPEN_PLAT_TYPE
+	{
+		E_OPEN_PLAT_TYPE_INVALID        = 0,         //无效
+		E_OPEN_PLAT_TYPE_IOS            = 1,         //IOS
+		E_OPEN_PLAT_TYPE_SHANGYOU       = 2,         //尚游
+	
+		E_OPEN_PLAT_TYPE_OPPO           = 11,        //OPPO
+		E_OPEN_PLAT_TYPE_VIVO           = 12,        //VIVO
+		E_OPEN_PLAT_TYPE_HUAWEI         = 13,        //华为
+		E_OPEN_PLAT_TYPE_9YOU           = 14,        //九游
+		E_OPEN_PLAT_TYPE_XIAOMI         = 16,        //小米
+		E_OPEN_PLAT_TYPE_360            = 17,        //360
+		E_OPEN_PLAT_TYPE_BAIDU          = 18,        //百度
+		E_OPEN_PLAT_TYPE_MEIZU          = 19,        //魅族
+		E_OPEN_PLAT_TYPE_LENOVO         = 20,        //联想
+		E_OPEN_PLAT_TYPE_KUPAI          = 21,        //酷派
+		E_OPEN_PLAT_TYPE_JL             = 22,        //金立
+		E_OPEN_PLAT_TYPE_YINGYONGBAO    = 23,        //应用宝
+		E_OPEN_PLAT_TYPE_4399           = 26,        //4399
+		E_OPEN_PLAT_TYPE_NUBIA          = 29,        //努比亚
+		E_OPEN_PLAT_TYPE_BILIBILI       = 30,        //bilibili
+        
+
+		E_OPEN_PLAT_TYPE_PC             = 40,        //PC电脑
+		E_OPEN_PLAT_TYPE_YOOOUM         = 41,        //游梦初心
+		E_OPEN_PLAT_TYPE_WECHAT         = 42,        //微信
+		E_OPEN_PLAT_TYPE_QQ             = 43,        //手Q
+		E_OPEN_PLAT_TYPE_GUEST          = 44,        //游客
+		E_OPEN_PLAT_TYPE_MINIGAME       = 45,        //小游戏
+		E_OPEN_PLAT_TYPE_LJ             = 47,        //棱镜
+		E_OPEN_PLAT_TYPE_FACEBOOK       = 48,        //facebook
+		E_OPEN_PLAT_TYPE_GOOGLE         = 49,        //google
+		E_OPEN_PLAT_TYPE_GARENA         = 50,        //garena
+
+
+		E_OPEN_PLAT_TYPE_SY_MAILIANG    = 100,       //尚游买量
+		E_OPEN_PLAT_TYPE_TAPTAP         = 101,       //taptap
+		E_OPEN_PLAT_TYPE_HYKB           = 102,       //好游快爆
+		E_OPEN_PLAT_TYPE_SY_MAILIANG2   = 103,       //尚游买量2
+		
+		E_OPEN_PLAT_TYPE_END            = 150,
+	};
+
+    //语言包
+	enum E_LANGUAGE_TYPE
+	{
+		china                            = 0,       //中国
+		usa                              = 1,       //美国
+		korea                            = 2,       //韩国
+		japan                            = 3,       //日本
+		thailand                         = 4,       //泰国
+		taiwan                           = 5,       //台湾
+		vietnam                          = 6,       //越南
+		singapore                        = 7,       //新加波
+		cambodia                         = 8,       //柬埔寨
+		malaysia                         = 9,       //马来西亚
+	};
+
+
+	//系统类型
+	enum E_MOBILE_PLAT_TYPE
+	{
+		E_MOBILE_PLAT_TYPE_INVALID      = 0,	     //无效
+		E_MOBILE_PLAT_TYPE_ANDROID      = 1,	     //android
+		E_MOBILE_PLAT_TYPE_IOS          = 2,	     //ios
+		E_MOBILE_PLAT_TYPE_PC           = 3,         //pc
+	};
+
+	
+	//用户类型
+	enum E_USER_ID_TYPE
+	{
+		E_USER_ID_TYPE_NORMAL           = 0,         //普通用户
+		E_USER_ID_TYPE_AI               = 1,         //AI
+	};
+
+	//资源类型
+	enum E_RES_PKG_TYPE
+	{
+		E_RES_PKG_TYPE_BIN             = 1,          //二进制文件
+		E_RES_PKG_TYPE_PIC             = 2,          //图片
+		E_RES_PKG_TYPE_CONF            = 3,          //数值配置
+		E_RES_PKG_TYPE_AUDIO           = 4,          //音频文件	
+		E_RES_PKG_TYPE_APK             = 5,          //安装包
+	};
+
+	//升级标志
+	enum E_CLIENT_VERSION_UPDATE_TYPE
+	{
+		E_CLIENT_VERSION_UPDATE_TYPE_NO     = 0,	//不需要升级
+		E_CLIENT_VERSION_UPDATE_TYPE_FORCE  = 1,	//强制升级
+		E_CLIENT_VERSION_UPDATE_TYPE_OPTION = 2,	//可选升级
+	};
+
+	//资源质量类型
+	enum E_DEVICE_QUALITY_TYPE
+	{
+		E_DEVICE_QUALITY_NORMAL        = 0,         //普清
+		E_DEVICE_QUALITY_HIGHT         = 1,         //高清
+	};
+
+	//消息类型
+	enum E_MSG_TYPE
+	{
+		E_MSG_TYPE_REQUEST              = 0,	    //请求
+		E_MSG_TYPE_RESPONSE             = 1,        //响应
+		E_MSG_TYPE_NOTIFY               = 2,        //通知
+	};
+
+    //性别
+    enum E_SEX
+    {
+        E_SEX_INVALID         = 0,
+        E_SEX_MAN             = 1, 
+        E_SEX_WOMAN           = 2,
+    };
+
+    //服务器状态
+    enum E_SERVER_STATUE
+    {
+        E_SERVER_STATUE_NORMAL                = 0,                             //顺畅
+        E_SERVER_STATUE_FULL                  = 1,                             //爆满
+        E_SERVER_STATUE_MAINTAIN              = 2,                             //维护状态
+        E_SERVER_STATUE_NORANDNEW             = 3,                             //顺畅&新区
+        E_SERVER_STATUE_NORANDHOT             = 4,                             //顺畅&热门
+        E_SERVER_STATUE_NORANDREC             = 5,                             //顺畅&推荐
+        E_SERVER_STATUE_FULLANDNEW            = 6,                             //爆满&新区
+        E_SERVER_STATUE_FULLANDHOT            = 7,                             //爆满&推荐
+    };
+
+    //登录类型
+    enum E_LOGIN_TYPE
+    {
+        E_LOGIN_TYPE_VERIFY_PLAT       = 0,                    //平台登录
+        E_LOGIN_TYPE_PHONE_NUMBER      = 1,                    //手机验证码
+        E_LOGIN_TYPE_USERNAME          = 2,                    //用户账号	
+	    E_LOGIN_TYPE_QUICK             = 3,                    //快速注册
+	
+    };
+
+    //用户在线状态
+	enum EAccountStatus
+	{
+		E_AS_TYPE_NONE = 0,
+		E_AS_WAIT_CLT_LOGIN,            //连接后等待客户端Login 1
+		E_AS_WAIT_LOGIN,                //等待Login的DB返回 2
+		E_AS_IN_PLAYING,                //游戏中状态 3
+		E_AS_IN_PLAYING2,               //游戏战斗中 4
+		E_AS_LOGOUT_DELAY,              //延迟登出中 5
+		E_AS_WAIT_LOGOUT,               //等待登出存盘返回  6
+		E_AS_WAIT_KICK_OFF,             //等待踢下线存盘返回  7
+		E_AS_TYPE_MAX,
+	};
+
+
+    //通知属性类型
+	enum EN_NotifyType
+	{
+		NotifyType_System                 = 1,           //系统参数
+		NotifyType_Profile                = 2,           //用户属性
+		NotifyType_Item                   = 3,           //用户物品
+		NotifyType_EquipmentAdd           = 4,           //行囊里增加了装备	
+		NotifyType_EquipmentDel           = 5,           //行囊里减少了装备
+		NotifyType_Hero                   = 6,           //英雄
+		NotifyType_Skin                   = 7,           //皮肤
+		NotifyType_Skill                  = 8,           //技能
+		NotifyType_Buff                   = 9,           //Buff
+		NotifyType_Charge                 = 10,          //充值
+		NotifyType_Task                   = 11,          //任务
+		NotifyType_TimedItem              = 12,          //有时限的物品
+		NotifyType_Privilege_Card         = 13,          //特权卡
+		NotifyType_Store                  = 14,          //仓库
+		NotifyType_Npc                    = 15,          //NPC
+		NotifyTYPE_Npc_Lvl                = 16,          //NPC Lvl
+	};
+
+	//通知子属性类型
+	enum EN_NotifySubType
+	{
+		NotifySubType_NULL                = 0,
+		NotifySubType_Exp                 = 1,           //经验      [NotifyType_Profile/NotifyType_Hero_Profile]
+		NotifySubType_Lvl                 = 2,           //等级      [NotifyType_Profile/NotifyType_Hero_Profile]
+		NotifySubType_Vit                 = 3,           //体力      [NotifyType_Profile]
+		NotifySubType_UpVit               = 4,           //体力上限  [NotifyType_Profile]
+		NotifySubType_ServerTime          = 5,           //后台服务器的时间 unix时间 [NotifyType_System]
+		NotifySubType_DayVitLimit         = 6,           //每日可透支剩余的体力      [NotifyType_Profile]
+		NotifySubType_LastOnlineTime      = 7,           //上一次登录时间            [NotifyType_Profile]
+		NotifySubType_GuideId             = 8,           //引导ID                   [NotifyType_Profile]
+		NotifySubType_LastVitTime         = 9,           //最后一次恢复体力的时间    [NotifyType_Profile]
+		NotifySubType_Diamon              = 10,          //钻石                     [NotifyType_Profile]
+		NotifySubType_VipLvl              = 11,          //玩家的vip等级             [NotifyType_Profile]
+		NotifySubType_Coin                = 12,          //金币                      [NotifyType_Profile]
+		NotifySubType_Diamon_AMT          = 13,          //累计已充值钻石            [NotifyType_Profile]
+		NotifySubType_Vit_Resume_TIME     = 14,          //体力恢复倒计时            [NotifyType_Profile]
+	};
+
+    //土地状态
+    enum EN_SOIL_STATUS
+    {
+        EN_SOIL_STATUS_DEFAULT              = 0,    //可种植
+        EN_SOIL_STATUS_DRY                  = 1,    //干涸
+        EN_SOIL_STATUS_USEING               = 2,    //种植中
+        EN_SOIL_STATUS_HUAFEI               = 3,    //化肥状态
+        EN_SOIL_STATUS_CAN_UNLOCK           = 4,    //可解锁
+        EN_SOIL_STATUS_LOCK               = 5,    //未解锁
+        EN_SOIL_STATUS_GROWN                = 6,    //成熟
+    };
+
+    //植物状态
+    enum EN_PLANT_STATUS
+    {
+        EN_PLANT_STATUS_SEED                = 0,    //种子
+        EN_PLANT_STATUS_LITTLE              = 1,    //小叶
+        EN_PLANT_STATUS_BIG                  = 2,    //大叶
+        EN_PLANT_STATUS_FLOWER               = 3,    //开花
+        EN_PLANT_STATUS_GROWN                = 4,    //成熟
+    };
+    
+    //成就类型
+    enum EN_ACHI_TYPE
+    {
+        EN_ACHI_TYPE_TIME_PASS              = 1,    //通关时间
+        EN_ACHI_TYPE_KILL_NUM               = 2,    //击杀数量
+        EN_ACHI_TYPE_PASS_COUNT             = 3,    //通关次数
+        EN_ACHI_TYPE_EXPRESS_COUNT          = 4,    //快递次数
+        EN_ACHI_TYPE_CHOP_TREE_COUNT        = 5,    //砍树次数
+        EN_ACHI_TYPE_BUY_ALL_WEAPON3000     = 6,    //购买全部要你命3000武器
+        EN_ACHI_TYPE_CHALLENGE_KING         = 7,    //挑战金馆长
+        EN_ACHI_TYPE_DRINK_WELL_WATER       = 8,    //喝井水
+        EN_ACHI_TYPE_SAY_LOVE_COUNT         = 9,    //表白小美次数
+        EN_ACHI_TYPE_USE_WEAPON_COUNT       = 10,   //单局使用武器过几把武器
+        EN_ACHI_TYPE_GROUP_PASS_COUNT       = 11,   //组队通关次数
+    };
+
+    //动物状态
+    enum EN_ANIMAL_STATUS
+    {
+        EN_ANIMAL_STATUS_SMALL               = 0,    //幼崽期
+        EN_ANIMAL_STATUS_MID                 = 1,    //成长期
+        EN_ANIMAL_STATUS_GROWN               = 2,    //成熟期
+    };
+
+	enum CS_CONNECT_TYPE // Network
+    {
+        CS_CONNECT_TYPE_NEW = 1, // 新建连接
+        CS_CONNECT_TYPE_RECONNECT = 2, // 断线重连
+    }; 
+
+	//通信消息ID定义
+	enum E_MSG_ID
+	{
+		/*****************************************************************************************/
+		/**                   十进制    [1 ~ 10000]        协议段 对应 ZoneSvr                   **/
+		/**                   十六进制  [0x0001 ~ 0x2710   协议段 对应 ZoneSvr                   **/
+		/*****************************************************************************************/
+		E_MSG_ID_HELLO                      = 0x0001,      //客户端请求Hello包 - TMsgReqHello & TMsgResHello
+		E_MSG_ID_ENTER_GAME                 = 0x0002,      //客户端请求登入游戏 - TMsgReqEnterGame & TMsgResEnterGame
+		//E_MSG_ID_REENTER                    = 0x0003,      //客户端请求重新登入游戏 - TMsgReqReEnter & TMsgResReEnter
+		E_MSG_ID_LOGOUT_GAME                = 0x0004,      //客户端请求登出游戏 - TMsgReqLogoutGame & TMsgResLogoutGame
+        E_MSG_ID_PUSH_KICKEDOUT             = 0x0005,      //服务器通知踢人 - TMsgPushKickedout
+        E_MSG_ID_QUERY_USER_INFO            = 0x0006,      //客户端请求用户信息 - TMsgReqQueryUserInfo & TMsgResQueryUserInfo
+	    E_MSG_ID_PUSH_MSG_HEAD_ERROR        = 0x0007,      //msg head error (后台通知)
+		E_MSG_ID_PUSH_SIG_DECRYPT_ERROR     = 0x0008,      //签名解密出错(后台通知)
+		E_MSG_ID_PUSH_OPENID_CHECK_ERROR    = 0x0009,      //OpenID校验失败(后台通知)
+		E_MSG_ID_PUSH_SIG_OVER_DATE         = 0x000A,      //签名已过期(后台通知)
+		E_MSG_ID_PUSH_DECRYPT_FAILED        = 0x000B,      //协议解密失败(后台通知)
+		E_MSG_ID_PUSH_RELOGIN               = 0x000C,      //通知客户端重新登陆(后台通知) TMsgPushReLoginNotify
+		E_MSG_ID_PUSH_UID_ERROR             = 0x000D,      //UID错误
+		E_MSG_ID_PUSH_MSG_ANTI              = 0x000E,      //防沉迷通知消息 TMsgNotifyAnti
+		E_MSG_ID_ANTI_AUTHENTICATION        = 0x0010,      //实名认证 - TMsgReqAntiAuthentication & TMsgResAntiAuthentication
+		E_MSG_ID_ZERO_TIME_NOTIFY           = 0x0011,      //0点数据通知
+		E_MSG_ID_USE_ITEM                   = 0x0012,      //使用道具 - TMsgReqUseItem & TMsgResUseItem
+
+		////////////////////////////////////  业务扩展协议   ////////////////////////////////////////
+        E_MSG_ID_SET_EQUIPMENT              = 0x0101,      //穿装备 TMsgReqSetEquipment & TMsgResSetEquipment
+		E_MSG_ID_CANCEL_EQUIPMENT           = 0x0102,      //卸下装备 TMsgReqCancelEquipment & TMsgResCancelEquipment
+		E_MSG_ID_UPGRADE_EQUIPMENT          = 0x0103,      //升级装备 TMsgReqUpgradeEquipment & TMsgResUpgradeEquipment
+		E_MSG_ID_SALE_EQUIPMENT             = 0x0104,      //熔炼装备 TMsgReqSaleEquipment & TMsgResSaleEquipment
+		E_MSG_ID_QUERY_EQUIPMENT            = 0x0105,      //查询装备池上面所有装备  TMsgReqQueryEquipment & TMsgResQueryEquipment
+		E_MSG_ID_SALE_EQUIPMENT_BATCH       = 0x0106,      //出售装备(批量接口) TMsgReqSaleEquipmentBatch & TMsgResSaleEquipmentBatch 
+		E_MSG_ID_RESET_EQUIPMENT_STATE      = 0x0107,      //设置装备的"新"状态 TMsgReqResetEquipmentState & TMsgResResetEquipmentState
+		E_MSG_ID_QUERY_EQUIPMENT_GRID_LVL   = 0x0108,      //查询装备槽的等级 TMsgReqQueryEquipmentGridLvl & TMsgResQueryEquipmentGridLvl
+
+
+        E_MSG_ID_GET_ROLE_INFO              = 0x0201,      //查询英雄 TMsgReqGetRoleInfo & TMsgResGetRoleInfo
+		E_MSG_ID_GET_ALL_ROLE               = 0x0202,      //查询所有英雄 TMsgReqGetAllRole & TMsgResGetAllRole
+		E_MSG_ID_SELECT_ROLE                = 0x0203,      //选择英雄 TMsgReqSelectRole & TMsgResSelectRole
+		E_MSG_ID_UNLOCK_ROLE                = 0x0204,      //解锁英雄 TMsgReqUnlockRole & TMsgResUnlockRole
+        E_MSG_ID_UPGRADE_ROLE               = 0x0205,      //升级角色 TMsgReqUpgradeRole & TMsgResUpgradeRole
+        E_MSG_ID_SET_NEWBIE_STEP            = 0x0206,      //请求设置新手引导完成到第几步 TSetNewbieStepReq & TSetNewbieStepRsp
+        E_MSG_ID_QUERY_NEWBIE_STEP          = 0x0207,      //查询新手引导 TQueryNewbieStepReq & TQueryNewbieStepRsp
+		E_MSG_ID_SELECT_ROLE_NEWBIE         = 0x0208,      //新手选择角色 TMsgReqSelectRoleNewBie & TMsgResSelectRoleNewBie
+
+
+		//跑马灯
+		E_MSG_ID_BROADCASE_LAMP             = 0x0301,      //跑马灯广播
+	    E_MSG_ID_BROADCASE_CHAT             = 0x0302,      //世界消息广播
+	    E_MSG_ID_BROADCASE_SYS_NOTICE       = 0x0303,      //服务端通知接取系统滚动公告
+	    E_MSG_ID_BROADCASE_POP_NOTICE       = 0x0304,      //服务端通知接取系统弹窗公告
+	    E_MSG_ID_BROADCASE_FIX_NOTICE       = 0x0305,      //服务端通知接取系统固定公告
+	    E_MSG_ID_CHANGE_DAY_NOTIFY          = 0x0306,      //跨天通知
+	    E_MSG_ID_DATA_POINT_REPORT          = 0x0307,      //客户端打点上报
+
+	    //背包相关
+	    E_MSG_ID_STORE_UP                   = 0x0401,      //仓库升级 TMsgReqStoreUp & TMsgRspStoreUp
+	    E_MSG_ID_STORE_DELETE               = 0x0402,      //丢弃物品 TMsgReqStoreDelete & TMsgRspStoreDelete
+	    E_MSG_ID_STORE_EXTRACT              = 0x0403,      //提取物品 TMsgReqStoreExtract & TMsgRspStoreExtract
+	    E_MSG_ID_STORE_QUERY                = 0x0404,      //查询仓库 TMsgReqStoreQuery & TMsgRspStoreQuery
+	    E_MSG_ID_CHANGE_NOTIFY              = 0x0405,      //物品变化通知 TMsgChangeNotify
+	    E_MSG_ID_CHANGE_ITEM_NUM            = 0x0406,      //改变物品数量 TMsgReqChangeItemNum & TMsgRspChangeItemNum
+	    E_MSG_ID_GET_BAG_LIST               = 0x0407,      //拉取背包列表 TMsgReqBagList & TMsgRspBagList
+	    E_MSG_ID_BAG_SWAP                   = 0x0408,      //交换物品栏 TMsgReqSwapBagItem & TMsgRspSwapBagItem
+	    E_MSG_ID_BAG_TIDY                   = 0x0409,      //整理背包 TMsgReqTidyBag & TMsgRspTidyBag
+        E_MSG_ID_BATCH_QUERY_PLAYER_BAG     = 0x0410,      //批量查询在线玩家背包 TMsgBatchQueryPlayerBagReq & TMsgBatchQueryPlayerBagRsp
+        E_MSG_ID_ITEM_WEAR_UPDATA           = 0x0411,      //物品耐久度更新 TMsgReqItemWearUpdata & TMsgResItemWearUpdata
+        E_MSG_ID_BATCH_CHANGE_ITEM_NUM      = 0x0412,      //批量改变物品数量 TMsgReqBatchChangeItemNum & TMsgResBatchChangeItemNum
+
+	    //农场 牧场
+	    E_MSG_ID_QUERY_FARM_INFO            = 0x0501,      //查询农场信息 TMsgReqQueryFarmInfo & TMsgRspQueryFarmInfo
+	    E_MSG_ID_FARMING                    = 0x0502,      //种地 TMsgReqFarming & TMsgRspFarming
+	    E_MSG_ID_FARM_UPROOT                = 0x0503,      //铲除 TMsgReqUproot & TMsgRspUproot
+	    E_MSG_ID_FARM_UNLOCK                = 0x0504,      //解锁土地 TMsgReqFarmUnlock & TMsgRspFarmUnlock
+	    E_MSG_ID_FARM_GET                   = 0x0505,      //收获 TMsgReqFarmGet & TMsgRspFarmGet
+	    E_MSG_ID_QUERY_ONE_FARM             = 0x0506,      //查询一块农田 TMsgReqQueryOneFarm & TMsgRspQueryOneFarm
+	    E_MSG_ID_FARM_SHIFEI                = 0x0507,      //施肥 TMsgReqFarmSF & TMsgRspFarmSF
+        E_MSG_ID_QUERY_PASTURE_INFO         = 0x0508,      //查询牧场 TMsgReqQueryPastureInfo & TMsgResQueryPastureInfo
+        E_MSG_ID_PASTURE_UP                 = 0x0509,      //升级牧场 TMsgReqPastureUp & TMsgResPastureUp
+        E_MSG_ID_PASTURE_GRAZE              = 0x0510,      //放养 TMsgReqPastureGraze & TMsgResPastureGraze
+        E_MSG_ID_PASTURE_QUERY_ONE          = 0x0511,      //查询单只动物 TMsgReqPastureQueryOne & TMsgResPastureQueryOne
+        E_MSG_ID_PASTURE_ADD_FODDER         = 0x0512,      //添加饲料 TMsgReqPastureAddFodder & TMsgResPastureAddFodder
+        E_MSG_ID_PASTURE_FEED               = 0x0513,      //喂单只动物 TMsgReqPastureFeed & TMsgResPastureFeed
+        E_MSG_ID_PASTURE_PICKUP_SHIT        = 0x0514,      //拾取粪便 TMsgReqPasturePickupShit & TMsgResPasturePickupShit
+        E_MSG_ID_PASTURE_REAP               = 0x0515,      //收获动物 TMsgReqPastureReap & TMsgResPastureReap
+        
+	    //博物馆
+	    E_MSG_ID_QUERY_MUSEUM               = 0x0601,      //查询博物馆 TMsgReqQueryMuseum & TMsgRspQueryMuseum
+	    E_MSG_ID_REPORT_ACHI                = 0x0602,      //上报成就点 TMsgReqReportAchi  & TMsgRspReportAchi
+	    E_MSG_ID_ACTIVATE_ACHI              = 0x0603,      //激活成就   TMsgReqActivateAchi & TMsgRspActivateAchi
+	    E_MSG_ID_ACTIVATE_CUP               = 0x0604,      //激活奖杯   TMsgReqActivateCup & TMsgRspActivateCup
+	    E_MSG_ID_GET_HONOR_AWARD            = 0x0605,      //领取荣耀奖励 TMsgReqGetHonorAward & TMsgRspGetHonorAward
+	    E_MSG_ID_CHANGE_SHOW_ACHI           = 0x0606,      //改变成就展示 TMsgReqChangeShowAchi & TMsgRspChangeShowAchi
+
+		//Friend
+		E_MSG_ID_GET_FRIEND_LIST            = 0x0701,      //获取好友列表 TMsgReqGetFriendList & TMsgResGetFriendLIst
+		E_MSG_ID_GET_FRIEND_PROFILE         = 0x0702,      //获取好友个人信息 TMsgReqGetFriendProfile & TMsgResGetFriendProfile
+		E_MSG_ID_FIND_USER_BY_UIN           = 0x0703,      //根据Uin查找用户 TMsgReqFindUserByUin & TMsgResFindUserByUin
+		E_MSG_ID_APPLY_FOR_FRIEND           = 0x0704,      //请求添加好友 TMsgReqApplyForFriend & TMsgResApplyForFriend
+		E_MSG_ID_AGREE_FOR_FRIEND           = 0x0705,      //同意好友申请 TMsgReqAgreeForFriend & TMsgResAgreeForFriend
+        E_MSG_ID_REFUSE_FOR_RRIEND          = 0x0706,      //拒绝好友申请 TMsgReqRefuseForFriend & TMsgResRefuseForFriend
+        E_MSG_ID_DELETE_FRIEND              = 0x0707,      //删除好友 TMsgReqDeleteFriend & TMsgResDeleteFriend
+		E_MSG_ID_GET_APPLY_LIST             = 0x0708,      //获取申请列表功能 TMsgReqGetApplyList & TMsgResGetApplyList
+		E_MSG_ID_INVITE_FRIEND_PVP          = 0x0709,      //邀请好友一起组队 TMsgReqInviteFriendPVP & TMsgResInviteFriendPVP
+		E_MSG_ID_NOTIFY_INVITE_FRIEND_PVP   = 0x0710,      //通知好友邀请组队消息 TMsgNotifyInviteFriendPVP 
+        E_MSG_ID_VISIT_FRIEND               = 0x0711,      //拜访好友 TMsgReqVisitFriend & TMsgResVisitFriend
+
+        //杂项
+        E_MSG_ID_MODIFY_NICK                = 0x0801,      //改名 TModifyNickReq & TModifyNickRsp
+        E_MSG_ID_GET_RECOMMAND_NAME         = 0x0802,      //获取推荐名称 TMsgReqGetRecommandName & TMsgRspGetRecommandName
+
+        //作坊
+        E_MSG_ID_GET_WORKSHOP_INFO          = 0x0901,      //获取作坊面板 TMsgReqGetWorkshopInfo & TMsgResGetWorkshopInfo
+        E_MSG_ID_WORKSHOP_UP_LEVEL          = 0x0902,      //作坊升级     TMsgReqWorkshopUpLevel & TMsgResUpWorkshopUpLevel
+        E_MSG_ID_WORKSHOP_MERGER            = 0x0903,      //合成         TMsgReqWorkshopMerger & TMsgResWorkshopMerger
+
+		//伙伴系统x
+		E_MSG_ID_QUEYR_ALL_NPC_BASE_INFO    = 0x0A01,      //查询所有结识的NPC基本信息 TMsgReqQueryAllNpcBaseInfo & TMsgResQueryAllNpcBaseInfo
+		E_MSG_ID_QUERY_NPC_BASE_INFO        = 0x0A02,      //查询指定的NPC基本信息  TMsgReqQueryNpcBaseInfo & TMsgResQueryNpcBaseInfo
+		E_MSG_ID_ADD_NPC                    = 0x0A03,      //结识新的NPC TMsgReqAddNpc & TMsgResAddNpc
+		E_MSG_ID_GET_NPC_DAY_AWARD          = 0x0A04,      //获取NPC每日奖励 TMsgReqGetNpcDayAward & TMsgResGetNpcDayAward
+		E_MSG_ID_DISPATCH_TOUR              = 0x0A05,      //派遣外出旅行 TMsgReqDispatchTour & TMsgResDispatchTour
+		E_MSG_ID_GET_TUMEIMEI_NPC_INFO      = 0x0A06,      //获取兔美美信息 TMsgReqGetTumeimeiNpcInfo & TMsgResGetTumeimeiNpcInfo       
+        E_MSG_ID_HHZ_STORE                  = 0x0A07,      //黑胡子商店面板 TMsgReqHHZStore & TMsgResHHZStore
+		E_MSG_ID_DRAW_DAY_TASK_AWARD        = 0x0A08,      //获取每日任务奖励 TMsgReqDrawDayTaskAward & TMsgResDrawDayTaskAward
+		E_MSG_ID_GET_DAY_TASK_INFO          = 0x0A09,      //获取每日任务信息 TMsgReqGetDayTaskInfo & TMsgResGetDayTaskInfo
+		E_MSG_ID_MODIFY_DAY_TASK_TM         = 0x0A0A,      //修改每日任务刷新时间 TMsgReqModifyDayTaskTM & TMsgResModifyDayTaskTM
+        E_MSG_ID_HHZ_STORE_REFRESH          = 0x0A0B,      //黑胡子商店刷新 TMsgReqHHZStoreRefresh & TMsgResHHZStoreRefresh
+		E_MSG_ID_DO_ANIMAL_EVENT            = 0x0A0C,      //完成小动物事件 TMsgReqDoAnimalEvent & TMsgResDoAnimalEvent 
+  
+        //任务系统
+		E_MSG_ID_NOTIFY_TASK_PROGRESS       = 0x0B01,      //通知任务进度信息 TNotifyTaskProgress
+	    E_MSG_ID_GET_TASK_INFO              = 0x0B02,      //获取任务信息 TMsgReqGetTaskInfo & TMsgResGetTaskInfo
+	    E_MSG_ID_DRAW_TASK_AWARD            = 0x0B03,      //获取任务奖励 TMsgReqDrawTaskAward & TMsgResDrawTaskAward
+	    E_MSG_ID_ACCEPT_TASK                = 0x0B04,      //接受任务(开始做任务) TMsgReqAcceptTask & TMsgResAcceptTask
+		E_MSG_ID_REPORT_TASK_PROGRESS       = 0x0B05,      //上报任务进度 TMsgReqReportTaskProgress & TMsgResReportTaskProgress
+		E_MSG_ID_GET_TASK_INFO_BATCH        = 0x0B06,      //批量拉取任务信息 TMsgReqGetTaskInfoBatch & TMsgResGetTaskInfoBatch
+		
+
+        //商城系统
+        E_MSG_ID_BUY_SALE_ITEM              = 0x0C01,      //购买物品 TMsgReqBuySaleItem & TMsgResBuySaleItem
+
+        //邮件
+        E_MSG_ID_READ_MAIL                  = 0x0D01,      //读邮件   TMsgReqReadMail & TMsgResReadMail
+        E_MSG_ID_GET_MAIL_LIST              = 0x0D02,     //请求拉取邮件列表  TMsgReqGetMailList & TMsgResGetMailList
+        E_MSG_ID_GET_MAILACCESSORY          = 0x0D03,     //请求提取邮件附件  TMsgReqGetMailAccessory & TMsgResGetMailAccessory
+        E_MSG_ID_BATGET_MAILACCESSORY       = 0x0D04,     //快速领取  TMsgReqBatchGetMailAccessory & TMsgResBatchGetMailAccessory
+        E_MSG_ID_BATDEL_MAIL                = 0x0D05,     //快速删除  TMsgReqBatDelMail & TMsgResBatDelMail
+        E_MSG_ID_GET_MAIL                   = 0x0D06,     //请求拉取邮件  TMsgReqGetMail & TMsgResGetMail
+        E_MSG_ID_DEL_MAIL                   = 0x0D07,     //删除邮件  TMsgReqDelMail & TMsgResDelMail
+        
+	    //GM
+	    E_MSG_ID_ADD_ITEM_COUNT             = 0x2601,      //GM增加物品数量 TGMAddItemReq & TGMAddItemRsp
+	    E_MSG_ID_GM_ACTIVATE_ACHI           = 0x2602,      //GM激活成就 TMsgReqGMActivateAchi
+		
+
+		/*****************************************************************************************/
+		/**                   十进制    [10001 ~ 10200]    协议段 对应 LoginSvr                  **/
+		/**                   十六进制   [0x2711 ~ 0x27D8]  协议段 对应 LoginSvr                 **/
+		/*****************************************************************************************/
+		E_MSG_ID_LOGIN_BY_OPENID           = 0x2711,      //开放平台登录请求  - TMsgReqLoginByOpenID & TMsgResLogin
+		E_MSG_ID_LOGIN_BY_PHONE            = 0x2712,      //手机号登陆请求 - TMsgReqLoginByPhone & TMsgResLogin
+		E_MSG_ID_LOGIN_BY_NAME             = 0x2713,      //用户名登录请求 - TMsgReqLoginByName & TMsgResLogin
+		E_MSG_ID_REGISTRY_BY_PHONE         = 0x2714,      //手机号注册请求 - TMsgReqRegistryByPhone & TMsgResRegistry
+		E_MSG_ID_REGISTRY_BY_NAME          = 0x2715,      //用户名注册请求 - TMsgRegistryByName & TMsgResRegistry
+		E_MSG_ID_REGISTRY_BY_TOURIST       = 0x2716,      //游客注册请求 - TMsgRegistryByTourist & TMsgResRegistry
+		E_MSG_ID_QUERY_VERIFICATION_CODE   = 0x2717,      //查询验证码请求 -TMsgReqVerificationCode & TMsgRspVerificationCode
+        E_MSG_ID_BINDING                   = 0x2718,      //账号绑定手机请求 - TMsgReqBinding & TMsgResBinding
+		E_MSG_ID_FIND_ACCOUNT              = 0x2719,      //找回账号请求 - TMsgReqFindAccount & TMsgResFindAccount
+		E_MSG_ID_FIND_PASSWD               = 0x271A,      //找回密码请求 - TMsgReqFindPasswd & TMsgResFindPasswd
+		E_MSG_ID_RESET_PASSWD              = 0x271B,      //重置密码请求 - TMsgReqResetPasswd & TMsgResResetPasswd
+		
+		
+
+
+
+		/*****************************************************************************************/
+		/**                   十进制    [10201 ~ 10300]    协议段 对应 VersionSvr                  **/
+		/**                   十六进制   [0x27D9 ~ 0x283C]  协议段 对应 VersionSvr                   **/
+		/*****************************************************************************************/
+		E_MSG_ID_QUERY_APK_UPDATE          = 0x27D9,      //查询APK版本更新请求  - TMsgReqQueryApkUpdate & TMsgResQueryApkUpdate
+		E_MSG_ID_RES_DOWNLOAD              = 0x27DA,      //资源更新请求 - TMsgReqResDownload & TMsgResResDownload
+		E_MSG_ID_SYS_NOTICES               = 0x27DB,      //系统公告请求 - TMsgReqSysNotices & TMsgResSysNotices
+
+
+		/*****************************************************************************************/
+		/**                   十进制    [10301 ~ 10400]    协议段 对应 DirSvr                  **/
+		/**                   十六进制   [0x283D ~ 0x‭28A0‬]  协议段 对应 DirSvr                   **/
+		/*****************************************************************************************/
+	    E_MSG_ID_QUERY_ZONE_LIST            = 0x283D,     //获取游戏分区 - TMsgReqQueryZoneList & TMsgResQueryZoneList
+
+
+		/*****************************************************************************************/
+		/**                   十进制    [10401 ~ 10500]    协议段 对应 ZoneSvr内部协议           **/
+		/**                   十六进制   [0x28A1 ~ 0x2904]  协议段 对应 ZoneSvr                  **/
+		/*****************************************************************************************/
+		E_LMSG_RELOADCFG                    = 0x28A1,      //重新加载服务配置
+		E_LMSG_RELOAD_GAMECFG               = 0x28A2,      //重新加载游戏配置
+		E_LMSG_DEL_OFFLIEN_PLAYER           = 0x28A3,      //把离线用户踢下线
+		E_LMSG_CHECK_MAIL                   = 0x28A4,      //检查系统邮件
+		E_LMSG_SEND_MAIL_RESPONSE           = 0x28A5,      //发送邮件响应
+		E_LMSG_ZERO_CHANGE_DAY              = 0x28A6,      //0点换天
+
+
+		/*****************************************************************************************/
+		/**                   十进制    [10501 ~ 10600]    协议段 对应 RoomSvr           **/
+		/**                   十六进制   [0x2905 ~ 0x2968]  协议段 对应 RoomSvr                  **/
+		/*****************************************************************************************/
+		E_MSG_ID_PVP_MATCH_ADD_TEMP_TEAM    = 0x2905,      //请求快速匹配临时队伍 - TMsgReqPvpMatchAddTempTeam & TMsgResPvpMatchAddTempTeam
+        E_MSG_ID_PVP_MATCH_CANCEL_TEMP_TEAM = 0x2906,      //请求退出临时队伍 - TMsgReqCancelPVPMatchTempTeam & TMsgResCancelPVPMatchTempTeam
+		E_MSG_ID_PVP_MATCH_ENTER_TEMP_TEAM  = 0x2907,      //请求进入已存在的临时队伍  - TMsgReqPvpMatchEnterTempTeam & TMsgResPvpMatchEnterTempTeam
+	    E_MSG_ID_SET_ROOM_STATUS            = 0x2908,      //请求设置房间状态 - TMsgReqSetRoomStatus & TMsgResSetRoomStatus
+		E_MSG_ID_PVP_MATCH_START            = 0x2909,      //请求临时队伍的开始对战 - TMsgReqPvpMatchStart & TMsgResPvpMatchStart
+		E_MSG_ID_PVP_MATCH_FIND_ROOM        = 0x290A,      //查找房间信息 - TMsgReqPvpMatchFindRoom &  TMsgResPvpMatchFindRoom   
+		E_MSG_ID_PVP_MATCH_QUERY_ROOM_LIST  = 0x290B,      //查询房间列表 - TMsgReqPvpMatchQueryRoomList &  TMsgResPvpMatchQueryRoomList  
+		E_MSG_ID_PUSH_PVP_MATCH_TEMP_TEAM   = 0x290C,      //通知临时队伍成员变化 - TMsgNotifyPVPMatchTempTeam 
+		E_MSG_ID_PUSH_SET_ROOM_STATUS       = 0x290D,      //通知修改房间状态事件 - TMsgNotifySetRoomStatus
+		E_MSG_ID_PUSH_PVP_MATCH_START       = 0x290E,      //开始比赛通知 - TNotifyPvpMatchStart
+		E_MSG_ID_QUERY_CURRENT_ROOM         = 0x290F,      //查询当前房间信息 - TMsgReqQueryCurrentRoom & TMsgResQueryCurrentRoom
+		E_MSG_ID_PVP_MATCH_READD_TEMP_TEAM  = 0x2910,      //请求重新快速匹配临时队伍 - TMsgReqReAddTempTeam & TMsgResReAddTempTeam
+		E_MSG_ID_ACCEPT_JOIN_ROOM           = 0x2911,      //接受邀请加入匹配房间 TMsgReqAcceptJoinRoom & TMsgResAcceptJoinRoom
+		E_MSG_ID_NOTIFY_ACCEPT_JOIN_ROOM    = 0x2912,      //通知邀请人 TNotifyAcceptJoinRoom
+		E_MSG_ID_SINGLE_PLAY_START          = 0x2913,      //开始单机游戏 TMsgReqSinglePlayStart & TMsgResSinglePlayStart
+		E_MSG_ID_SINGLE_PLAY_FINISH         = 0x2914,      //结束单机游戏 TMsgReqSinglePlayFinish & TMsgResSinglePlayFinish
+		E_MSG_ID_NOTIFY_PVP_FINISH          = 0x2915,      //PVP结束战斗 TMsgNotifyPvpPlayFinish
+		E_MSG_ID_GET_MEMBER_INFO_BATCH      = 0x2916,      //请求成员信息 TMsgReqGetMemberInfoBatch & TMsgResGetMemberInfoBatch
+		E_MSG_ID_SET_WEAPON                 = 0x2917,      //请求设置武器或配件 - TMsgReqSetWeapon & TMsgResSetWeapon
+
+
+		//战斗局内消息
+		E_MSG_UDP_ID_PVP_ENTER_ROOM         = 0x2970,      // [RUDP] 请求进入pvp房间  TMsgReqPVPEnterRoom & TMsgResPVPEnterRoom
+		E_MSG_UDP_ID_PVP_READY              = 0x2971,      // [RUDP] client loading准备就绪 TMsgReqPVPReady & TMsgResPVPReady
+		E_MSG_UDP_ID_PVP_LEAVE_ROOM         = 0x2972,      // [RUDP] 请求退出pvp房间 TMsgReqPVPLeaveRoom & TMsgResPVPLeaveRoom
+		E_MSG_UDP_ID_PVP_REENTER_ROOM       = 0x2973,      // [RUDP] 请求重入pvp房间 TMsgReqPVPReEnterRoom & TMsgResPVPReEnterRoom
+		E_MSG_UDP_ID_NOTIFY_PVP_PLAYER_STATUS= 0x2974,     // [RUDP] 通知消息 TNotifyPVPPlayerStatus
+		E_MSG_UDP_ID_REQ_SYNC               = 0x2975,      // [RUDP] 请求帧同步消息 TMsgReqSync
+		E_MSG_UDP_ID_NOTIFY_SYNC            = 0x2976,      // [RUDP] 帧同步消息 TNotifySync
+		E_MSG_UDP_ID_NOTIFY_PVP_KICK_OFF    = 0x2977,      // [RUDP] 踢人 TNotifyPVPKickOff
+		E_MSG_UDP_ID_NOTIFY_PVP_END_ABNORMALLY=0x2978,     // [RUDP] 非正常结束 TNotifyPVPrEndAbnormally
+		E_MSG_UDP_ID_PVP_PUSH_FINISH_PLAYER = 0x2979,      // [RUDP] 推送通过终点玩家 TNotifyPVPFinishPlayer
+		E_MSG_UDP_ID_NOTIFY_NEW_RECORD      = 0x297A,      // [RUDP] 成绩是否破记录 TNotifyNewRecord
+		E_MSG_UDP_ID_PVP_PUSH_FINISH        = 0x297B,      // [RUDP] 推送PVP结算 TNotifyPVPFinish
+		E_MSG_UDP_ID_NOTIFY_POP_LOADING_PROGRESS=0x297C,   // [RUDP] 推送loading消息  TNotifyPopLoadingProgress
+		E_MSG_UDP_ID_POP_LOADING_PROGRESS   = 0x297D,      // [RUDP] 同步loading进度  
+		E_MSG_UDP_ID_PVP_PUSH_START         = 0x297E,      // [RUDP] 推送PVP场内战斗开始 TNotifyPVPStart
+		E_MSG_UDP_ID_PVP_HELLO              = 0x2980,      // [RUDP] 客户端心跳请求 TMsgReqPVPHello &  TMsgResPVPHello  
+		E_MSG_UDP_ID_PVP_GET_ITEM           = 0x2981,      // [RUDP] 获得道具 TMsgReqPopGetItem & TMsgResPopGetItem
+		E_MSG_UDP_ID_NOTIFY_POP_GET_ITEM    = 0x2982,      // [RUDP] 通知获得道具 TNotifyPopGetItem
+        E_MSG_UDP_ID_PVP_POP_USE_ITEM       = 0x2983,      // [RUDP] 使用道具 TMsgReqPopUseItem & TMsgResPopUseItem
+		E_MSG_UDP_ID_NOTIFY_POP_USE_ITEM    = 0x2984,      // [RUDP] 通知使用道具 TNotifyPopUseItem
+		E_MSG_UDP_ID_PVP_POP_DISCARD_ITEM   = 0x2985,      // [RUDP] 丢弃道具 TMsgReqPopDiscardItem & TMsgResPopDiscardItem
+		E_MSG_UDP_ID_NOTIFY_POP_DISCARD_ITEM= 0x2986,      // [RUDP] 通知丢弃道具 TNotifyPopDiscardItem
+		E_MSG_UDP_ID_PVP_STAT_INFO          = 0x2987,      // [RUDP] PVP上报统计信息 TMsgReqPVPStatInfo & TMsgResPVPStatInfo
+		E_MSG_UDP_ID_PVP_STATISTICS_ACT     = 0x2988,      // [RUDP] PVP上报统计动作 TMsgReqPVPActInfo & TMsgResPVPActInfo
+		E_MSG_UDP_ID_PVP_FINISH             = 0x2989,      // [RUDP] PVP结束战斗 TMsgReqFinishPVP & TMsgResFinishPVP
+		E_MSG_UDP_ID_REQ_FRAME              = 0x298A,      // [RUDP] 请求补帧数据 TMsgReqFrame & TMsgResFrame
+
+		
+		/*****************************************************************************************/
+		/**                   十进制    [10601 ~ 10700]     协议段 对应 AntiSvr                  **/
+		/**                   十六进制   [0x2969 ~ 0x29CC]  协议段 对应 AntiSv                   **/
+		/*****************************************************************************************/
+    	E_MSG_ID_ANTI_AUTHENTICATION2       = 0x2969,      //实名认证 - TMsgReqAntiAuthentication & TMsgResAntiAuthentication
+		E_MSG_ID_QUERY_REAL_NAME_AUTH       = 0x296A,      //查询实名认证信息请求 - TMsgReqQueryRealNameAuth & TMsgResQueryRealNameAuth
+        
+	};
+
+	
+
+	//服务器返回客户端的值 0 - 1000为公共服务返回码
+	enum E_SVR_RET
+	{
+		E_SVR_RET_SUCCESS                       = 0,                        //成功
+		E_SVR_RET_FAILED                        = 1,						//通用失败
+		E_SVR_RET_DCACHE_SYS_ERROR              = 2,                        //DCache异常 
+		E_SVR_RET_REGISTRY_DUPLICATE            = 3,                        //重复注册
+		E_SVR_RET_REGISTER_FAILED               = 4,                        //注册失败
+		E_SVR_RET_NOT_REGISTER                  = 5,                        //用户未注册
+		E_SVR_RET_VERIFY_FAILED                 = 6,					    //身份校验失败
+		E_SVR_RET_GETUIN_FAILED                 = 7,					    //获取用户ID失败
+		E_SVR_RET_GETUIN_NOT_FOUND	            = 8,                        //游戏账号未注册
+		E_SVR_RET_PASSWD_ERROR                  = 9,                        //密码错误
+		E_SVR_RET_GETUSERDATA_FAILED            = 10,				        //获取玩家数据失败
+		E_SVR_RET_NOT_WHITEUIN                  = 11,                       //非内测用户，拒绝登录
+		E_SVR_RET_NO_SESSION                    = 12,                       //未取到用户session
+		E_SVR_RET_LOGIN_OVERLOAD                = 13,                       //Server人数太满，客户端需要等待一段时间在重试
+		E_SVR_RET_NOT_FOUND_SESSION             = 14,                       //用户态不存在
+		E_SVR_RET_ERR_LOGIN_TYPE                = 15,                       //错误的登陆类型
+		E_SVR_RET_ERR_INVALIDPARAM              = 16,                       //参数解析或者验证失败
+		E_SVR_RET_TOKEN_EXPIRE                  = 17,                       //TOKEN过期
+		E_SVR_RET_OTHER_LOGIN                   = 18,                       //用户在其他地方登录了
+		E_SVR_RET_GET_CFG_FAIL                  = 19,                       //读取配置失败
+		E_SVR_RET_MSG_HEAD_ERR                  = 20,                       //消息头错误
+		E_SVR_RET_STOP_SERVICE                  = 21,                       //停服 
+		E_SVR_RET_CLIENT_UPGRADE                = 22,                       //客户端版本升级
+		E_SVR_RET_USR_BAN                       = 23,                       //客户端被限制登陆
+		E_SVR_RET_USR_GAG                       = 24,                       //客户端被限制发言
+		E_SVR_RET_NO_ZONE_INFO                  = 25,                       //分区不存在
+		E_SVR_RET_ZONE_MATTAIN                  = 26,                       //分区维护中
+		E_SVR_RET_ZONE_FULL                     = 27,                       //分区满人
+		E_SVR_RET_BAN                           = 28,                       //系统禁止登录
+		E_SVR_RET_NO_SERVER_GROUP               = 29,                       //没有配置分组信息
+		E_SVR_RET_NOT_GM_RIGHT                  = 30,                       //没有GM权限
+        E_SVR_RET_ALREADY_GET_REWARD            = 31,                       //不能重复领取
+        E_SVR_RET_NOT_REACH_CONDITION           = 32,                       //未达成条件
+        E_SVR_RET_NICK_TOO_LONG                 = 33,                       //昵称长度太长
+        E_SVR_RET_NICK_IS_USE                   = 34,                       //昵称已被占用
+		E_SVR_RET_ANTI_FORBID                   = 35,                       //非首次登录未实名认证且体验时间≥45分钟
+		E_SVR_RET_ANTI_UNDER_AGE                = 36,                       //每日22时至次日8时，不得以任何形式为未成年人提供游戏服务
+		E_SVR_RET_ANTI_UNDER_AGE_TOO_LONG       = 37,                       //每日22时至次日8时，不得以任何形式为未成年人提供游戏服务
+		E_SVR_RET_ANTI_AUTHENTICATION_DUPLICATE = 38,                       //重复验证
+
+
+		/*****************************************************************************************/
+		/**                              服务名称: VersionSvr                                   **/
+		/**                              号段: [ 100 ~ 200]                                     **/
+		/*****************************************************************************************/
+		E_SVR_RET_APK_NOT_FOUND                 = 100,                      //客户端升级包配置不存在
+		E_SVR_RET_RES_FILE_NOT_FOUND            = 101,                      //资源文件不存在
+		E_SVR_RET_NOTICE_NOT_FOUND              = 102,                      //公告不存在
+
+		/*****************************************************************************************/
+		/**                              服务名称: LoginSvr                                   **/
+		/**                              号段: [ 200 ~ 300]                                     **/
+		/*****************************************************************************************/
+		E_SVR_RET_NOT_REGIST_RIGHT              = 200,                      //没有注册权限
+        E_SVR_RET_SMS_CODE_ERR                  = 201,                      //短信验证码错误
+        E_SVR_RET_SMS_EXPIRE                    = 202,                      //短信验证码已失效
+		E_SVR_RET_DUPLICATE_BINDING             = 203,                      //已经存在绑定的账号
+	    E_SVR_RET_NOT_BINDING                   = 204,                      //手机号还没有绑定
+	    E_SVR_RET_ERR_PHONE_NUMBER              = 205,                      //非法的手机号码
+	    E_SVR_RET_DUPLICATE_CERTIFICATE         = 206,                      //重复认证
+	    E_SVR_RET_TOO_OFTEN                     = 207,                      //请求太频繁
+
+		/*****************************************************************************************/
+		/**                   [ 0 ~ 1000] 为公共服务返回码,业务从10001~20000号段使用              **/
+		/*****************************************************************************************/
+
+		//基础属性
+	    E_SVR_RET_BASIC_INVALID_VALUE           = 10001,                    //非法的属性值
+	    E_SVR_RET_BASIC_DEC_OVER_HOLD_CNT       = 10002,                    //待消耗资源超过拥有的数量，请重试
+	    E_SVR_RET_BASIC_UP_TO_HOLD_LIMIT        = 10003,                    //已达到可拥有上限，无法继续获取
+	    E_SVR_RET_BASIC_INVALID_ATTR_TYPE       = 10004,                    //资源类型不正确，请联系客服
+	    E_SVR_RET_GOLD_NOT_ENOUGH               = 10005,                    //金币数量不足
+	    E_SVR_RET_DIAMOND_NOT_ENOUGH            = 10006,                    //钻石数量不足
+	    E_SVR_RET_BASIC_LOAD_FROM_DB_ERROR      = 10007,                    //重DB内存加载失败
+	    E_SVR_RET_BOX_NOT_ENOUGH                = 10008,                    //宝箱不足
+	    E_SVR_RET_EXP_NOT_ENOUGH                = 10009,                    //经验不足
+	    E_SVR_RET_YWB_NOT_ENOUGH                = 10010,                    //遗物币不足
+	    E_SVR_RET_XZB_NOT_ENOUGH                = 10011,                    //勋章币不足
+		E_SVR_RET_ITEM_NOT_FOUND                = 10012,                    //物品配置不存在
+	
+	    //背包
+	    E_SVR_RET_BAG_STACK_COUNT               = 10101,                    //超过允许堆叠数
+	    E_SVR_RET_BAG_ITEM_FULL                 = 10102,                    //这么大的背包居然都装满了！请先清理一下背包里的无用
+	    E_SVR_RET_BAG_MAX_STACK_COUNT           = 10103,                    //物品达到堆叠上限，无法增加
+	    E_SVR_RET_BAG_RESID_NOT_FIND            = 10104,                    //没有该装备的资源
+	    E_SVR_RET_BAG_ITEM_NOT_ENOUGH           = 10105,                    //材料数量不足
+	    E_SVR_RET_GOODS_LIMIT_MAX               = 10106,                    //该物品产出达到当日上限
+	    E_SVR_RET_ITEM_TYPE_WRONG               = 10107,                    //道具类型错误
+	    E_SVR_RET_BAG_POS_NOT_FOUND             = 10108,                    //背包位置不存在
+	    E_SVR_RET_BAG_POS_ERROR                 = 10109,                    //物品位置错误
+        
+
+		//角色相关
+		E_SVR_RET_ROLE_NOT_FOUND                = 10201,                     //角色不存在
+    	E_SVR_RET_ROLE_CONF_NOT_FOUND           = 10202,                     //角色配置不存在
+		E_SVR_RET_ROLE_EXIST                    = 10203,                     //角色已存在
+        E_SVR_RET_MAX_ROLE_LVL_LIMIT            = 10204,                     //达到角色的最大等级限制
+		E_SVR_RET_STRENGTHEN_CFG_ERR            = 10205,                     //角色强化配置错误
+
+
+		//房间服务相关
+		E_SVR_RET_MATCH_MODE_ERR                = 10501,                     //房间模式错误
+		E_SVR_RET_PVP_NOT_ENTER_BEFORE_NOT_REENTER = 10502,                  //正在用心为您寻找一起玩的小伙伴，请稍等等哦
+		E_SVR_RET_PVP_MATCH_CANOT_NEW_PLAYER    = 10503,                     //不能创建用户
+		E_SVR_RET_PVP_MATCH_ADD_ROOM_FAIL       = 10504,                     //加入房间失败，请重新尝试
+		E_SVR_RET_PVP_MATCH_CANOT_FIND_INVITER  = 10505,                     //邀请人已经去忙别的了，下次再一起玩吧~
+		E_SVR_RET_PVP_MATCH_MATCH_TYPE_INVALID  = 10506,                     //游戏模式有误，请重新选择游戏模式
+		E_SVR_RET_PVP_MATCH_ROOM_FULL           = 10507,                     //此房间已满
+		E_SVR_RET_PVP_MATCH_ROOM_NOT_EXIST      = 10508,                     //游戏已经开始了,您暂时不能加入此房间
+		E_SVR_RET_PVP_SYS_ERR                   = 10509,                     //PVP系统错误
+		E_SVR_RET_PVP_ROOM_NOT_EXIST            = 10510,                     //房间不存在
+		E_SVR_RET_MATCH_PLAYER_NOT_FIND         = 10511,                     //操作错误
+		E_SVR_RET_PVP_MATCH_NOT_LEADER          = 10512,                     //不是房主,没有权限操作
+		E_SVR_RET_PVP_MATCH_NOT_ALL_READY       = 10513,                     //房间成员不足，还不能开始
+		E_SVR_RET_PVP_ROOM_MEMBER               = 10514,                     //您不属于此房间哦
+		E_SVR_RET_PVP_ROOM_NOT_START            = 10515,                     //您的房间还没有开始游戏哦
+		E_SVR_RET_PVP_ROOM_MEM_STATE            = 10516,                     //loading未完成
+		E_SVR_RET_PVP_ROOM_IS_START             = 10517,                     //此房间已经开始游戏了
+		E_SVR_RET_PVP_PLAYER_NUMBER_ERROR       = 10518,                     //需要2人以上，才能开始游戏
+		E_SVR_RET_PVP_OUT_NOT_REENTER_ROOM      = 10519,                     //您已退出当前房间
+		E_SVR_RET_PVP_OFFLINE_TIMEOUT_NOT_REENTER_ROOM = 10520,              //您与服务器丢失连接超时，已经离开当前房间
+	    E_SVR_RET_PVP_MATCH_ALLOCATE_ROOM_FAIL  = 10521,                     //创建房间失败,请稍后再试
+
+		E_SVR_RET_PVP_CANOT_NEW_SESSION         = 10550,                     //对战服务不能创建会话连接
+		E_SVR_RET_PVP_CANOT_NEW_PLAYER          = 10551,                     //对战服务不能创建新用户
+		E_SVR_RET_PVP_POP_ITEM_SLOT_FULL        = 10552,                     //道具槽已满
+		E_SVR_RET_PVP_ITEM_SLOT_ITEM_ERROR      = 10553,                     //未获得此道具，不能使用
+		
+
+		//农场
+		E_SVR_RET_FARM_SOIL_LOCK                = 10614,                     //农田未解锁
+		E_SVR_RET_FARM_SOIL_USEING              = 10615,                     //农田被占用
+        E_SVR_RET_ANIMAL_FULL                   = 10616,                     //牧场动物满了
+        E_SVR_RET_MAX_GRASS                     = 10617,                     //超过牧草上限
+
+
+        //博物馆
+        E_SVR_RET_MUSEUM_ERR_TYPE               = 10701,                     //成就类型错误
+        E_SVR_RET_MUSEUM_ALREADY_ACTIVATE       = 10702,                     //重复激活
+        E_SVR_RET_MUSEUM_NOT_REACH_CONDITION    = 10703,                     //未达成条件
+        E_SVR_RET_MUSEUM_GET_ACHI_INFO_FAIL     = 10704,                     //获取成就数据失败
+        E_SVR_RET_MUSEUM_NOT_ACTIVATE           = 10705,                     //未激活
+
+
+		//好友系统
+		E_SVR_RET_APPLY_FOR_FRIEDN_ERR          = 10801,                     //添加好友申请失败
+		E_SVR_RET_APPLY_NOT_FOUND               = 10802,                     //好友申请不存在
+		E_SVR_RET_ADD_FRIEND_ERR                = 10803,                     //添加好友失败
+		E_SVR_RET_FRIEND_NOT_FOUND              = 10804,                     //好友不存在
+		E_SVR_RET_FRIEND_NOT_ONLINE             = 10805,                     //好友不在线
+		E_SVR_RET_DUPLICATE_APPLY_FOR_FRIEDN    = 10806,                     //不能重复申请添加好友
+
+		//伙伴系统
+		E_SVR_RET_NPC_NOT_FOUND                 = 10901,                     //NPC未结识
+		E_SVR_RET_NO_SUPPORT_ITEM_ID            = 10902,                     //不支持的物品类型
+		E_SVR_RET_UNKNOW_NPC                    = 10903,                     //未结识NPC
+		E_SVR_RET_NO_ANIMAL_EVENT               = 10904,                     //没有改小动物事件
+		E_SVR_RET_ERR_ANIMAL_EVENT_OPT          = 10905,                     //错误的小动物选项
+		E_SVR_RET_ADD_FAVOR_TIMES_LIMIT         = 10906,                     //达到赠送次数上限
+		E_SVR_RET_FAVOR_REACH_MAX               = 10907,                     //好感度已达到最大
+
+		//任务系统
+		E_SVR_RET_TASK_LIMIT_REPEAT             = 10950,                     //重复领取任务
+		E_SVR_RET_TASK_NOCF                     = 10951,                     //任务配置不存在
+		E_SVR_RET_TASK_ACCEPT_LIMIT             = 10952,                     //接受任务条件不满足
+        E_SVR_RET_HAVE_NOT_TASK                 = 10953,                     //玩家没有该任务
+		E_SVR_RET_TASK_NOT_FINISH               = 10954,                     //任务未完成	
+        E_SVR_RET_TASK_AWARD_DUPLICATE_DRAW     = 10955,                     //重复领取任务奖励
+
+        //商店
+        E_SVR_RET_SALE_CONF_NOT_FOUND           = 11001,                      //商品配置不存在
+        E_SVR_RET_SALE_NOT_BEGIN                = 11002,                      //售卖时间未到
+	    E_SVR_RET_SALE_TIME_OVER                = 11003,                      //售卖时间已结束
+	    E_SVR_RET_SALE_INVALID                     = 11004,                      //商品无效
+
+        //邮件
+        E_SVR_RET_MAIL_NOT_EXIST                = 12001,                      //邮件不存在
+        E_SVR_RET_MAIL_CONF_NOT_FOUND           = 12002,                      //邮件配置不存在
+        E_SVR_RET_MAIL_DUPLICATE_READ           = 12003,                      //重复读取邮件
+        E_SVR_RET_MAIL_NOT_START                = 12004,                      //邮件未生效
+        E_SVR_RET_MAIL_HAS_OVER                 = 12005,                      //邮件已结束
+        E_SVR_RET_MAIL_OS_TYPE_ERR              = 12006,                      //邮件系统不符
+        E_SVR_RET_MAIL_VERSION_ERR              = 12007,                      //邮件客户端版本不符
+        E_SVR_RET_MAIL_EXIST                    = 12008,                      //邮件已存在
+        E_SVR_RET_MAIL_DUPLICATE_ACCESSORY      = 12009,                      //重复领取邮件
+        E_SVR_RET_MAIL_ACCESSORY_EMPTY          = 12010,                      //邮件附件为空
+        E_SVR_RET_MAIL_STATUS_ERR               = 12011,                      //邮件状态错误
+        E_SVR_RET_MAIL_NOT_READ                 = 12012,                      //邮件未查收,不能删除
+        E_SVR_RET_MAIL_NOT_MATCH_PLAT           = 12013,                      //平台类型不匹配
+        E_SVR_RET_MAIL_NOT_MATCH_WHITEUIN       = 12014,                      //uin白名单不匹配
+
+	};
+
+
+    //=========================== FrameWork 系统枚举类型 结束 ============================//
+
+
+
+
+    //========================= 业务自定义枚举类型   开始    =============================//
+
+    enum EKICKOUT_REASON
+    {
+        E_KICKOUT_OFFLINE                    = 0,                         //正常踢人,长时间没有消息而下线
+        E_KICKOUT_LAST_CONNECT               = 1,                         //踢掉同一个服务器上的上一次登陆账号
+        E_KICKOUT_IN_OTHER_GAME              = 2,                         //踢掉不同服务器上的登陆账号
+        E_KICKOUT_LOGOUT                     = 3,                         //正常登出
+        E_KICKOUT_ANTI                       = 4,                         //防沉迷踢出
+    };
+
+    //道具类型
+    enum E_SERVER_ITEM_TYPE
+    {
+        E_SERVER_ITEM_TYPE_BASE_INFO        = 1,        //基础属性
+        E_SERVER_ITEM_TYPE_BASE_ITEM        = 2,        //普通物品
+        E_SERVER_ITEM_TYPE_EQUIPMENT        = 3,        //装备
+        E_SERVER_ITEM_TYPE_TIMER_ITEM       = 4,        //有时间周期的物品
+        E_SERVER_ITEM_TYPE_PACKAGE          = 5,        //礼包
+        E_SERVER_ITEM_TYPE_NATURAL          = 6,        //天赋
+        E_SERVER_ITEM_TYPE_SOLDIER          = 7,        //士兵
+        E_SERVER_ITEM_TYPE_HEOR             = 8,        //英雄
+        E_SERVER_ITEM_TYPE_SKIN             = 9,        //皮肤
+        E_SERVER_ITEM_TYPE_SKILL            = 10,       // 技能
+        E_SERVER_ITEM_TYPE_BUFF             = 11,       // Buff
+        E_SERVER_ITEM_TYPE_PROP             = 12,       // 临时属性
+        E_SERVER_ITEM_TYPE_PROTRAIT         = 13,       // 头像
+        E_SERVER_ITEM_TYPE_TASK             = 14,       // 任务
+        E_SERVER_ITEM_TYPE_SPECAIL_EFFECT   = 15,       // 特效
+        E_SERVER_ITEM_TYPE_MEDAL_PRIVILEGE  = 16,       // 勋章特权
+        E_SERVER_ITEM_TYPE_STORE            = 17,       //仓库
+        
+        E_SERVER_ITEM_TYPE_HIDE             = 100,      //隐藏类占位
+    };
+
+    //商城类型
+	enum EN_SALE_TYPE
+	{
+		EN_SALE_TYPE_ALL                    = 0,       //全部类型
+		EN_SALE_TYPE_DISCOUNT               = 1,       //超值优惠
+		EN_SALE_TYPE_BOX_KEY                = 2,       //宝箱钥匙
+		EN_SALE_TYPE_DAY_SELECTION          = 3,       //每日精选
+		EN_SALE_TYPE_HERO                   = 4,       //英雄ID
+		EN_SALE_TYPE_SKIN                   = 5,       //皮肤
+		EN_SALE_TYPE_DIAMON                 = 6,       //钻石
+		EN_SALE_TYPE_GOLD                   = 7,       //金币	
+		EN_SALE_TYPE_VIT                    = 8,       //体力
+		EN_SALE_TYPE_LIMIT_ITEM             = 9,       //限购礼包
+		EN_SALE_TYPE_MYSTICAL               = 10,      //神秘宝箱	
+		
+	};
+
+	enum E_PROPERTIES_OPER
+	{
+		E_PROPERTIES_OPER_EQUAL             = 0,       //相等
+		E_PROPERTIES_OPER_ADD               = 1,       //增加
+		E_PROPERTIES_OPER_DEL               = 2,       //减少
+	};
+
+
+	// MODE_TYPE
+	enum E_MODE_TYPE 
+	{
+		MODE_TYPE_NONE                      = 0, 	   //未定义
+		MODE_TYPE_MULTIPLAYER_RATE          = 1, 	   //竞技
+		MODE_TYPE_MAX                       = 2, 	   //最大值
+	};
+
+	// MATCH_TYPE
+	enum E_MATCH_TYPE 
+	{  
+		MATCH_TYPE_OLD                      = 0,
+		MATCH_TYPE_CREATE_ROOM_SINGLE       = 1, 	   //单人开房间匹（无队伍概念）
+		MATCH_TYPE_CREATE_ROOM_MULTI        = 2, 	   //组队开房间(有队伍概念)
+		
+		MATCH_TYPE_MAX                      = 3, 	   //匹配类型最大值 
+	};
+
+	// 日程循环方式
+	enum ADD_MATCH_ROOM_TYPE 
+	{
+		ADD_MATCH_ROOM_TYPE_DEFAUT          = 0,
+		ADD_MATCH_ROOM_TYPE_BE_INVITE       = 1,
+		ADD_MATCH_ROOM_TYPE_RE_ADD          = 2,
+		ADD_MATCH_ROOM_TYPE_FAST_ADD        = 3,
+	};
+
+    // 踢出原因
+	enum PVP_KICK_OFF_REASON 
+    {
+        PVP_KICK_OFF_REASON_LOADING_SLOW = 1,           // Loading时间太慢
+        PVP_KICK_OFF_REASON_EXIT_ROOM_DURING_START = 2, // 点击开始的同时退出房间
+        PVP_KICK_OFF_REASON_READY_SLOW = 3,             // ready超时
+    };
+
+    // 分配房间的来源类型
+	enum ALLOCATE_TOOM_TYPE 
+    {
+        ALLOCATE_TOOM_TYPE_CREATE_ROOM = 1,            // 开房间
+        ALLOCATE_TOOM_TYPE_MATCH = 2,                  // 排位匹配
+        ALLOCATE_TOOM_TYPE_AI_1V5 = 3,                 // AI开房间
+    };
+
+    // 局内动作策略统计
+	enum ENUM_ACT_STAT_TYPE 
+	{
+		ENUM_ACT_STAT_KILL             = 1, // 击杀怪物
+		ENUM_ACT_STAT_SAY_LOVE         = 2, // 表白
+		ENUM_ACT_STAT_TOTAL_GRAB_COINS = 3, // 总共获得过的金币数目
+		ENUM_ACT_STAT_MAX              = 4, // 最大值
+	};
+
+	//任务事件类型
+	enum E_TASK_TYPE 
+	{
+		E_TASK_TYPE_MAIN = 1,       //主线任务
+		E_TASK_TYPE_DAY  = 2,       //每日任务
+		E_TASK_TYPE_ZOON = 3,       //小动物任务
+	};
+
+	//任务奖励状态
+	enum E_TASK_AWARD_FLAG
+	{
+		E_TASK_AWARD_FLAG_LOCK         = 0,   // 任务未解锁
+		E_TASK_AWARD_FLAG_UNABLE       = 1,   // 已解锁任务，不可领取奖励
+		E_TASK_AWARD_FLAG_ABLE         = 2,   // 已完成，可领取
+		E_TASK_AWARD_FLAG_ALREADY      = 3,   // 已领取
+	};
+
+	//任务状态
+	enum E_TASK_STATE
+	{
+		E_TASK_STATE_INITIALIZE        = 0,   // 任务未接受
+		E_TASK_STATE_PROGRESS          = 1,   // 任务进行中
+		E_TASK_STATE_FINISHED          = 2,   // 任务已完成
+		E_TASK_STATE_ALREADY           = 3,   // 已领取奖励
+	};
+
+	//任务条件类型
+	enum E_TASK_LIMIT_TYPE
+	{
+		E_TASK_LIMIT_TYPE_COST_ITEM    = 101,   //消耗物品
+		E_TASK_LIMIT_TYPE_TASK         = 102,   //前置任务
+		E_TASK_LIMIT_TYPE_CHAPTER      = 103,   //地图副本(单机)
+		E_TASK_LIMIT_TYPE_ROUND        = 104,   //完成局数(单机)
+		E_TASK_LIMIT_TYPE_WIN_ROUND    = 105,   //胜利局数(单机)
+		E_TASK_LIMIT_TYPE_DAYS         = 106,   //登陆天数
+		E_TASK_LIMIT_TYPE_ONLINE_ROUND = 107,   //完成局数(组队)
+		E_TASK_LIMIT_TYPE_WIN_ONLINE_ROUND=108, //胜利局数(组队)
+		E_TASK_LIMIT_TYPE_ONLINE_CHAPTER= 109,  //地图副本(组队)
+	};
+
+	//任务事件类型
+	enum E_TASK_TARGET_TYPE
+	{
+		E_TASK_TARGET_INVAILD          = 0,
+		E_TASK_TARGET_DIALOG           = 1001, //完成对白
+		E_TASK_TARGET_KILL             = 1002, //击杀怪物
+		E_TASK_TARGET_GAME             = 1003, //通关副本(单机)
+		E_TASK_TARGET_RESCUE           = 1004, //解救人质
+		E_TASK_TARGET_COST             = 1005, //消耗物品
+		E_TASK_TARGET_ONLINE_GAME      = 1006, //通关副本(组队)
+	};
+
+	//任务事件中子类型
+	enum E_TASK_TARGET_SUB_TYPE
+	{
+		E_TASK_TARGET_SUB_TYPE_DESIRE_ID  = 2000, //任务目标ID
+		E_TASK_TARGET_SUB_TYPE_DIALOG_ID  = 2001, //对白ID
+		E_TASK_TARGET_SUB_TYPE_KILL_ID    = 2002, //击杀怪物ID
+		E_TASK_TARGET_SUB_TYPE_ITEM_ID    = 2003, //物品ID
+		E_TASK_TARGET_SUB_TYPE_ITEM_CNT   = 2004, //物品数量
+		E_TASK_TARGET_SUB_TYPE_CHAPTER_ID = 2005, //章ID
+		E_TASK_TARGET_SUB_TYPE_SECTION_ID = 2006, //节ID
+		E_TASK_TARGET_SUB_TYPE_RESUCE_ID  = 2007, //解救人质
+		E_TASK_TARGET_SUB_TYPE_ONLINE_CHAPTER_ID = 2008, //章ID
+		E_TASK_TARGET_SUB_TYPE_ONLINE_SECTION_ID = 2009, //节ID
+	};
+
+    //商城类型
+	enum E_SALE_TYPE
+	{
+        E_SALE_TYPE_HHZ                 = 1,  //黑胡子商店
+	};
+ 
+
+	/*************************************************************************************/
+    /**                                宏定义声明                                       **/
+    /************************************************************************************/
+
+	const int  MATCH_CHANGE_TYPE_ADD        = 1;       //增加
+    const int  MATCH_CHANGE_TYPE_DEL        = 2;       //减少
+    const int  MATCH_CHANGE_TYPE_MODIFY     = 3;       //改变
+
+	const int  MAX_MATCH_PVP_MEM_NUM        = 4;       //匹配成员最大个数
+
+    const int  MAX_NICKNAME_LEN             = 20;      //昵称长度最大值
+	const int  MAX_HEAD_URL_LEN             = 20;     //头像长度最大值
+	const int  MAX_RECENT_CANCEL_ROOMID_NUM = 3;       //最近快速加入时最多退出过的房间ID
+	const int  MAX_POP_ITEM_NUMBER          = 24;       //Pop中游戏中道具最多个数
+	const int  MAX_PVP_MEM_STAT_NUM         = 15;      //PVP成员统计数据项目
+    const int  MAX_PVP_MEM_NUM              = 4;       //PVP最大成员数量
+
+
+	const int  FAVOR_ITEM_ID_1              = 302;     //竖纹糖块
+	const int  FAVOR_ITEM_ID_2              = 303;     //拐杖糖块
+	const int  FAVOR_ITEM_ID_3              = 304;     //棒棒糖斧
+	const int  FAVOR_ITEM_ID_4              = 305;     //怪味糖果
+	const int  FAVOR_ITEM_ID_5              = 306;     //浓缩牛奶糖
+
+    /*************************************************************************************/
+    /**                                 数据结构声明                                    **/
+    /************************************************************************************/
+
+    //============================= FrameWork 系统数据结构类型 开始 ======================//
+
+
+    struct TSigInfo
+    {
+	    0  optional    string              sProtoSecretKey;                  //通信密钥
+	    1  optional    string              sOpenID;                          //OpenID
+	    2  optional    int                 iTimeStamp;                       //时间戳
+	    3  optional    int                 iValidTime;                       //有效期
+    };
+
+    struct TTokenInfo
+    {
+        0  optional   string                 sAccessToken;                   //登录token
+        1  optional   string                 sPayToken;                      //PayToken
+        2  optional   string                 sPf;                            //支付签名pf
+        4  optional   string                 sPfKey;                         //支付签名pfkey
+    };
+
+
+	//手机信息
+    struct TMobilePhoneInfo
+    {
+        0  optional    string              sOSType;                            //操作系统类型            
+        1  optional    string              sOSVersion;                         //系统版本            
+        2  optional    string              sPhoneMode;                         //手机型号            
+        3  optional    string              sTeleComOper;                       //手机制式
+        4  optional    ENETWORK_TYPE       eNetworkType;                       //网络类型
+        5  optional    int                 iScreenHight;
+        6  optional    int                 iScreenWidth;
+        7  optional    int                 iScreenDensity;
+        8  optional    string              sCpuHardware;                       //cpu类型|频率|核数
+        9  optional    int                 iMemory;                            //内存信息单位M
+        10 optional    string              sMacAddr;                           //网卡地址
+        11 optional    string              sIMEI;                              //IMEI
+        12 optional    E_DEVICE_QUALITY_TYPE  eDeviceQuality;                  //画质
+        13 optional    string              sIDFA;                              //IDFA  iOS
+        14 optional    string              sIDFV;                              //IDFV  iOS
+        15 optional    string              sAndroidID;                         //AndroidID  安卓
+    };
+
+    //Cache数据更新结构
+    struct TUpdateField
+	{
+		0   require    string               sFieldName;
+		1   require    string               sFieldValue;
+	};
+
+    //
+    struct TSessionData
+	{
+	    0   optional   int             tm;            //时间戳
+	    1   optional   unsigned int    uin;           
+	    2   optional   string          openid; 
+	    3   optional   string          token;
+	};
+
+  
+
+    //游戏分区信息
+    struct TServerInfo
+    {
+        0  optional    int                   iSvrID;                           //分区ID
+        1  optional    string                sName;                            //分区名称
+        2  optional    int                   iType;                            //分区类型
+        3  optional    int                   iStatue;                          //分区状态
+        4  optional    int                   iMaxOpenUser;                     //最大开通人数
+        5  optional    string                sUrl;                             //分区地址
+        6  optional    short                 nGroupID;                         //分组ID
+    };
+    
+    struct TEndpoint
+    {
+        0  optional    string                sIP;                             //分区IP
+        1  optional    int                   iPort;                           //分区端口
+    };
+
+    struct TUserZoneInfo
+    {
+        0  optional    int                   iZoneID;                        //zoneID
+        1  optional    string                sName;                          //zoneName
+        2  optional    int                   iSvrStatue;                     //分区状态 E_SERVER_STATUE	
+        3  optional    bool                  bExistRole;                     //是否有创建角色
+        4  optional    long                  lLastTM;                        //最后登录时间
+        5  optional    short                 nRoleStatus;                    //角色状态 0 正常 -1 禁用
+        6  optional    int                   iLvl;                           //角色等级
+        7  optional    string                sUrl;                           //IP地址列表
+		8  optional    bool                  bCreateRole;                    //是否有创建过角色
+    };	
+
+    struct TServerGroupInfo
+    {
+        0  optional   short                  nGroupID;                       //分组ID
+        1  optional   string                 sGroupName;                     //分组名称
+        2  optional   vector<TUserZoneInfo> vecZoneInfo;                     //分区列表
+        3  optional   int                    iRoleNum;                       //角色数量
+    };
+
+    struct TItemParam
+	{
+		0 optional int          iItemID;
+        1 optional unsigned int uItemCount;
+        2 optional unsigned int uItemTime;
+		3 optional int          iItemType;
+	};
+	
+	struct TItemListParam
+	{
+		0 optional vector<TItemParam>  vItemList;
+	};
+
+    
+    
+
+    //玩家账号唯一标识结构体
+	struct TAccountID
+	{
+		0	 require   unsigned int        	   uUin=0;             // Uin
+		1	 require   string 				   sOpenID;            // openid
+		2	 require   E_OPEN_PLAT_TYPE 	   eOpenPlatType;      // 参见E_OPEN_PLAT_TYPE
+		3	 require   int 				       iZoneID;	           //分区ID
+	};
+	
+	//Relay数据
+    struct TRelayMsgInfo
+    {
+        0   require    int                     iMsgID;             //消息id 
+        1   require    string                  sMsgSrc;            //消息来源ServantObj
+        2   require    int                     sMsgSeq;            //消息序号
+        3   require    vector<byte>            sMsgData;           //消息数据
+        4   optional   TAccountID              stAccountID;
+    };
+
+
+
+    //============================= FrameWork 系统数据结构类型 结束 ======================//
+
+
+
+    //============================= 业务自定义数据结构类型 开始 ==========================//
+	struct TEquipmentItem
+	{
+		0   optional   string                  sUniqueID;
+		1   optional   int                     iEquipID;
+		2   optional   short                   nLevel;            //等级
+		3   optional   short                   nPos;              //当前装备格位置
+		4   optional   bool                    bNew;              //新装备
+	};
+
+	struct TItemInfo
+    {
+	    0   optional   int                     iItemId;           //物品id（道具表配置）
+	    1   optional   int                     iItemCount;        //物品数量
+	    2   optional   int                     iItemType;         //物品类型
+	    3   optional   int                     iExpiredTime;      //失效时间, 限时物品使用
+    };
+
+	struct TEquipID
+    {
+	    0   optional   int                     iEquipID;           //装备ID
+        1   optional   string                  sUniqID;            //装备唯一ID
+    }; 
+
+
+	struct TEquipmentGridInfo
+	{
+		0   optional   int                     iPos;              //装备槽位置ID
+		1   optional   int                     nLevel;            //装备等级
+	};
+
+	
+	//战斗属性
+	struct TProperty
+	{
+		0   optional   string                 sPropName;        //属性名称
+		1   optional   float                  fPropValue;       //属性值
+		2   optional   E_PROPERTIES_OPER      oper;             //属性操作
+	};
+
+	//角色基本数据
+    struct TCliRoleInfo
+    {
+	    0   optional   int                     iRoleID;          //角色ID
+	    1   optional   short                   nLvl;             //等级
+		2   optional   vector<TProperty>       vecUpgradeProperty; //升级属性
+    };
+
+	//客户端在线状态
+	enum EClientStatus
+	{
+		E_CS_TYPE_OFFLINE = 0,   //离线
+		E_CS_TYPE_ONLINE  = 1,   //在线
+		E_CS_TYPE_PLAYING = 2,   //游戏中
+	};
+
+	//个人信息
+	struct TSimpleProfile
+    {
+        0  optional    unsigned int               uUin;              //用户uin
+        1  optional    int                        iZoneID;
+		2  optional    E_OPEN_PLAT_TYPE           eOpenPlatType;
+        3  optional    string                     sNickName;          //昵称
+        4  optional    string                     sHeadUrl;           //头像
+        5  optional    short                      nLvl;               //等级
+		6  optional    int                        iState;             //状态 EClientStatus
+    };
+
+
+    //好友ID
+	struct TFriendAccountID
+	{
+		0  optional   unsigned int                uUin;
+		1  optional   int                         iZoneID=1;
+	};
+
+
+	//玩家帐户基本信息
+	struct TBasic
+	{
+		0  optional   string                      sName;             //昵称
+		1  optional   byte                        Geneder;           //性别
+		2  optional   string                      sHeadUrl;          //头像
+		3  optional   unsigned int                uCoins;            //金币
+		4  optional   unsigned int                uDiamonds;         //钻石
+		5  optional   unsigned int                uDiamonAmt;        //钻石累计充值
+		6  optional   short                       nLevel;            //当前等级
+		7  optional   unsigned int                nExperince;        //当前经验值   
+	};
+    
+    struct TBagSlot
+    {
+        0  optional      int                     iItemID;        //得到的物品
+        1  optional      int                     iItemCount;    //数量
+        2  optional      short          usIndex;       //所在下标
+        3  optional      short                   shWear;        //耐久度
+        4  optional      long                    lUniqID;     //唯一ID
+    };
+    
+    //玩家背包
+    struct TPlayerBagInfo
+    {
+        0  optional      unsigned int              uUin;
+        1  optional      int                       iZoneID;    
+        2  optional      vector<TBagSlot>          vBagList;    //道具列表
+        3  optional      short            usBagSize;   //背包大小
+    };
+
+	//实名认证标记
+	enum EN_AUTH_TYPE
+	{
+		EN_AUTH_ADULTS = 1,   //成年 x > 18
+		EN_AUTH_MINORS = 2,   //未成年 16 < x < 18
+		EN_AUTH_NONE   = 3,   //未认证
+		EN_AUTH_CHILDREN=4,   //幼年 8 < x 16
+		EN_AUTH_INFANCY= 5,   //儿童 x < 8
+	};
+
+	//同步操作类型
+	/*enum EN_SYNC_OPT_TYPE
+	{
+		SYNC_OPT_TYPE_NONE            = 0,     //空操作
+		SYNC_OPT_TYPE_MOVE            = 1,     //移动
+		SYNC_OPT_TYPE_FIRE            = 2,     //开火
+		SYNC_OPT_TYPE_HIT             = 3,     //子弹结束
+		SYNC_OPT_TYPE_AIM             = 4,     //瞄准
+		SYNC_OPT_TYPE_AIMEND          = 5,     //瞄准结束
+		SYNC_OPT_TYPE_INPUT_STEER     = 6,     //转向
+		SYNC_OPT_TYPE_INPUT_PRESS     = 7,     //按下
+		SYNC_OPT_TYPE_INPUT_RELEASE   = 8,     //释放
+		SYNC_OPT_TYPE_RESET           = 9,     //复位
+		SYNC_OPT_TYPE_REVIVE          = 10,    //复活
+		SYNC_OPT_TYPE_ITEM            = 11,    //道具
+		SYNC_OPT_TYPE_SKILL           = 12,    //技能
+		SYNC_OPT_TYPE_BUFF            = 13,    //buff
+		SYNC_OPT_TYPE_HP              = 14,   //血量
+		SYNC_OPT_TYPE_DAMAGE          = 15,    //伤害
+		SYNC_OPT_TYPE_ANIMATION       = 16,    //触发动画
+	};*/
+
+    enum E_WORKSHOP_TYPE
+    {
+        E_WORKSHOP_TYPE_PROP               = 0,   //道具
+        E_ITEM_USE_TYPE_SMITHY             = 1,   //铁匠铺
+        E_ITEM_USE_TYPE_KITCHEN            = 2,   //厨房
+
+        E_WORKSHOP_TYPE_MAX                = 3,
+    };
+
+    struct TWorkshopInfo
+    {
+        0  optional      short              shType;     // E_WORKSHOP_TYPE
+        1  optional      short              shLevel;    // 等级
+        2  optional      vector<unsigned int>  vUnlock;  //已解锁配方
+    };
+
+    struct TAnimalSlot
+    {
+        0  optional      int                       iSlotID;             //唯一标识
+        1  optional      int                       iAnimalID;           //动物ID
+        2  optional      int                       iAnimalStatus;       //动物生长状态 EN_ANIMAL_STATUS
+        3  optional      unsigned int              uiNextStageTime;     //到达下阶段的时间
+        4  optional      unsigned int              uiNeedRefreshTime;   //需要请求刷新的时间
+        5  optional      bool                      bIsAte;              //是否吃过饲料了
+    };
+
+	//NPC基本信息
+    struct TBaseNpcInfo
+    {
+        0  optional      int                        iNpcID;       //NPC ID
+        1  optional      int                        iFavor;       //好感度	
+        2  optional      int                        iLvl;         //等级
+        3  optional      unsigned int               lKnowTM;      //结识时间
+		//4  optional      byte                       State=0;      //结识状态 0 未结识 1 已结束     
+		4  optional      short                      nFavorTimes;  //赠送好感度次数
+		5  optional      unsigned int               lLastFavorTM;     //赠送好感度时间戳 
+    };
+
+	struct TTaskContionCfg
+	{
+		0  optional      int                        iConditionID;
+		1  optional      int                        iOper;
+		2  optional      int                        iConditionValue;
+	};
+
+	//任务目标
+	struct TTaskDesireCfg
+	{
+		0  optional      int 		                iDesireId;				//任务条件id
+		1  optional      string		                sDesireDesc;			//任务描述
+		2  optional      int			            iDesireValue;			//条件值 对于非物品类的条件有效
+		3  optional      int			            iItemId;				//物品id
+		4  optional      string 		            sJumpTo;				//任务关联场景
+		5  optional      int 		                iCommonId;				//辅助通用id，根据iDesireSubType不同代表不同id
+		6  optional      vector<TTaskContionCfg>    vecCondition;           //任务条件
+		7  optional      short                      nPriority;              //任务列表展示的优先级
+	};
+
+	//任务条件
+	struct TTaskAcceptLimitCfg
+	{
+		0  optional      int                        iLimitType;             //限制类型
+		1  optional      int                        iJudgeType;             //判断类型
+		2  optional      int                        iLimitValue;            //条件值
+		3  optional      string                     sParam1;                //参数1
+		4  optional      string                     sParam2;                //参数2
+		5  optional      short                      nNecessary;             //必要条件
+	};
+
+    //任务奖励
+	struct TMultipleAwardTypeCfg
+	{
+		0  optional      int 		                iAwardId;				//奖励id
+		1  optional      string		                sAwardDesc;				//奖励描述
+		2  optional      int			            iAwardType;				//奖励类型  
+		3  optional      int			            iItemId;				//物品id
+		4  optional      int			            iItemNum;				//物品个数
+		5  optional      int			            iCalcRate;				//物品概率
+	};
+
+	//任务配置
+	struct TTaskInfoCfg
+	{
+		0  optional      int			            iTaskId;				//任务id
+		1  optional      string		                sTaskName;				//任务名称
+		2  optional      string		                sTaskDesc;				//任务描述
+		3  optional      int                        iNpcID;                 //NPC ID
+		4  optional      int                        iMinLvl;                //NPC 最小等级
+		5  optional      int                        iMaxLvl;                //NPC 最大等级
+		6  optional      short                      nAwardType;             //奖励类型 1-直接发送所有 2-用户选取 3-随机抽取
+		7  optional      vector<int>                vDialog;                //任务对白
+		8  optional      vector<int>                vFinishDialog;          //任务完成后对白
+		9  optional      vector<TTaskDesireCfg>	    vDesireList;            //目标列表
+		10 optional      vector<TMultipleAwardTypeCfg> vAwardList;	        //奖励列表
+		11 optional      vector<TTaskAcceptLimitCfg> vecAcceptLimit;        //解锁条件
+		12 optional      int                        iFavorValue;            //奖励好感度
+		13 optional      byte                       TaskType;               //任务类型 E_TASK_TYPE
+		14 optional      byte                       Quality;                //任务品质
+	};
+
+	//完成目标的简化版
+	struct TSimpleDesire
+	{
+		0   optional      int                       iDesireId;              //目标ID
+		1   optional      string                    sDesireName;            //目标名
+		2   optional      int 	                    iDesireNum;             //目标数量
+		3   optional      byte 	                    bDesireType;            //目标类型
+		4   optional      int 	                    iCurrentNum;            //当前完成数量
+		5   optional      int                       iItemId;                //物品ID
+		6   optional      int                       iCommonId;              //动作Id
+		7   optional      string                    sJumpTo;                //跳转
+		8   optional      short                     nPriority;              //优先级ID
+	};
+
+	//用户任务数据
+	struct TUserTaskInfo
+	{
+		0  optional      int  	                    iTaskId;               //任务ID
+		1  optional      string  	                sTaskName;             //任务名称
+		2  optional      string  	                sTaskDesc;             //任务介绍
+		3  optional      int                        iNpcID;                //NPC ID
+        4  optional      int  	                    nAwardType;            //任务奖励类型 1-直接发送所有 2-用户选取 3-随机抽取
+		5  optional      unsigned int  	            lGetTime;              //任务领取时间
+		6  optional      byte	                    bTaskState;            //任务状态 E_TASK_STATE
+		7  optional      vector<TSimpleDesire>      vecDesire;             //任务的目标完成状态(动作类的相应次数)
+		8  optional      int                        iProgess;              //完成任务数
+		9  optional      int                        iTotalNum;             //总任务数
+		10 optional      vector<TItemInfo>          vecAwardInfo;          //任务奖励
+		11 optional      int                        iFavorValue;           //奖励好感度
+		12 optional      byte                       TaskType;              //任务类型 E_TASK_TYPE
+		13 optional      byte                       Quality;               //任务品质
+	};
+
+	//任务通知
+	struct TTaskCommonData
+	{
+		0  optional      int                       iTaskId;                //任务ID
+		1  optional      int                       iTarget;                //任务目标
+		2  optional      int                       iTargetProcess;         //任务目标的进度
+		3  optional      int                       iState;                 //主线任务状态
+		4  optional      int                       iDesireId;              //任务条件ID
+	};
+
+	//用户任务信息
+	struct TMemberTaskInfo
+	{
+		0  optional      unsigned int              uUin;
+        1  optional      vector<TUserTaskInfo>     vecTaskData;
+	};
+
+	//兔美美NPC信息
+	struct TTumeimeiInfo
+	{
+		0  optional     byte                            Status=0;               //状态标志  0 初始状态(停留家园) 1 外出旅游
+		1  optional     vector<YOOOUM::TItemInfo>       vecDayAward;            //每日奖励
+		2  optional     unsigned int                    uLastRefreshTM;         //最后刷新奖励的时间(每个自然日的凌晨5点刷新)    
+        3  optional     byte                            AwardStatus=0;          //奖励状态	0 未领取 1 已领取	
+		4  optional     unsigned int                    uTourTM=0;              //外出旅游时间戳
+		5  optional     unsigned int                    uComeBackTM=0;          //回家时间戳
+		6  optional     int                             iZoonID;                //小动物ID
+        7  optional     int                             iEventID;               //事件ID
+		8  optional     unsigned int                    uZoonEventTM=0;         //小动物产生时间戳
+	};
+	
+	//游戏数据
+	struct TGameData
+	{
+		0    optional    int                   iRound;                         //总次数
+		1    optional    int                   iWin;                           //胜利次数
+		2    optional    int                   iFail;                          //失败次数
+		3    optional    int                   iChapterID;                     //章ID
+		4    optional    int                   iSectionID;                     //节ID
+	};
+
+	struct TMemberInfo
+	{
+		0  optional      unsigned int              uUin;
+        1  optional      vector<TUserTaskInfo>     vecTaskData;            //任务列表
+		2  optional      vector<TBaseNpcInfo>      vNPCInfo;               //NPC信息
+		3  optional      vector<TGameData>         aGameData;           // 游戏数据 [0]单机 [1]组队
+		4  optional      TPlayerBagInfo            stBagInfo;              //背包信息
+	};
+
+	struct TWeapon 
+	{
+		0  optional      int                      iWeaponID;
+		1  optional      int                      iAccesoryID;
+	};
+	
+    //邮件内容
+    enum E_MAIL_TYPE
+    {
+	    E_MAIL_TYPE_FRIEND_MAIL                     = 1, //好友邮件
+	    E_MAIL_TYPE_SYS_MAIL                        = 2, //系统邮件(需要配置邮件id)
+	    E_MAIL_TYPE_SYS_BUSI_MAIL                   = 3, //系统邮件（游戏内部产生业务邮件）
+    };
+
+    enum E_MAIL_STATUS
+    {
+    	E_MAIL_STATUS_NORMAL               = 0,    //正常状态
+    	E_MAIL_STATUS_READ                 = 1,    //已读状态
+    	E_MAIL_STATUS_AWARD                = 2,    //已领取附件
+    	E_MAIL_STATUS_DEL                  = 3,    //已删除
+    };
+
+    struct TMailData 
+	{
+		0  optional      int                      iMailId;                  //邮件ID
+		1  optional      int                      iMailType;                //邮件类型
+		2  optional      int                      iStatus;                  //邮件状态 E_MAIL_STATUS
+		3  optional      string                   sTitle;                   //标题
+		4  optional      string                   sContent;                 //内容
+		5  optional      vector<TItemInfo>        vecAccessoryData;         //附件内容         
+		6  optional      int                      iExpireTime;              //到期时间，时间戳, 0永久
+		7  optional      int                      iSendTime;                //发送时间，时间戳
+		8  optional      string                   sSender;                  //发送者
+	};
+
+	
+};  

@@ -1,0 +1,536 @@
+module CommData 
+{
+
+	//////////////////////////////// 常量定义 ////////////////////////////////////
+	
+	const int ID_ITEM_CAT_EXP1        = 10011;      //最小经验
+	const int ID_ITEM_CAT_EXP2        = 10012;      //中等经验
+	const int ID_ITEM_CAT_EXP3        = 10013;      //最大经验
+	
+	const int ID_ITEM_CARD_EXP1       = 10021;      //最小经验
+	const int ID_ITEM_CARD_EXP2       = 10022;      //中等经验
+	const int ID_ITEM_CARD_EXP3       = 10023;      //最大经验
+	
+	const int ID_ITEM_CAT_GROWTH_WISDOM = 201;
+	const int ID_ITEM_CAT_GROWTH_SPEED = 202;
+	const int ID_ITEM_CAT_GROWTH_POWER = 203;
+	
+	const int ID_ITEM_CAT_FUR          = 24000;   //猫毛
+	
+	const int ID_ITEM_INIT_SHIP        = 104001;   //初始船只
+	
+	const int DB_BAG_RESOURCE_MAX      = 200;      //背包大小
+	const int DB_MAX_BASE_INFO_COUNT   = 50;       //属性数量最大值
+	const int RES_DEFAULT_MAX_STACK    = 100000;   //资源默认最大上限
+	
+	const long RES_DEFAULT_MAX_TIME = 2682259200;  //物品有效时间的最大上限 "2054-12-31 00:00:00"
+	
+	const int GLOBAL_BASE_RATIO = 10000;           //百分比基数
+	
+	const int ID_ITEM_WORK_PLAT  = 90002;          //工作台
+	const int ID_ITEM_FARMLAND   = 90003;          //农田
+	const int ID_ITEM_PADDOCK    = 90004;          //牧场
+	const int ID_ITEM_OREHOLE    = 90005;          //矿洞
+
+	const int ID_ITEM_GARDEN     = 90007;          //小花园
+
+	const int ID_ITEM_EXPLOR_HOUSE = 90009;        //探索司
+	const int ID_ITEM_FOSTER_CAT_HOUSE = 90010;    //奶猫屋
+	const int ID_ITEM_FEED_PET     = 90011;        //喂食
+	
+	const int FLOWER_PAPER_CARD_2_CHIP = 1;        //花笺卡转换成碎片的数量
+
+	const int COMMON_TOPIC_ID = 60001;             //通用话题ID
+	
+	const int ID_FAST_SELL_ITEM = 321;             //增加热卖次数道具（锣）
+	const int ID_PLAY_CAT_HAIR_ITEM = 322;         //撸猫毛 道具
+	
+
+//技能效果ID
+enum E_SKILL_EFFECT_ID
+{ 
+	E_SE_PLANT_SPEED                 = 1,   //种植速度
+	E_SE_PLANT_CAPACITY              = 2,   //种植容量
+	E_SE_BREED_SPEED                 = 3,   //养殖速度
+	E_SE_BREED_CAPACITY              = 4,   //种植容量
+	E_SE_MINING_SPEED                = 5,   //采矿速度
+	E_SE_MINING_CAPACITY             = 6,   //采矿容量
+	
+	E_SE_MAKE_CLOTH_SPEED            = 7,   //制作布料速度
+	E_SE_MAKE_JEWELRY_SPEED          = 8,   //制作珠宝速度
+	E_SE_MAKE_COSMETICS_SPEED        = 9,   //制作妆品速度
+	
+	E_SE_EXPLOR_TREASURE             = 10,  //探险寻宝事件概率
+	E_SE_EXPLOR_COLLECT              = 11,  //探险采集事件概率
+	E_SE_EXPLOR_FIGHT                = 12,  //探险战斗事件概率
+	
+	E_SE_MAKE_CLOTH_STAR             = 13,  //制作布料增加半颗星级概率
+	E_SE_MAKE_CLOTH_DOUBLE           = 14,  //制作布料双倍概率
+	E_SE_MAKE_CLOTH_MATERAIL         = 15,  //制作布料原材料数量
+	
+	E_SE_MAKE_JEWELRY_STAR           = 16,  //制作珠宝增加半颗星级概率
+	E_SE_MAKE_JEWELRY_DOUBLE         = 17,  //制作珠宝双倍概率
+	E_SE_MAKE_JEWELRY_MATERAIL       = 18,  //制作珠宝原材料数量
+	
+	E_SE_MAKE_COSMETICS_STAR         = 19,  //制作妆品增加半颗星级概率
+	E_SE_MAKE_COSMETICS_DOUBLE       = 20,  //制作妆品双倍概率
+	E_SE_MAKE_COSMETICS_MATERAIL     = 21,  //制作妆品原材料数量
+	
+	E_SE_EXPLOR_TREASURE_HP          = 22,  //探险寻宝消耗体力
+	E_SE_EXPLOR_TREASURE_FAIL_AWARD  = 23,  //探险寻宝失败后获得奖励概率
+	
+	E_SE_EXPLOR_COLLECT_HP           = 24,  //探险采集消耗体力
+	E_SE_EXPLOR_COLLECT_FAIL_AWARD   = 25,  //探险采集失败后获得奖励概率
+
+	E_SE_EXPLOR_FIGHT_HP             = 26,  //探险战斗消耗体力
+	E_SE_EXPLOR_FIGHT_FAIL_AWARD     = 27,  //探险战斗失败后获得奖励概率
+	
+	E_SE_EXPLOR_INFOMATION           = 28,  //探险线索掉落概率
+	E_SE_EXPLOR_RECOVER_HP           = 29,  //探险每次回复生命
+	
+	E_SE_EXPLOR_WISDOM               = 30,  //探险增加全队创意属性(智力)
+	E_SE_EXPLOR_POWER                = 31,  //探险增加全队勇气属性(力量)
+	E_SE_EXPLOR_SPEED                = 32,  //探险增加全队毅力属性(速度)
+	
+	E_SE_EXPLOR_BOSS                 = 33,  //探险遇到boss概率
+	
+	E_SE_EXT_FRESH_CAT               = 34,  //猫爬架额外刷新一只野猫概率
+};
+
+
+	///////////////////////////////// 常量定义 ////////////////////////////////////
+	enum E_DCACHE_MODULE
+	{
+		E_DCACHE_MODULE_ACCOUNT = 1,     
+		E_DCACHE_MODULE_FRIEND  = 2,
+		E_DCACHE_MODULE_FRIEND_INTERACT = 3,
+	};
+	
+	const int MINI_GAME_PULL_THE_TAIL = 25;  //揪猫尾巴小游戏
+   
+
+	enum E_PET_TASK_CONDITION_TYPE
+	{
+		E_PET_TASK_CONDITION_TYPE_TOTAL_ATTR 	= 1, //五项基础属性值
+		E_PET_TASK_CONDITION_TYPE_NUM 			= 2, //拥有N只某品种的猫
+		E_PET_TASK_CONDITION_TYPE_WORK_COUNT 	= 3, //工作次数
+		E_PET_TASK_CONDITION_TYPE_WORK_TIME 	= 4, //工作累计时长
+	};
+	
+	//角色基础数据信息，定义后不能变更，只能增加，注意！！！
+	//最大值不能超过DB_MAX_BASE_INFO_COUNT
+	enum ROLE_BASE_INFO_TYPE
+	{
+	    ROLE_BASE_INFO_TYPE_GOLD                        = 1,                  //金币（安卓）道具id
+	    ROLE_BASE_INFO_TYPE_DIAMOND                     = 2,                  //钻石（安卓）道具id
+        ROLE_BASE_INFO_TYPE_DIAMOND_AMT                 = 3,                  //累计充值元（安卓）
+        
+        ROLE_BASE_INFO_TYPE_LEVEL                       = 4,                  //当前经验等级（繁星阁）
+        ROLE_BASE_INFO_TYPE_EXP                         = 5,                  //当前经验    （繁星阁）道具id
+        
+		ROLE_BASE_INFO_TYPE_GOLD_IOS                    = 6,                  //IOS账户金币
+	    ROLE_BASE_INFO_TYPE_DIAMOND_IOS                 = 7,                  //IOS账户钻石
+        ROLE_BASE_INFO_TYPE_DIAMOND_AMT_IOS             = 8,                  //IOS账户累计充值元
+        
+        ROLE_BASE_INFO_TYPE_VIP_LEVEL                   = 9,                  //vip等级
+		ROLE_BASE_INFO_INTELLIGENCE_POINT               = 10,                 //情报点
+		ROLE_BASE_INFO_POWER                            = 11,                 //力量
+		ROLE_BASE_INFO_WISDOM                           = 12,                 //智力
+		ROLE_BASE_INFO_SPEED                            = 13,                 //速度
+
+		ROLE_BASE_INFO_PHY_STRENGTH                     = 14,                 //副本体力
+		ROLE_BASE_INFO_FISH_COIN                        = 15,                 //钓鱼币
+
+        ROLE_BASE_INFO_TYPE_MAX,                                              //最大值
+	};
+	
+	//用于流水日志reason字段
+	enum E_SOURCE_TYPE
+	{
+		E_SOURCE_COMM                     = 0,
+		E_SOURCE_MAINSTORY                = 1,  //主线剧情
+		E_SOURCE_MAINSTORY_BOX            = 2,  //主线宝箱
+		E_SOURCE_PROTAGONIST              = 3,  //男主剧情
+		E_SOURCE_PROTAGONIST_BOX          = 4,  //男主宝箱
+		E_SOURCE_PROTAGONIST_UNLOCK       = 5,  //男主解锁小节
+		E_SOURCE_PROTAGONIST_GOTOGETHER   = 6,  //男主建立恋爱
+		E_SOURCE_COLLECT_BUILDING         = 7,  //生产建筑获物品到仓库
+		E_SOURCE_MAOPAJIA_TRAD            = 8,  //猫爬架买卖
+		E_SOURCE_DISMISSPET               = 9,  //遣散猫
+		E_SOURCE_TASK_DAILY               = 10, //每日任务
+		E_SOURCE_TASK_GUID                = 11, //引导任务
+		E_SOURCE_OPER_BUILDING            = 12, //建造或升级
+		E_SOURCE_MAKE_PRODUCT             = 13, //制作成品
+		E_SOURCE_MAKE_CANCEL              = 14, //制作撤销
+		E_SOURCE_UPGRADE_PROTAG_LVL       = 15, //男友好感度升级
+		E_SOURCE_GAIN_BUILDING            = 16, //工作台收获物品到仓库
+		E_SOURCE_DAILY_ACTIVE             = 17, //每日活跃度
+		E_SOURCE_RECRUIT_PET              = 18, //招募
+		E_SOURCE_QUICK_RECRUIT_PET        = 19, //快速招募
+		E_SOURCE_QUICK_FRIEND_RECRUIT_PET = 20, //快速好友招募
+		E_SOURCE_FRIEND_RECRUIT_PET       = 21, //好友招募
+		E_SOURCE_UPGRADE_PET              = 22, //升级猫
+		E_SOURCE_ATTRACK_PET              = 23, //猫咪吸引
+		E_SOURCE_ACTIVE_CODE              = 24, //激活码
+		E_SOURCE_OPEN_PACKAGE             = 25, //使用礼包
+		E_SOURCE_STORY_MINIGAME           = 26, //剧情小游戏
+		E_SOURCE_GET_MAIL_ACCESSORY       = 27, //获取邮件附件
+		E_SOURCE_REBUILD_PET              = 28, //洗练猫咪
+		E_SOURCE_SENIOR_REBUILD_PET       = 29, //高级洗练猫咪
+		E_SOURCE_DAILY_SIGN               = 30, //每日签到
+		E_SOURCE_REPAIR_SIGN              = 31, //补签
+		E_SOURCE_TOTAL_SIGN               = 32, //累计签到
+		E_SOURCE_ROLE_EVENT               = 33, //角色事件
+		E_SOURCE_USE_TOPIC                = 34, //使用话题
+		E_SOURCE_UPGRADE                  = 35, //升级繁星阁
+		E_SOURCE_UPGRADE_STAR             = 36, //宠物升星
+		E_SOURCE_CAT_EVENT                = 37, //猫事件
+		E_SOURCE_UNLOCK_WORK_LIST         = 38, //解锁工作队列
+		E_SOURCE_CHARGE                   = 39, //充值
+		E_SOURCE_UNLOCK_HORSE_SLOT        = 40, //解锁马槽
+		E_SOURCE_UPGRADE_HORSE_SLOT       = 41, //升级马槽
+		E_SOURCE_UPGRADE_NPC_LVL          = 42, //npc升级
+		E_SOURCE_MAIN_TASK_AWARD          = 43, //主线任务
+		E_SOURCE_EXPLOR_EVENT             = 44, //探索事件奖励
+		E_SOURCE_EXPLOR_COST              = 45, //探索消耗
+		E_SOURCE_ACCEPT_MAIN_TASK         = 46, //接受主线任务
+		E_SOURCE_ACCEPT_EIGHT_DIAGRAMS_TASK = 47, //接受八卦任务
+		E_SOURCE_REFRESH_EIGHT_DIAGRAMS_TASK= 48, //刷新八卦任务
+		E_SOURCE_EIGHT_DIAGRAMS_TASK_AWARD = 49,  //获取八卦任务奖励
+		E_SOURCE_RESET_INTELLIGENCE_POINT  = 50,  //每日恢复情报点
+		E_SOURCE_COMM_NPC_SHOP             = 51,  //普通商人npc交易
+		E_SOURCE_RARE_NPC_SHOP             = 52,  //奇异商人npc交易
+		E_SOURCE_BUY_ITEM                  = 53,  //购买道具
+		E_SOURCE_SUB_TASK_COST             = 54,  //消耗物品完成子任务
+		E_SOURCE_NPC_TALK                  = 55,  //npc探讨
+		E_SOURCE_BR_DAY_COLLECT            = 56,  //密室每日收藏奖励
+		E_SOURCE_BR_DAY_GAME               = 57,  //密室每日游戏奖励
+		E_SOURCE_BR_ACHIEVE                = 58,  //密室成就奖励
+		E_SOURCE_UNLOCK_PRODUCE_SLOT       = 59,  //解锁生产建筑槽位
+		E_SOURCE_BUY_SHIP                  = 60,  //购买船只
+		E_SOURCE_UPGRADE_WHARF             = 61,  //升级码头
+		E_SOURCE_FAST_BACK_SHIP            = 62,  //让船加速
+		E_SOURCE_SHIP_TRADE                = 63,  //用船交易
+		E_SOURCE_FEED_PET                  = 64,  //喂食
+		E_SOURCE_SETUP_TOOL                = 65,  //使用猫咪玩具
+		E_SOURCE_USE_PET_TOOL              = 66,  //使用玩具
+		E_SOURCE_FAST_WORK_MAKE            = 67,  //工作台加速
+		E_SOURCE_EXPLOR_UNEQUIP            = 68,  //探索卸下装备
+		E_SOURCE_FAST_EXPLOR               = 69,  //探索加速
+		E_SOURCE_UNLOCK_PROTAGONIST        = 70,  //解锁支线
+		E_SOURCE_FAST_PRODUCE              = 71,  //生产加速
+		E_SOURCE_PRODUCE_EXPAND            = 72,  //生产建筑扩容
+		E_SOURCE_SHOP_ADD_GOODS            = 73,  //店铺补充商品
+		E_SOURCE_SHOP_DEL_GOODS            = 74,  //店铺下架商品
+		E_SOURCE_SHOP_SELL_INCOME          = 75,  //店铺售卖收益
+		E_SOURCE_ORDER_AWARD               = 76,  //订单奖励
+		E_SOURCE_UPGRADE_SHOP              = 77,  //店铺升级
+		E_SOURCE_SUB_ORDER_COST            = 78,  //消耗物品完成订单子任务
+		E_SOURCE_COLLECT_NPC_AWARD         = 79,  //收集NPC奖励
+		E_SOURCE_NPC_TALK_FAVOR            = 80,  //npc聊天好感度    
+		E_SOURCE_NPC_VISIT_FAVOR           = 81,  //npc问候好感度 
+		E_SOURCE_NPC_SHARE_FAVOR           = 82,  //npc分享好感度 
+		E_SOURCE_COLLECT_CAT_FUR           = 83,  //收集猫毛
+		E_SRORCE_PROFILE                   = 84,  //npc档案
+		E_SOURCE_TRUST_TASK_AWARD          = 85,  //获取委托任务奖励
+		E_SOURCE_ACCEPT_TRUST_TASK         = 86,  //接受委托任务
+        E_SOURCE_UNLOCK_SHOP               = 87,  //解锁店铺
+		E_SOURCE_TRY_PULL_TAIL             = 88,  //再次揪猫尾巴
+		E_SOURCE_SECTION_REWARD            = 89,  //章节宝箱奖励
+		E_SOURCE_UNLOCK_FEED_CAT           = 90,  //解锁喂猫
+		E_SOURCE_PULL_TAIL                 = 91,  //揪猫尾巴奖励
+		E_SOURCE_PULL_TAIL_PROP            = 92,  //揪猫尾巴属性奖励
+		E_SOURCE_SHOP_SLIP_PAPER           = 93,  //小纸条奖励
+		E_SOURCE_SEND_GIFTS                = 94,  //拜访送礼
+		E_SOURCE_COMPOSE_FLOWER_PAPER      = 95,  //合成花笺
+		E_SOURCE_DECOMPOSE_FLOWER_PAPER    = 96,  //分解花笺碎片
+		E_SOURCE_BREAK_FLOWER_PAPER        = 97,  //花笺卡突破
+		E_SOURCE_UPGRADE_FLOWER_PAPER_STAR = 98,  //花笺卡升星
+		E_SOURCE_UPGRADE_FLOWER_PAPER_LVL  = 99,  //花笺卡升级
+		E_SOURCE_FLOWER_CARD_TO_CHIP       = 100, //卡转换成碎片
+		E_SOURCE_LUCKY_DRAW                = 101, //抽奖
+		E_SOURCE_ACCEPT_INFOR_TASK         = 102, //情报接取
+		E_SOURCE_DRAW_INFOR_TASK           = 103, //情报提交
+		E_SOURCE_SWEEP_INFOR_TASK          = 104, //扫荡情报  
+		E_SOURCE_DRAW_INFOR_LVL_STAR       = 105, //情报等级星星进度奖励  
+		E_SOURCE_INFOR_DIALOGUE            = 106, //情报对白
+		E_SOURCE_EXCHANGE_GOODS            = 107, //兑换  
+		E_SOURCE_INFOR_HELP                = 108, //情报帮助
+		E_SOURCE_BREAK_PET                 = 109, //猫突破
+		E_SOURCE_SEVEN_DAYS_TASK           = 110, //七天活动
+		E_SOURCE_UNLOCK_BUILDING           = 111, //解锁建筑
+		E_SOURCE_ITEM_RECOVER              = 112, //腿力或情报恢复
+        E_SOURCE_PROTAGONIST_INSTANCE      = 113, //男主副本
+        E_SOURCE_PROTAGONIST_EVENT         = 114, //男主事件
+        E_SOURCE_PROTAGONIST_HELLO         = 115, //男主问候
+        E_SOURCE_PET_GROWTH                = 116, //猫成长
+        E_SOURCE_PET_GROWTH_BREAK          = 117, //猫成长突破
+        E_SOURCE_PET_TEAM_UNLOCK           = 118, //猫战队坑位解锁
+        E_SOURCE_DAILY_INSTANCE            = 119, //每日副本
+        E_SOURCE_TEAHOUSE_INSTANCE         = 120, //茶楼副本
+        E_SOURCE_PUT_CAT_EGG               = 121, //放置猫蛋
+        E_SOURCE_COLLECT_CAT_ATONCE        = 122, //立即收获培养的猫
+        E_SOURCE_CAT_TO_ITEM               = 123, //猫转换成道具
+        E_SOURCE_COMPOSE_EGG               = 124, //合成猫蛋
+        E_SOURCE_PET_EGG_PET               = 125, //猫蛋养成猫
+        E_SOURCE_CHANGE_PET_CAPACITY       = 126, //扩容猫容量
+		E_SOURCE_UNLOCK_AD_COPY            = 127, //解锁副本
+		E_SOURCE_GO_FISH                   = 128, //钓鱼
+		E_SOURCE_AD_COPY_BOOK              = 129, //探险副本图鉴奖励
+		E_SOURCE_AD_COPY_BOOK_PROGRESS     = 130, //图鉴进度奖励
+		E_SOURCE_AD_OPEN_BOX               = 131, //副本打开宝箱
+		E_SOURCE_USE_FAST_SELL_ITEM        = 132, //使用热卖道具
+		E_SOURCE_DRAW_PET_FAVOR            = 133, //领取猫好感等级奖励
+		E_SOURCE_PLAY_CAT_HAIR             = 134, //鲁毛毛
+		E_SOURCE_PROTAG_ENGAGE             = 135, //男主约会
+		E_SOURCE_UNLOCK_PROTAG_STORY       = 136, //解锁男主故事
+		E_SOURCE_PROTAG_STORY              = 137, //男主故事
+		E_SOURCE_CHARGE_AWARD              = 138, //累计充值
+        E_SOURCE_RECOMMEND_STORE           = 139, //推荐商店
+		
+		E_SOURCE_GM                        = 1000, //GM工具
+	};
+	
+	//任务事件类型
+	enum E_TASK_TARGET_TYPE
+	{
+		E_TASK_TARGET_INVAILD                     = 0,
+		E_TASK_TARGET_CREATE_BUILD                = 1001, //建造或升级建筑,上报建筑id和等级
+		E_TASK_TARGET_BUY_ITEM                    = 1002, //购买物品，上报物品id和数量
+		E_TASK_TARGET_SELL_ITEM                   = 1003, //售卖物品，上报物品id和数量
+		//E_TASK_TARGET_MAKE_ITEM                   = 1004, //制作物品，上报物品id和数量
+		
+		E_TASK_TARGET_FINISH_MAIN_STORY_SETION    = 1005, //完成主线剧情节，上报章和节id
+		E_TASK_TARGET_FINISH_PROTAGONIST_SECTION  = 1006, //完成男主剧情节，上报男主、章和节id
+		E_TASK_TARGET_FINISH_NPC_DIALOGUE         = 1007, //完成NPC对话
+	    E_TASK_TARGET_CAT_LVL_UPGRADE             = 1008, //猫升级 SET
+	    E_TASK_TARGET_RECRUIT_CAT                 = 1009, //招募猫
+		E_TASK_TARGET_OPER                        = 1010, //玩家操作行为，上报玩家操作id
+		E_TASK_TARGET_FINISH_EVENT                = 1011, //完成事件，上报事件ID
+		E_TASK_TARGET_CHARGE                      = 1012, //充值
+		E_TASK_TARGET_GET_BOX_AWARD               = 1013, //领取剧情宝箱奖励
+		E_TASK_TARGET_UNLOCK_BUILD                = 1014, //解锁建筑
+		E_TASK_TARGET_FINISH_EIGHT_DIAGRAMS       = 1015, //完成八卦任务
+		E_TASK_TARGET_HARVES_ITEM                 = 1016, //收获制作物品，上报物品id和数量
+		E_TASK_TARGET_PUT_CAT_BUILD               = 1017, //把猫放入建筑
+		E_TASK_TARGET_UPGRADE_LVL                 = 1018, //凡星阁升级
+		E_TASK_TARGET_SHIP_SELL                   = 1019, //使用船售卖
+		E_TASK_TARGET_OPEN_BUILD_LIST             = 1020, //打开建筑队列
+		
+		E_TASK_TARGET_CHANGE_ITEM                 = 1021, //物品有变化
+		E_TASK_TARGET_FINISH_TRUST_TASK           = 1022, //完成委托任务
+		
+		E_TASK_TARGET_SHOP_ADD_GOODS              = 1023, //商铺增加货物
+		E_TASK_TARGET_FINISH_ORDER                = 1024, //完成结束订单
+		E_TASK_TARGET_SHOP_SELL_TOTAL_INCOME      = 1025, //店铺售卖累计收益
+		E_TASK_TARGET_SHOP_SELL_INCOME            = 1026, //店铺售卖收益
+
+		E_TASK_TARGET_SEND_GIFTS                  = 1027, //去访-送礼
+		E_TASK_TARGET_USE_TOPIC                   = 1028, //使用话题
+		E_TASK_TARGET_SHARE_NPC                   = 1029, //分享npc
+		E_TASK_TARGET_CAT_BREAK_THROUGH           = 1030, //猫突破
+		E_TASK_TARGET_FINISH_CAT_EVENT            = 1031, //完成猫事件
+		E_TASK_TARGET_FLOWER_PAPER_CARD_BREAK_THROUGH = 1032, //花笺卡突破
+
+		E_TASK_TARGET_VISIT_NPC                   = 1033, //拜访npc
+		E_TASK_TARGET_PROTAGONIST_DATA            = 1034, //男主数据变更
+		E_TASK_TARGET_FEED_PET                    = 1035, //喂猫
+		E_TASK_TARGET_FLOWER_PAPER_DATA           = 1036, //花笺卡数据变更
+		E_TASK_TARGET_INFOR_FINISH_TASK           = 1037, //情报阁完成任务
+		E_TASK_TARGET_FINISH_BRANCH_STORY         = 1038, //完成花笺卡支线
+		E_TASK_TARGET_GAIN_SLIP_PAPER             = 1039, //获得小纸条
+		E_TASK_TARGET_INFOR_TOTAL_STAR            = 1040, //情报总星星数
+		E_TASK_TARGET_INFOR_LVL                   = 1041, //情报阁等级
+		E_TASK_TARGET_INFOR_FIGHT                 = 1042, //情报战斗
+		E_TASK_TARGET_CAT_STAR_UPGRADE            = 1043, //猫升星 SET
+		
+		E_TASK_TARGET_LUCK_DRAW                   = 1044, //抽奖
+		
+		E_TASK_TARGET_COLLECT_CAT_FROM_EGG        = 1046, //获得孵化的猫
+		E_TASK_TARGET_PLAY_COPY                   = 1047, //完副本
+		E_TASK_TARGET_GO_FISH                     = 1048, //钓鱼
+	};   
+	
+	//任务事件中子类型
+	enum E_TASK_TARGET_SUB_TYPE
+	{
+		E_TASK_TARGET_SUB_INVAILD         = 0,
+		E_TASK_TARGET_SUB_BUILD           = 2001, //建筑id
+		E_TASK_TARGET_SUB_BUILD_LEVEL     = 2002, //建筑等级
+		
+		E_TASK_TARGET_SUB_ITEM            = 2003, //物品id
+		E_TASK_TARGET_SUB_ITEM_COUNT      = 2004, //物品数量
+
+		E_TASK_TARGET_SUB_STORY_CHAPTER   = 2005, //剧情章id
+		E_TASK_TARGET_SUB_STORY_SECTION   = 2006, //剧情节id
+		E_TASK_TARGET_SUB_STORY_MAN       = 2007, //剧情男主id
+		E_TASK_TARGET_SUB_ITEM_TYPE       = 2008, //物品类型
+		E_TASK_TARGET_SUB_STORY_DIALOGUE  = 2009, //剧情对话id
+		E_TASK_TARGET_SUB_NPC_DIALOGUE    = 2010, //NPC对话id
+		E_TASK_TARGET_SUB_CATID           = 2011, //猫id
+		E_TASK_TARGET_SUB_CATLVL          = 2012, //猫等级
+		E_TASK_TARGET_SUB_CATSTAR         = 2013, //猫星级
+		E_TASK_TARGET_SUB_CATFIGHT        = 2014, //猫战力
+		E_TASK_TARGET_SUB_ALLCATFIGHT     = 2015, //所有猫战力
+		E_TASK_TARGET_SUB_BUILD_COUNT     = 2016, //建筑数量或工作台队列 数量
+		E_TASK_TARGET_SUB_LV              = 2017, //凡星阁等级
+		E_TASK_TARGET_SUB_BUILD_ID        = 2018, //子建筑id
+		E_TASK_TARGET_SUB_ITEM_STAR       = 2019, //道具星级
+		E_TASK_TARGET_ALL_CAT_COUNT       = 2020, //所有猫的数量
+		E_TASK_TARGET_LVL_CAT_COUNT       = 2021, //达到等级猫的数量
+		E_TASK_TARGET_RECRUIT_RESULT      = 2022, //招募结果 成功2
+		E_TASK_TARGET_LUCK_DRAW_POOLID    = 2023, //抽奖奖池id
+		E_TASK_TARGET_COPY_TYPE           = 2024, //副本类型 1 八卦楼(男主) 2 精英 3 茶楼
+		E_TASK_TARGET_COPY_ID             = 2025, //副本id
+		
+	    E_TASK_TARGET_SUB_SVR_EVENT       = 2050, //后台事件id 待定
+		E_TASK_TARGET_SUB_CET_EVENT       = 2100, //客户端动作行为id 待定
+		
+		
+		E_TASK_TARGET_TASK_ID             = 2101, //八卦任务ID
+		E_TASK_TARGET_TASK_DESIRE_ID      = 2102, //八卦任务目标ID
+		E_TASK_TARGET_TASK_VAULE          = 2103, //八卦任务目标值  
+
+		E_TASK_TARGET_SUB_PROTAGONIST_FAVOR     = 2104, //男主好感度
+		E_TASK_TARGET_SUB_PROTAGONIST_FAVOR_LVL = 2105, //男主好感度等级
+		E_TASK_TARGET_SUB_FLOWER_PAPER_LVL      = 2106, //花笺卡等级
+		E_TASK_TARGET_SUB_FLOWER_PAPER_STAR     = 2107, //花笺卡星级
+		E_TASK_TARGET_SUB_INFOR_TASK_STAR       = 2108, //情报阁任务星级
+		E_TASK_TARGET_SUB_BRANCH_STORY_ID       = 2109, //花笺卡章ID
+		E_TASK_TARGET_SUB_INFOR_LVL             = 2110, //情报阁等级
+		E_TASK_TARGET_SUB_INFOR_TASK_ID         = 2111, //情报任务id
+		E_TASK_TARGET_SUB_INFOR_FIGHT_ID        = 2112, //战斗id
+	};
+	
+	enum E_GAME_COPY_TYPE
+	{
+		E_GAME_COPY_PROTAG   = 1,   //男主（八卦楼）
+		E_GAME_COPY_DAILY    = 2,   //每日精英
+		E_GAME_COPY_TEAHOUSE = 3,   //茶楼
+	};
+	
+	//任务条件类型
+	enum E_TASK_LIMIT_TYPE
+	{
+		E_TASK_LIMIT_TYPE_MAIN_STORY      = 101,   //剧情
+		E_TASK_LIMIT_TYPE_FAVOR           = 102,   //好感度
+		E_TASK_LIMIT_TYPE_TASK            = 103,   //指导任务
+		E_TASK_LIMIT_TYPE_PROTAGONIST     = 104,   //男主剧情
+		E_TASK_LIMIT_TYPE_PROPERTY        = 105,   //繁星阁繁荣度
+		E_TASK_LIMIT_TYPE_COST_ITEM       = 106,   //消耗物品
+	};
+	
+	//探索状态
+	enum E_EXPLORA_STATUS
+	{
+		E_EXPLORA_STATUS_FREE     = 0,  //空闲
+		E_EXPLORA_STATUS_EXPLORA  = 1,  //探索中
+		E_EXPLORA_STATUS_FINISH   = 2,  //探索完成
+		E_EXPLORA_STATUS_END      = 3,  //探索结束 
+	};
+	
+	struct TRecruitPetInfoOut
+	{
+		0 optional short                               nPetID;                  //当前招募的宠物ID
+		1 optional string                              sPetName;                //宠物名称
+		2 optional string                              sPicUrl;                 //宠物头像
+		3 optional short                               nTimes;                  //招募次数
+		4 optional byte                                cStatus;                 //状态 0 未成功招募 1 成功 
+	};
+	
+	struct TItemParam
+	{
+		0 optional int          iItemID;
+        1 optional unsigned int uItemCount;
+        2 optional unsigned int uItemTime;
+	};
+	
+	struct TItemListParam
+	{
+		0 optional vector<TItemParam>  vItemList;
+	};
+	
+	//招募宠物状态
+	enum E_RECRUIT_PET_STATUS
+	{
+		E_RECRUIT_PET_STATUS_FAVOR        = 0,  //增加好感度
+	    E_RECRUIT_PET_STATUS_NULL         = 1,  //未成功招
+		E_RECRUIT_PET_STATUS_SUCC         = 2,  //招募成功
+	};
+	
+	// 物品使用类型
+    const int ITEMUSETYPE_MASK_NULL        = 0; //无任何使用类型
+    const int ITEMUSETYPE_MASK_AUTOOPEN    = 1; //自动打开
+    const int ITEMUSETYPE_MASK_USEROPEN    = 2; //手动打开
+	
+
+	
+	//邮件类别
+	enum E_MAIL_TYPE
+	{
+		E_MAIL_TYPE_FRD    												= 1,    	//好友邮件
+		E_MAIL_TYPE_SYSTEM     											= 2,    	//系统邮件
+	};
+	
+	//邮件状态
+	enum E_MAIL_STATUS
+	{
+	    E_MAIL_STATUS_NORMAL               = 0,    //正常状态
+		E_MAIL_STATUS_READ                 = 1,    //已读状态
+		E_MAIL_STATUS_AWARD                = 2,    //已领取附件
+		E_MAIL_STATUS_DEL                  = 3,    //已删除
+	};
+	
+	//角色事件类型
+    enum E_ROLE_EVENT_TYPE
+    {
+		E_ROLE_EVENT_INVAILD             = 0,
+		E_ROLE_EVENT_STORY               = 1, //剧情
+		E_ROLE_EVENT_ACTIVITY            = 2, //活动
+		E_ROLE_EVENT_SPECAIL             = 3, //特殊
+		E_ROLE_EVENT_COMMON              = 4, //普通
+    };
+	
+	//角色事件触发类型
+	enum E_ROLE_TRIGGER_TYPE
+	{
+		E_ROLE_TRIGGER_COMMON              = 0,
+		E_ROLE_TRIGGER_LOGIN               = 1,    //登陆普通
+		E_ROLE_TRIGGER_ONLINE              = 2,    //在线时长普通
+		E_ROLE_TRIGGER_TIME_RANGE          = 3,    //在线时间段普通
+		E_ROLE_TRIGGER_MAINSTORY           = 4,    //主线剧情
+		E_ROLE_TRIGGER_BRANCHSTORY         = 5,    //支线剧情
+	};
+	
+	//探索事件类型
+	enum E_EXPLOR_EVENT_TYPE
+	{
+		E_EXPLOR_EVENT_INVAILD            = 0,
+		E_EXPLOR_EVENT_FIGHT              = 1, //战斗
+		E_EXPLOR_EVENT_COLLET             = 2, //采集
+		E_EXPLOR_EVENT_TREASURE           = 3, //寻宝
+		E_EXPLOR_EVENT_BOSS               = 4, //boss
+	};
+	
+	const short SEND_ITEM_TYPE_DIRECT	  =  1;   //直接发送所有礼包
+    const short SEND_ITEM_TYPE_SINGLERAND =  2;   //采用礼包内物品单个独立随机的规则
+    const short SEND_ITEM_TYPE_COMBRAND	  =  3;   //组合随机，也就是圆桌随机
+    
+    //猫所处的建筑状态
+    struct TPetStatusInfo
+	{
+		0  optional int 		   iPetID; 		      //cat ID
+		1  optional int 		   iPetSeq; 		  //cat 编号
+		2  optional int            iStatus;           //工作状态   E_PET_STATUS
+		3  optional int            iBuildID;          //建筑id
+	    4  optional int            iSubBuildID;       //子建筑id
+	};
+   
+   struct TBuffMsg
+   {	
+		0	optional   int          iMsgId;             //消息id
+		1   optional   int          iMsgType;           //消息类型
+		2	optional   string       sMsg;               //消息内容
+   };
+
+};

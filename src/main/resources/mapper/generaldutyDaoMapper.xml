@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.GeneraldutyDao">
+	<!-- 目的：为DAO接口方法提供sql语句配置 -->
+
+	<!--留存用户等级成长跟踪 -->
+	<select id="queryUserLevel" resultType="com.yoooum.entity.common.Item">
+		SELECT lv AS levelId,COUNT(uin) AS userNum
+		FROM(
+		SELECT MAX(afterLvl)AS
+		lv,uin
+		FROM ${tbName}
+		WHERE dtEventTime &gt;=#{begDay}
+		AND dtEventTime
+		&lt;=#{endDay}
+		AND registTime &lt;=#{regEndDay}
+		AND registTime
+		&gt;=#{regBegDay}
+        <if test="platformId!=null and platformId!=0">
+			AND platformId=#{platformId}
+		</if>
+		GROUP BY uin
+		) AS t
+		GROUP BY t.lv
+	</select>
+
+	<!--关卡通关情况分布 -->
+	<select id="queryPlann" resultType="com.yoooum.entity.common.Item">
+		SELECT
+		level_id AS levelId,
+		COUNT(uin) AS userNum
+		FROM
+		(
+		SELECT MAX(taskID)
+		AS level_id,uin
+		FROM ${tbName}
+		<where>
+            <if test="platformId!=null and platformId!=0">
+				platformId=#{platformId}
+			</if>
+			<if test="checkId==1">
+				and registTime &gt;= #{begRegTs}
+				and registTime &lt;= #{endRegTs}
+			</if>
+		</where>
+		GROUP BY uin
+		) a
+		GROUP BY level_id
+	</select>
+
+	<!--关卡通关情况分布 -->
+	<select id="queryUserOrder" resultType="com.yoooum.entity.common.Item">
+		SELECT cots AS levelId,COUNT(uin) AS userNum
+		FROM(
+		SELECT uin,COUNT(*)
+		AS cots
+		FROM ${tbName}
+		WHERE opType = 2
+		<if test="checkId==1">
+			AND registTime &gt;= #{begRegTs}
+			AND registTime &lt;= #{endRegTs}
+		</if>
+        <if test="platformId!=null and platformId!=0">
+			AND platformId=#{platformId}
+		</if>
+		GROUP BY uin) AS t
+		GROUP BY cots
+	</select>
+	<!-- 男主好感次数统计 -->
+	<select id="heroCount" resultType="com.yoooum.entity.common.Util">
+		SELECT COUNT(*) reason,
+		COUNT(DISTINCT uin) as sum
+		FROM ${tbName}
+		WHERE protagID=#{checkId}
+        <if test="platformId!=null and platformId!=0">
+			AND platformId=#{platformId}
+		</if>
+	</select>
+
+	<!-- 男主好感区间分布 -->
+	<select id="hero" resultType="com.yoooum.entity.common.Util">
+		SELECT favorLvl as reason,
+		COUNT(DISTINCT uin) AS sum
+		FROM ${tbName}
+		WHERE protagID=#{checkId}
+        <if test="platformId!=null and platformId!=0">
+			AND platformId=#{platformId}
+		</if>
+		GROUP BY favorLvl
+	</select>
+
+	<!-- 男主好感总和 -->
+	<select id="queryFlSum" resultType="int">
+		SELECT IFNULL(SUM(t.fa),0)
+		FROM (
+			SELECT MAX(favorLvl) AS fa
+			FROM ${tbName}
+			WHERE protagID=#{checkId}
+            <if test="platformId!=null and platformId!=0">
+				AND platformId=#{platformId}
+			</if>
+			GROUP BY uin) AS t
+	</select>
+
+</mapper>

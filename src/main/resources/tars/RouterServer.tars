@@ -1,0 +1,53 @@
+#include "../../CommProto/CSProto/CSCommStruct.tars"
+
+module YOOOUM
+{
+    
+    struct TRSPackage
+    {
+        0    require   E_OPEN_PLAT_TYPE        eOpenPlatType;      //开放平台类型 参见E_OPEN_PLAT_TYPE
+        1    require   string                  sOpenID;	           //openID
+        2    require   unsigned int            uUin=0;             //uUin
+        3    optional  int                     iZoneID;            //分区ID
+        4    optional  int                     iClientVer;         //客户端版本号（亿数量级，不大于int32，用于版本升级）
+        5    require   int                     iMsgID;             //消息ID
+        6    require   E_MSG_TYPE              eMsgType;           //消息类型
+        7    require   string                  sMsgBody;           //消息体
+        8    optional  E_LANGUAGE_TYPE         eLang;              //语言
+    };
+
+    struct TRPackage
+    {
+        0    require   string                  sOpenID;	             //openid
+        1    require   int                     iMsgID;               //消息ID
+        2    require   E_MSG_TYPE              eMsgType;             //消息类型
+        3    require   string                  sMsgBody;             //消息体
+        4    optional  int                     iZoneID;              //分区ID
+    };
+
+    //逻辑信息头部
+    struct TRouterHead
+    {
+        0    require   string                  sClientIP;            //客户端IP
+        1    require   int                     iClientPort;          //客户端Port
+        2    require   long                    iConnID;              //客户端连接ID
+        3    require   string                  sRouterObj;           //Router Server OBJ地址
+        4    require   string                  sRealSvrObj;          //Real Server OBJ地址
+        5    optional  string                  sZoneSvrObj;          //Zone Server OBJ地址
+    };
+
+    //Router===>RealServer 
+    struct TR2RSPackage
+    {	
+        0    require   TRouterHead             stRouterHead;         //Router server统一消息头
+        1    require   TRSPackage              stRSPkg;              //
+    };
+
+    //RealServer===>Router 
+    struct TRS2RPackage
+    {	
+        0    require   TRouterHead             stRouterHead;	     //Router server统一消息头
+        1    require   TRPackage               stRPkg;               //
+    };
+
+};

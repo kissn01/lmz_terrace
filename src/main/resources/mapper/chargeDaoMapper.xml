@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.ChargeDao">
+
+    <!--Ltv1:充值金额-->
+    <select id="chargesSum" resultType="int">
+        SELECT IFNULL(SUM(monney)/100,0)
+        FROM ${tbName}
+        WHERE registTime &gt;=#{begTs}
+        AND  registTime &lt;=#{endTs}
+        <if test="platformId!=null and platformId!=0">
+            AND platformId=#{platformId}
+        </if>
+    </select>
+
+    <!--当天总充值总金额-->
+    <select id="chargeUserSum" resultType="java.lang.Integer">
+        select IFNULL(sum(monney), 0)
+        from  ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId=#{platformId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增玩家充值人数-->
+    <select id="chargeNumByReg" resultType="int">
+        SELECT IFNULL(COUNT(DISTINCT uin), 0)
+        FROM ${tbName}
+        WHERE  registTime &gt;= #{begTime}
+        AND    registTime &lt;= #{endTime}
+        <if test="platformId!=null and platformId!=0">
+            AND  platformId=#{platformId}
+        </if>
+    </select>
+
+    <!--充值玩家数量-->
+    <select id="chargeUserNum" resultType="java.lang.Integer">
+        SELECT IFNULL(COUNT(DISTINCT uin), 0)
+        FROM ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId=#{platformId}
+            </if>
+        </where>
+    </select>
+
+    <!--当天总充值总金额-->
+    <select id="newChargeSum" resultType="int">
+        SELECT IFNULL(SUM(monney), 0)
+        FROM  ${tbName}
+        WHERE  registTime &gt;= #{begTime}
+        AND    registTime &lt;= #{endTime}
+        <if test="platformId!=null and platformId!=0">
+            AND platformId=#{platformId}
+        </if>
+    </select>
+
+    <!--用户充值区间分布次数-->
+    <select id="chargeSumAndCount" resultType="com.yoooum.entity.common.Twos">
+        SELECT COUNT(*) AS levelId,
+        COUNT(DISTINCT uin) AS  userNum
+        FROM ${tbName}
+        WHERE monney BETWEEN #{minMoney} AND #{maxMoney}
+        <if test="platformId!=null and platformId!=0">
+            AND platformId=#{platformId}
+        </if>
+    </select>
+
+    <!--玩家充值查询-->
+    <select id="chargeSearchByUin" resultType="com.yoooum.entity.charge.chargeRecord">
+        SELECT DATE_FORMAT(dtEventTime, '%Y-%m-%d %k:%i:%s') as dtEventTime,
+        platformId,monney,diamond,itemID,orderID,payMode,
+        result,totalDiamond,totalMoney,lvl,
+        DATE_FORMAT(FROM_UNIXTIME(registTime), '%Y-%m-%d %k:%i:%s') as registTime
+        FROM ${tbName}
+        WHERE uin = #{uin}
+        ORDER BY id DESC
+    </select>
+
+    <!--玩家充值查询-->
+    <select id="chargeSearchDate" resultType="com.yoooum.entity.charge.chargeRecord">
+        SELECT DATE_FORMAT(dtEventTime, '%Y-%m-%d %k:%i:%s') as dtEventTime,
+        platformId,monney,diamond,itemID,orderID,payMode,
+        result,totalDiamond,totalMoney,lvl,
+        DATE_FORMAT(FROM_UNIXTIME(registTime), '%Y-%m-%d %k:%i:%s') as registTime
+        FROM ${tbName}
+        WHERE uin = #{uin}
+        ORDER BY id DESC
+    </select>
+
+
+</mapper>

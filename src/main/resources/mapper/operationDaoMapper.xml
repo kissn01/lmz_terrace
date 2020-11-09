@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.OperationDao">
+    <!-- 查询所有 -->
+    <select id="operationData" resultType="com.yoooum.entity.operation.OperationData">
+        SELECT * FROM ${tbName}
+        WHERE myDate BETWEEN  #{startDate}  AND #{expirationDate}
+        <if test="platformId != null and platformId != 0">
+            platformId=#{platformId}
+        </if>
+
+        ORDER BY myDate DESC
+    </select>
+
+    <!-- 查询每个小时注册的人数-->
+    <select id="queryHourPeopleNum" resultType="com.yoooum.entity.operation.HourNum">
+        SELECT HOUR(p.dtEventTime) AS hour,COUNT(*) AS peopleNum
+        FROM ${tbName} AS p
+        <where>
+            <if test="platformId != null and platformId != 0">
+                p.platformId=#{platformId}
+            </if>
+        </where>
+        GROUP BY HOUR(p.dtEventTime)
+        ORDER BY HOUR(p.dtEventTime)
+    </select>
+
+    <!-- 钻石产出或消耗 -->
+    <select id="queryDiamondCharge" resultType="com.yoooum.entity.operation.DiamodTwos">
+        SELECT  reason,
+        COUNT(DISTINCT uin) AS playNum,
+        IFNULL(SUM(changeCount),0) AS sum
+        FROM  ${tbName}
+        WHERE itemID = 2
+        <if test="type==1">
+            AND changeCount&gt;0
+        </if>
+        <if test="type==2">
+            AND changeCount&lt;0
+        </if>
+        <if test="platformId != null and platformId != 0">
+            AND platformId=#{platformId}
+        </if>
+        GROUP BY reason
+    </select>
+    <!-- 钻石存量  -->
+    <select id="queryDiamondAfterCount" resultType="int">
+        SELECT IFNULL(SUM(afterCount),0)
+        FROM (
+        SELECT uin,afterCount
+        FROM(
+        SELECT uin,afterCount,dtEventTime
+        FROM ${tbName}
+        WHERE itemID = 2
+        AND dtEventTime BETWEEN #{begDate} AND #{endDate}
+        <if test="platformId != null and platformId != 0">
+            AND platformId=#{platformId}
+        </if>
+        ORDER BY dtEventTime DESC)AS t
+        GROUP BY uin)AS q
+    </select>
+
+    <!-- 金币产出或消耗 -->
+    <select id="coinChange" resultType="com.yoooum.entity.operation.CoinTwos">
+        SELECT
+        SUM( changeCount ) AS coin,
+        COUNT(DISTINCT uin) AS avgCoin
+        FROM
+        ${tableName}
+        WHERE  itemID = 1
+        <if test="platformId != null and platformId != 0">
+            AND platformId=#{platformId}
+        </if>
+        GROUP BY (changeCount>0)
+    </select>
+
+    <!-- 玩家自行产生金币途径 -->
+    <select id="userCoinPathway" resultType="com.yoooum.entity.operation.CoinTwos">
+        SELECT reason as coin,
+        IFNULL(SUM(changeCount),0) as avgCoin
+        FROM ${tableName}
+        WHERE  changeCount&gt;0
+        <if test="platformId != null and platformId != 0">
+            AND platformId=#{platformId}
+        </if>
+        GROUP BY reason
+    </select>
+</mapper>

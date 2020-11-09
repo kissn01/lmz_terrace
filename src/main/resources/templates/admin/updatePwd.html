@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>密码重置</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Worlds Best Admin UX Dashbaoard PRO version for bootstrap template, Select, Calandar, Report, Charts, Tables etc." name="description" />
+    <meta content="" name="author" />
+    <!-- ========================================================================= -->
+    <link rel="shortcut icon" th:href="favicon.ico">
+    <!-- ========================================================================= -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link href="/vendor/material-icons/material-icons.css" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link href="/vendor/flags/css/flag-icon.min.css" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link href="/vendor/daterangepicker-master/daterangepicker.css" rel="stylesheet">
+    <!-- ========================================================================= -->
+    <link href="/css/bootstrap.css" rel="stylesheet" id="stylelink2"><link href="/css/style-darkblue-dark.css" rel="stylesheet" id="stylelink">
+    <!-- ========================================================================= -->
+</head>
+
+<body class="h-100 no-sidemenu">
+<div th:replace="~{common/public_main::loader}"></div>
+    <div class="wrapper">
+        <div class="content shadow-sm position-relative">
+            <header class="header">
+                <!-- Fixed navbar -->
+                <nav class="container-fluid">
+                    <div class="row">
+                        <div class="col align-self-center">
+                            <a href="" class="logo text-white">
+                                <img th:src="@{/img/logoicon.svg}" alt="" class="logo-icon">
+                                <div class="logo-text">
+                                    <h5 class="fs22 mb-0">迷你地下城<!--<sup class="badge badge-danger">PRO</sup>--></h5>
+                                    <p class="text-uppercase fs11">MINI-DI-XIA-CHENG</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col text-right align-self-center">
+                            <a th:href="@{/regist}" class="btn btn-sm btn-primary text-uppercase">注册</a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <div class="background opac">
+                <img src="/img/team.jpg" alt="">
+            </div>
+
+            <div class="container main-container" id="main-container">
+                <div class="row login-row-height">
+                    <div class="col-12 col-md-6 col-lg-5 col-xl-4 mx-auto align-self-center">
+                        <div class="card border-0 shadow-lg blur">
+                            <form th:id="updatePwdForm" th:action="updatePwd" th:method="post" class="card-body py-5">
+                                <h3 class="font-weight-normal mb-4" style="text-align: center">请输入重置后的密码</h3>
+                                <div class="card  mb-2 overflow-hidden">
+                                    <div class="card-body p-0">
+                                        <label for="inputPwd" class="sr-only">新的密码...</label>
+                                        <input type="password" name="password" id="inputPwd" th:maxlength="8" class="form-control rounded-0 border-0" required="" autofocus="">
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <button type="button" th:onclick="checkPwd()" class="btn btn-primary btn-block">确定
+                                        <i class="material-icons md-18">arrow_forward</i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+
+                </div>
+            </div>
+        </footer>
+        <div th:replace="~{common/public_main::warningModal(modalId='updatePwdModal',text='请输入正确的密码！(6~8位字母和数字组合)')}"></div>
+    </div>
+    <!-- ========================================================================= -->
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/js/popper.min.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/vendor/cookie/jquery.cookie.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/vendor/daterangepicker-master/moment.min.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/vendor/daterangepicker-master/daterangepicker.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/js/main.js}"></script>
+    <!-- ========================================================================= -->
+    <script th:src="@{/js/style-picker.js}"></script>
+    <!-- ========================================================================= -->
+    <script>
+        'use strict'
+        $(document).ready(function() {
+
+        });
+        function checkPwd()
+        {
+            var inputPwd = $('#inputPwd').val();
+            var rule = new RegExp(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,8}$/);
+            if(rule.test(inputPwd) === false){
+                $('#updatePwdModal').modal('show');
+                return false;
+            }else{
+                document.getElementById("updatePwdForm").submit();
+                jquery: $("#updatePwdForm").submit();
+            }
+        }
+    </script>
+    <!-- ========================================================================= -->
+</body>
+
+
+</html>

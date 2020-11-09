@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>公共组件</title>
+</head>
+<body>
+<!--加载进度条-->
+<div class="loader container-fluid" th:fragment="loader">
+    <div class="row h-100">
+        <div class="col-auto align-self-center  mx-auto text-center">
+            <div class="loader-ripple">
+                <div></div>
+                <div></div>
+            </div>
+            <h2>加载中...</h2>
+        </div>
+    </div>
+</div>
+
+<!-- 左侧菜单栏 -->
+<div class="sidebar" th:fragment="sidebar">
+    <a href="#" class="logo">
+        <img th:src="@{/img/logoicon.svg}" alt="" class="logo-icon">
+        <div class="logo-text">
+            <h5 class="fs22 mb-0">迷你地下城 <!--<sup class="badge badge-danger">PRO</sup>--></h5>
+            <p class="text-uppercase fs11">MINI-DI-XIA-CHENG</p>
+        </div>
+    </a>
+    <!-- 游戏运营数据 -->
+    <div sec:authorize="hasRole('ROLE_OPERATION')">
+        <h6 class="subtitle fs11">运营数据</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">widgets</i>
+                    <span>游戏运营数据</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='operation'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='operationData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/operationData}"
+                           th:class="${isSelect=='operationData'?'nav-link active':'nav-link'}">
+                            <span>运营数据总览</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='retentionData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/retentionData}"
+                           th:class="${isSelect=='retentionData'?'nav-link active':'nav-link'}">
+                            <span>用户留存</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='registData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/registData}"
+                           th:class="${isSelect=='registData'?'nav-link active':'nav-link'}">
+                            <span>新进数据</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='diamodData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/diamodData}"
+                           th:class="${isSelect=='diamodData'?'nav-link active':'nav-link'}">
+                            <span>钻石数据总览</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='coinData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/coinData}"
+                           th:class="${isSelect=='coinData'?'nav-link active':'nav-link'}">
+                            <span>金币数据总览</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='diamodConsumptionData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/diamodConsumptionData}"
+                           th:class="${isSelect=='diamodConsumptionData'?'nav-link active':'nav-link'}">
+                            <span>钻石消耗途径</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 付费数据 -->
+    <div sec:authorize="hasRole('ROLE_CHARGE')">
+        <h6 class="subtitle fs11">付费数据</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='chargeData'?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">attach_money</i>
+                    <span>用户充值</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='charge'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='chargeData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/charge/chargeData}"
+                           th:class="${isSelect=='chargeData'?'nav-link active':'nav-link'}">
+                            <span>用户充值总览</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='chargeAnalysis'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/charge/chargeAnalysis}"
+                           th:class="${isSelect=='chargeAnalysis'?'nav-link active':'nav-link'}">
+                            <span>用户付费解析</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='chargeInterval'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/charge/chargeInterval}"
+                           th:class="${isSelect=='chargeInterval'?'nav-link active':'nav-link'}">
+                            <span>用户充值区间</span>
+                        </a>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+        <ul class="nav flex-column">
+            <li class="nav-item dropdown" th:class="${isSelect=='chargeSearch'?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">search</i>
+                    <span>充值查询</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='chargeSearch'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='chargeSearchUin'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/charge/chargeSearchByUin}"
+                           th:class="${isSelect=='chargeSearchByUin'?'nav-link active':'nav-link'}">
+                            <span>指定用户查询</span>
+                        </a>
+                    </div>
+                    <!--<div th:class="${isSelect=='chargeSearchDate'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/charge/chargeSearchDate}"
+                           th:class="${isSelect=='chargeSearchByDate'?'nav-link active':'nav-link'}">
+                            <span>指定日期查询</span>
+                        </a>
+                    </div>-->
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 通用数据 -->
+    <div sec:authorize="hasRole('ROLE_GENERALDUTY')">
+        <h6 class="subtitle fs11">通用数据</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">storage</i>
+                    <span>通用数据</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='generalduty'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='menLove'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/generalduty/menLove}"
+                           th:class="${isSelect=='menLove'?'nav-link active':'nav-link'}">
+                            <span>男主好感度</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='orderData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/generalduty/orderData}"
+                           th:class="${isSelect=='orderData'?'nav-link active':'nav-link'}">
+                            <span>订单完成情况统计</span>
+                        </a>
+                    </div>
+
+                    <div th:class="${isSelect=='userLvlData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/generalduty/userLvlData}"
+                           th:class="${isSelect=='userLvlData'?'nav-link active':'nav-link'}">
+                            <span>留存用户等级成长跟踪</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userCounterpartData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/generalduty/userCounterpartData}"
+                           th:class="${isSelect=='userCounterpartData'?'nav-link active':'nav-link'}">
+                            <span>留存用户关卡成长跟踪</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 副本挑战 -->
+    <div sec:authorize="hasRole('ROLE_DUNGEON')">
+        <h6 class="subtitle fs11">挑战副本</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">explicit</i>
+                    <span>挑战副本统计</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div th:style="${isSelectParent=='dungeon'?'display: block':'display: none'}" class="nav flex-column">
+                    <div th:class="${isSelect=='teaHouse'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/dungeon/teaHouse}"
+                           th:class="${isSelect=='teaHouse'?'nav-link active':'nav-link'}">
+                            <span>茶楼</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='catExpedition'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/dungeon/catExpedition}"
+                           th:class="${isSelect=='catExpedition'?'nav-link active':'nav-link'}">
+                            <span>猫探险</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='baGuaFloor'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/dungeon/baGuaFloor}"
+                           th:class="${isSelect=='baGuaFloor'?'nav-link active':'nav-link'}">
+                            <span>八卦楼</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='intelligenceEntrust'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/dungeon/intelligenceEntrust}"
+                           th:class="${isSelect=='intelligenceEntrust'?'nav-link active':'nav-link'}">
+                            <span>情报委托</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='eliteDungeon'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/dungeon/eliteDungeon}"
+                           th:class="${isSelect=='eliteDungeon'?'nav-link active':'nav-link'}">
+                            <span>精英副本</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 剧情分析 -->
+    <div sec:authorize="hasRole('ROLE_SCENARIO')">
+        <h6 class="subtitle fs11">剧情分析</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">library_music</i>
+                    <span>剧情分析</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div th:style="${isSelectParent=='scenario'?'display: block':'display: none'}" class="nav flex-column">
+                    <div th:class="${isSelect=='mainScenario'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/scenario/mainScenario}"
+                           th:class="${isSelect=='mainScenario'?'nav-link active':'nav-link'}">
+                            <span>主线剧情分析</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='mainScenarioSelect'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/scenario/mainScenarioSelect}"
+                           th:class="${isSelect=='mainScenarioSelect'?'nav-link active':'nav-link'}">
+                            <span>主线剧情选项分析</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- 任务分析 -->
+<!--    <div sec:authorize="hasRole('ROLE_TASK')">
+        <h6 class="subtitle fs11">委托任务</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">cake</i>
+                    <span>委托任务统计</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div th:style="${isSelectParent=='task'?'display: block':'display: none'}" class="nav flex-column">
+                    <div th:class="${isSelect=='firstPassData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/firstPassData}"
+                           th:class="${isSelect=='firstPassData'?'nav-link active':'nav-link'}">
+                            <span>委托首次通过情况统计</span>
+                        </a>
+                    </div>
+
+                    <div th:class="${isSelect=='everyDayPassData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/everyDayPassData}"
+                           th:class="${isSelect=='everyDayPassData'?'nav-link active':'nav-link'}">
+                            <span>委托关卡每日通过情况</span>
+                        </a>
+                    </div>
+
+                    <div th:class="${isSelect=='userLvlData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/userLvlData}"
+                           th:class="${isSelect=='userLvlData'?'nav-link active':'nav-link'}">
+                            <span>委托通过玩家等级分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='checkUser'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/checkUser}"
+                           th:class="${isSelect=='checkUser'?'nav-link active':'nav-link'}">
+                            <span>指定玩家委托情况查询</span>
+                        </a>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+     玩家信息
+    <div sec:authorize="hasRole('ROLE_USERINFO')">
+        <h6 class="subtitle fs11">玩家数据</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">person</i>
+                    <span>玩家基本信息和行为</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div th:style="${isSelectParent=='userInfo'?'display: block':'display: none'}" class="nav flex-column">
+                    <div th:class="${isSelect=='basicBehavior'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/basicBehavior}"
+                           th:class="${isSelect=='basicBehavior'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='gameOnLineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/gameOnLineTime}"
+                           th:class="${isSelect=='gameOnLineTime'?'nav-link active':'nav-link'}">
+                            <span>游戏在线时长</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='catHouseOnLineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/catHouseOnLineTime}"
+                           th:class="${isSelect=='catHouseOnLineTime'?'nav-link active':'nav-link'}">
+                            <span>猫后院在线时长</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='activeUserLvlData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/activeUserLvlData}"
+                           th:class="${isSelect=='activeUserLvlData'?'nav-link active':'nav-link'}">
+                            <span>活跃用户等级分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='checkUser'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/checkUser}"
+                           th:class="${isSelect=='checkUser'?'nav-link active':'nav-link'}">
+                            <span>指定玩家游戏行为查询</span>
+                        </a>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+    </div>-->
+    <!--其他工具-->
+    <div sec:authorize="hasRole('ROLE_UTIL')">
+        <h6 class="subtitle fs11">其他工具</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">mail</i>
+                    <span>邮件</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div th:style="${isSelectParent=='util'?'display: block':'display: none'}" class="nav flex-column">
+                    <div th:class="${isSelect=='sendMail'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/util/sendMail}"
+                           th:class="${isSelect=='sendMail'?'nav-link active':'nav-link'}">
+                            <span>个人邮件</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='sendServerMail'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/util/sendServerMail}"
+                           th:class="${isSelect=='sendServerMail'?'nav-link active':'nav-link'}">
+                            <span>全服邮件</span>
+                        </a>
+                    </div>
+                    <!--<div th:class="${isSelect=='checkMailRecord'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/util/checkMailRecord}"
+                           th:class="${isSelect=='checkMailRecord'?'nav-link active':'nav-link'}">
+                            <span>全服邮件</span>
+                        </a>
+                    </div>-->
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--tbForm-->
+<div th:fragment="tbForm" class="form-inline search col-auto align-self-center px-0">
+    <div class="input-group">
+        <input name="startDate" th:onchange="checkStartDate()" th:id="startDate" type="date" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text form-control ">-- --</span>
+        </div>
+        <input name="expirationDate" th:onchange="checkExpirationDate()" th:id="expirationDate" type="date" class="form-control ">
+    </div>
+    <select th:id="platformId" name="platformId" class="form-control  ml-2">
+        <option selected="selected" value='0'>All</option>
+        <option value="1">微信</option>
+        <option value="2">手Q</option>
+        <option value="3">游客</option>
+        <option value="4">小游戏</option>
+        <option value="5">游梦初心</option>
+        <option value="6">应用宝</option>
+        <option value="7">华为</option>
+        <option value="8">OPPO</option>
+        <option value="9">VIVO</option>
+        <option value="10">360</option>
+        <option value="11">百度</option>
+    </select>
+    <button type="button" th:disabled="disabled" class="form-control">渠道</button>
+    <div class="col-auto align-self-center">
+        <button type="submit" onclick="table.ajax.reload()" class="btn  btn-outline-success ml-2 ">
+            <i class="material-icons md-18">search</i>查询
+        </button>
+
+    </div>
+    <div class="col-auto align-self-center">
+        <button class="btn btn-outline-danger ml-2">
+            <i class="material-icons md-18">cloud_download</i>导出
+        </button>
+    </div>
+</div>
+
+<!--oneDateForm-->
+<div th:fragment="oneDateForm" class="form-inline search col-auto align-self-center px-0">
+    <div class="input-group">
+        <input name="searchDate" th:onchange="checkSearchDate()" th:id="searchDate" type="date" class="form-control">
+    </div>
+    <select th:id="platformId" name="platformId" class="form-control  ml-2">
+        <option selected="selected" value='0'>All</option>
+        <option value="1">微信</option>
+        <option value="2">手Q</option>
+        <option value="3">游客</option>
+        <option value="4">小游戏</option>
+        <option value="5">游梦初心</option>
+        <option value="6">应用宝</option>
+        <option value="7">华为</option>
+        <option value="8">OPPO</option>
+        <option value="9">VIVO</option>
+        <option value="10">360</option>
+        <option value="11">百度</option>
+    </select>
+    <button type="button" th:disabled="disabled" class="form-control">渠道</button>
+    <div class="col-auto align-self-center">
+        <button type="submit" onclick="table.ajax.reload()" class="btn  btn-outline-success ml-2 ">
+            <i class="material-icons md-18">search</i>查询
+        </button>
+
+    </div>
+    <div class="col-auto align-self-center">
+        <button class="btn btn-outline-danger ml-2">
+            <i class="material-icons md-18">cloud_download</i>导出
+        </button>
+    </div>
+</div>
+
+<!-- 警告模态框 -->
+<div class="modal fade " th:id="${modalId}" tabindex="-1" role="dialog" aria-hidden="true"
+     th:fragment="warningModal(modalId,text)">
+    <div class="modal-dialog  modal-dialog-centered " role="document">
+        <div class="modal-content box-shadow">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert bg-danger" role="alert" style="color: white;text-align: center">
+                    <i class="material-icons mr-2 vm">warning</i>
+                    <span th:text="${text}"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--顶部-->
+<div class="container-fluid header-container" th:fragment="heard">
+    <div class="row header">
+        <div class="container-fluid " id="header-container">
+            <div class="row">
+                <!-- 顶部 -->
+                <nav class="navbar col-12 navbar-expand ">
+                    <button class="menu-btn btn btn-link btn-sm" type="button">
+                        <i class="material-icons">menu</i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <!-- heard left -->
+                        <form class="form-inline search mr-auto">
+                            <input class="form-control form-control-sm" type="search" placeholder="搜索..."
+                                   aria-label="Search">
+                            <button class="btn btn-link btn-sm" type="submit">
+                                <i class="material-icons">search</i>
+                            </button>
+                        </form>
+
+                        <!-- heard center -->
+                        <!--<div class="mx-auto d-none d-xxl-inline">-->
+                            <!--<div class="row mx-0">-->
+                                <!--<div class="col-auto">-->
+                                    <!--<h2>诚意创造</h2>-->
+                                <!--</div>-->
+                                <!--<div class="col-auto border-left-dashed">-->
+                                    <!--<h2>为梦而生</h2>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!-- heard right -->
+                        <ul class="navbar-nav ml-auto">
+                            <!-- language -->
+                            <li class="nav-item dropdown select-flag">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown0" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="flag-icon flag-icon-cn"></span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown0">
+                                    <a class="dropdown-item" href="#">
+                                        <span class="flag-icon flag-icon-cn"></span>
+                                        <span class="ml-2">中国</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="flag-icon flag-icon-in"></span>
+                                        <span class="ml-2">印度</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="flag-icon flag-icon-us"></span>
+                                        <span class="ml-2">美国</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="flag-icon flag-icon-za"></span>
+                                        <span class="ml-2">南非</span>
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="flag-icon flag-icon-au"></span>
+                                        <span class="ml-2">澳大利亚</span>
+                                    </a>
+                                </div>
+                            </li>
+
+                            <!-- app -->
+                            <li class="nav-item dropdown d-none d-sm-flex">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">apps</i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-center no-defaults pt-0 overflow-hidden"
+                                     aria-labelledby="navbarDropdown2">
+                                    <div class="position-relative text-center rounded">
+                                        <div class="background">
+                                            <img th:src="@{/img/background-part.png}" alt="">
+                                        </div>
+                                        <div class="pt-4 pb-5 text-white">
+                                            <h5 class="font-weight-normal">Hello World</h5>
+                                            <p>I am leaving<br>but I don`t come back.</p>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="row mx-0 top-60">
+                                        <div class="col-12 col-md-11 mx-auto">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="card border-0 shadow mb-3">
+                                                        <div class="card-body text-center">
+                                                            <i class="avatar avatar-40 material-icons text-template-primary my-3">favorite</i>
+                                                            <p>No.1</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="card border-0 shadow mb-3">
+                                                        <div class="card-body text-center">
+                                                            <i class="avatar avatar-40 material-icons bg-light-warning text-warning my-3">style</i>
+                                                            <p>No.2</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="card border-0 shadow mb-3">
+                                                        <div class="card-body text-center">
+                                                            <i class="avatar avatar-40 material-icons bg-light-danger text-danger my-3">library_books</i>
+                                                            <p>No.3</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="card border-0 shadow mb-3">
+                                                        <div class="card-body text-center">
+                                                            <i class="avatar avatar-40 material-icons bg-light-success text-success my-3">poll</i>
+                                                            <p>No.4</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- tasks -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">view_day</i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-center no-defaults pt-0 overflow-hidden"
+                                     aria-labelledby="navbarDropdown5">
+                                    <div class="position-relative text-center rounded">
+                                        <div class="background">
+                                            <img th:src="@{/img/background-part.png}" alt="">
+                                        </div>
+                                        <div class="py-3 text-white">
+                                            <h5 class="font-weight-normal mb-3">Tasks</h5>
+                                            <div class="px-3">
+                                                <ul class="nav nav-pills tab-white nav-fill" id="tasks"
+                                                    role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="pills-home-tab"
+                                                           data-toggle="pill" href="#pills-home" role="tab"
+                                                           aria-controls="pills-home"
+                                                           aria-selected="true">Task</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="pills-profile-tab"
+                                                           data-toggle="pill" href="#pills-profile" role="tab"
+                                                           aria-controls="pills-profile"
+                                                           aria-selected="false">Activity</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="pills-contact-tab"
+                                                           data-toggle="pill" href="#pills-contact" role="tab"
+                                                           aria-controls="pills-contact" aria-selected="false">Alert</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-content" id="tasksContent">
+                                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                             aria-labelledby="pills-home-tab">
+                                            <div class="scroll-y h-320 d-block">
+                                                <div class="dropdown-item status-border border-warning">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="checktask1">
+                                                                <label class="custom-control-label"
+                                                                       for="checktask1"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">6:33 | Attend Meeting</p>
+                                                            <p class="small text-mute">Meeting with team
+                                                                regarding new project live integration.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-item status-border border-danger">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="checktask2">
+                                                                <label class="custom-control-label"
+                                                                       for="checktask2"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">7:33 | Drink Water</p>
+                                                            <p class="small text-mute">Reminder for drinking
+                                                                water is very important.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-item status-border border-warning">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="checktask3">
+                                                                <label class="custom-control-label"
+                                                                       for="checktask3"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">8:00 | work for timesheet</p>
+                                                            <p class="small text-mute">Working for calendar
+                                                                module in timesheet. First entry and secondly
+                                                                for display</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-item status-border border-success">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="checktask4">
+                                                                <label class="custom-control-label"
+                                                                       for="checktask4"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">10:45 | Reverse proccess
+                                                                Training</p>
+                                                            <p class="small text-mute mb-2">Must attend training
+                                                                which is basically the most advisable to setup
+                                                                role and descipline.</p>
+                                                            <figure class="avatar avatar-20">
+                                                                <img th:src="@{/img/user1.png}" alt="">
+                                                            </figure>
+                                                            <figure class="avatar avatar-20">
+                                                                <img th:src="@{/img/user2.png}" alt="">
+                                                            </figure>
+                                                            <figure class="avatar avatar-20">
+                                                                <img th:src="@{/img/user3.png}" alt="">
+                                                            </figure>
+                                                            <figure class="avatar avatar-20">20+</figure>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-item status-border border-primary">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox"
+                                                                       class="custom-control-input"
+                                                                       id="checktask5">
+                                                                <label class="custom-control-label"
+                                                                       for="checktask5"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">6:33 | Attend Meeting</p>
+                                                            <p class="small text-mute">Meeting with team
+                                                                regarding new project live integration.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-item border-top">
+                                                <button class="btn btn-primary text-white btn-block mt-2">
+                                                    <span>Complete</span><i
+                                                        class="material-icons md-18">arrow_forward</i></button>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-profile" role="tabpanel"
+                                             aria-labelledby="pills-profile-tab">
+                                            <div class="scroll-y h-320 d-block">
+                                                <a class="dropdown-item" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="timeline-circle-wrap">
+                                                                <div class="timeline-circle border-warning">
+                                                                    <span class="bg-warning"></span></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">We become world most valauble</p>
+                                                            <p class="small text-mute">Thank you for all of your
+                                                                support and well wishes</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="timeline-circle-wrap">
+                                                                <div class="timeline-circle border-danger"><span
+                                                                        class="bg-danger"></span></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">Team Closer</p>
+                                                            <p class="small text-mute mb-1">Maxartkiller
+                                                                Team</p>
+                                                            <figure class="avatar avatar-30">
+                                                                <img th:src="@{/img/user1.png}" alt="">
+                                                            </figure>
+                                                            <figure class="avatar avatar-30">
+                                                                <img th:src="@{/img/user2.png}" alt="">
+                                                            </figure>
+                                                            <figure class="avatar avatar-30">
+                                                                <img th:src="@{/img/user3.png}" alt="">
+                                                            </figure>
+                                                            <figure class="avatar avatar-30">
+                                                                <img th:src="@{/img/user4.png}" alt="">
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="timeline-circle-wrap">
+                                                                <div class="timeline-circle border-success">
+                                                                    <span class="bg-success"></span></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">Final Amendments are done </p>
+                                                            <p class="small text-mute">Creative visual hierarchy
+                                                                completed</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="timeline-circle-wrap">
+                                                                <div class="timeline-circle border-primary">
+                                                                    <span class="bg-primary"></span></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">Vision deployment done</p>
+                                                            <p class="small text-mute">UX designer worked upon
+                                                                timline</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto">
+                                                            <div class="timeline-circle-wrap">
+                                                                <div class="timeline-circle border-info"><span
+                                                                        class="bg-info"></span></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <p class="mb-0">Critical Bug resolved</p>
+                                                            <p class="small text-mute">Cleared list for bugs and
+                                                                development.</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-contact" role="tabpanel"
+                                             aria-labelledby="pills-contact-tab">
+                                            <div class="scroll-y h-320 d-block">
+                                                <a class="dropdown-item border-top new" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <i class="material-icons text-template-primary">local_mall</i>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <div class="row mb-1">
+                                                                <div class="col">
+                                                                    <p class="mb-0">New Order received</p>
+                                                                </div>
+                                                                <div class="col-auto pl-0">
+                                                                    <p class="small text-mute text-trucated mt-1">
+                                                                        2/12/2019</p>
+                                                                </div>
+                                                            </div>
+                                                            <p class="small text-mute">Order from Anand Mhatva
+                                                                recieved for Electronics with 6 quanity.</p>
+                                                        </div>
+
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item border-top " href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <i class="material-icons text-template-primary">account_balance_wallet</i>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <div class="row mb-1">
+                                                                <div class="col">
+                                                                    <p class="mb-0">Balance has benn added</p>
+                                                                </div>
+                                                                <div class="col-auto pl-0">
+                                                                    <p class="small text-mute text-trucated mt-1">
+                                                                        2/12/2019</p>
+                                                                </div>
+                                                            </div>
+                                                            <p class="small text-mute">Order from Anand Mhatva
+                                                                recieved for Electronics with 6 quanity.</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item border-top " href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <i class="material-icons text-template-primary">account_circle</i>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <div class="row mb-1">
+                                                                <div class="col">
+                                                                    <p class="mb-0">Friend request received</p>
+                                                                </div>
+                                                                <div class="col-auto pl-0">
+                                                                    <p class="small text-mute text-trucated mt-1">
+                                                                        2/12/2019</p>
+                                                                </div>
+                                                            </div>
+                                                            <p class="small text-mute">New friend request
+                                                                received from Mickey John from Australia</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item border-top" href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <i class="material-icons text-template-primary">check_circle</i>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <div class="row mb-1">
+                                                                <div class="col">
+                                                                    <p class="mb-0">Email Updated</p>
+                                                                </div>
+                                                                <div class="col-auto pl-0">
+                                                                    <p class="small text-mute text-trucated mt-1">
+                                                                        2/12/2019</p>
+                                                                </div>
+                                                            </div>
+                                                            <p class="small text-mute">Your email change request
+                                                                has been successfully updated</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item border-top " href="#">
+                                                    <div class="row">
+                                                        <div class="col-auto align-self-center">
+                                                            <i class="material-icons text-template-primary">account_balance_wallet</i>
+                                                        </div>
+                                                        <div class="col pl-0">
+                                                            <div class="row mb-1">
+                                                                <div class="col">
+                                                                    <p class="mb-0">Balance has benn added</p>
+                                                                </div>
+                                                                <div class="col-auto pl-0">
+                                                                    <p class="small text-mute text-trucated mt-1">
+                                                                        2/12/2019</p>
+                                                                </div>
+                                                            </div>
+                                                            <p class="small text-mute">Order from Anand Mhatva
+                                                                recieved for Electronics with 6 quanity.</p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- message -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown5" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">email</i>
+                                    <span class="counter bg-danger">1</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-sm-left dropdown-menu-center no-defaults pt-0 overflow-hidden"
+                                     aria-labelledby="navbarDropdown5">
+                                    <div class="position-relative text-center rounded">
+                                        <div class="background">
+                                            <img th:src="@{/img/background-part.png}" alt="">
+                                        </div>
+                                        <div class="py-3 text-white">
+                                            <h5 class="font-weight-normal">Messages</h5>
+                                            <p>Updates and Status</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="scroll-y h-320 d-block">
+                                        <a class="dropdown-item border-top new" href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">local_mall</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">New Order received</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">Order from Anand Mhatva recieved
+                                                        for Electronics with 6 quanity.</p>
+                                                </div>
+
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item border-top " href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">account_balance_wallet</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">Balance has benn added</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">Order from Anand Mhatva recieved
+                                                        for Electronics with 6 quanity.</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item border-top " href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">account_circle</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">Friend request received</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">New friend request received from
+                                                        Mickey John from Australia</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item border-top" href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">check_circle</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">Email Updated</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">Your email change request has
+                                                        been successfully updated</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item border-top " href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">account_balance_wallet</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">Balance has benn added</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">Order from Anand Mhatva recieved
+                                                        for Electronics with 6 quanity.</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item border-top " href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">account_circle</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">Friend request received</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">New friend request received from
+                                                        Mickey John from Australia</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item border-top" href="#">
+                                            <div class="row">
+                                                <div class="col-auto align-self-center">
+                                                    <i class="material-icons text-template-primary">check_circle</i>
+                                                </div>
+                                                <div class="col pl-0">
+                                                    <div class="row mb-1">
+                                                        <div class="col">
+                                                            <p class="mb-0">Email Updated</p>
+                                                        </div>
+                                                        <div class="col-auto pl-0">
+                                                            <p class="small text-mute text-trucated mt-1">
+                                                                2/12/2019</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="small text-mute">Your email change request has
+                                                        been successfully updated</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- profile dropdown-->
+                            <li class="nav-item dropdown ml-0 ml-sm-4">
+                                <a class="nav-link dropdown-toggle profile-link" href="#" id="navbarDropdown6"
+                                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    <figure class="rounded avatar avatar-30">
+                                        <img th:src="@{/img/user1.png}" alt="">
+                                    </figure>
+                                    <div class="username-text ml-2 mr-2 d-none d-lg-inline-block">
+                                        <h6 class="username">
+                                            <span>Welcome</span>
+                                            <span sec:authentication="name"></span>
+                                        </h6>
+                                    </div>
+                                    <figure class="rounded avatar avatar-30 d-none d-md-inline-block">
+                                        <i class="material-icons">expand_more</i>
+                                    </figure>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right w-300 pt-0 overflow-hidden"
+                                     aria-labelledby="navbarDropdown6">
+                                    <div class="position-relative text-center rounded py-5">
+                                        <div class="background">
+                                            <img th:src="@{/img/background-part.png}" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="text-center mb-3 top-60 z-2">
+                                        <figure class="avatar avatar-120 mx-auto shadow">
+                                            <img th:src="@{/img/user1.png}" alt=""></figure>
+                                    </div>
+                                    <h5 class="text-center mb-0">admin</h5>
+                                    <a class="dropdown-item border-top" th:href="@{/updatePwd}">
+                                        <div class="row">
+                                            <div class="col-auto align-self-center">
+                                                <i class="material-icons text-success">account_box</i>
+                                            </div>
+                                            <div class="col pl-0">
+                                                <p class="mb-0">密码修改</p>
+                                                <!--<p class="small text-mute text-trucated">更多详细资料</p>-->
+                                            </div>
+                                            <div class="col-auto align-self-center text-right pl-0">
+                                                <i class="material-icons text-mute small">chevron_right</i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item border-top" th:href="@{/logout}">
+                                        <div class="row">
+                                            <div class="col-auto align-self-center">
+                                                <i class="material-icons text-danger">exit_to_app</i>
+                                            </div>
+                                            <div class="col pl-0">
+                                                <p class="mb-0 text-danger">切换账号</p>
+                                            </div>
+                                            <div class="col-auto align-self-center text-right pl-0">
+                                                <i class="material-icons text-mute small text-danger">chevron_right</i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QQ -->
+<div class="wrap-fixed-float wrap-fixed-bottom-left" th:fragment="qq">
+    <button class="btn btn-primary  btn-rounded-circle shadow chat-btn"><i class="material-icons vm">comment</i>
+    </button>
+    <div class="chat-window card shadow">
+        <div class="card-header border-0 bg-none">
+            <h5 class="d-inline-block fs15 mb-0">乐在沟通</h5>
+            <button class="btn btn-sm p-0 float-right chat-close text-white">
+                    <span class="rounded avatar avatar-20">
+                        <i class="material-icons fs15 vm text-mute">close</i>
+                    </span>
+            </button>
+        </div>
+        <div class="card-body chat-list scroll-y p-0 ">
+            <div class="p-3">
+                <div class="row left-chat">
+                    <div class="col-auto">
+                        <figure class="avatar avatar-20">
+                            <img th:src="@{/img/user1.png}" alt="">
+                        </figure>
+                    </div>
+                    <div class="col pl-0">
+                        <div class="chat-block">
+                            <div class="row">
+                                <div class="col">
+                                    我们已经是好友啦，一起来聊天吧！
+                                    <p class="text-mute small mt-2">8:00 am</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row right-chat">
+                    <div class="col pr-0">
+                        <div class="chat-block">
+                            <div class="row">
+                                <div class="col">
+                                    很高兴认识你.
+                                    <p class="text-mute small mt-2">8:00 am</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <figure class="avatar avatar-20">
+                            <img th:src="@{/img/user3.png}" alt="">
+                        </figure>
+                    </div>
+                </div>
+                <div class="row left-chat">
+                    <div class="col-auto">
+                        <figure class="avatar avatar-20">
+                            <img th:src="@{/img/user1.png}" alt="">
+                        </figure>
+                    </div>
+                    <div class="col pl-0">
+                        <div class="chat-block">
+                            <div class="row">
+                                <div class="col">
+                                    你喜欢灵猫传吗?
+                                    <p class="text-mute small mt-2">8:02 am</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row right-chat">
+                    <div class="col pr-0">
+                        <div class="chat-block">
+                            <div class="row">
+                                <div class="col">
+                                    <p>当然,我从未玩过如此好玩的游戏. </p>
+                                    <p class="text-mute small mt-2">8:03 am</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <figure class="avatar avatar-20">
+                            <img th:src="@{/img/user3.png}" alt="">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer px-0">
+            <div class="input-group">
+                <div class="input-group-prepend ">
+                    <button class="btn btn-link fs15 py-0 " type="button" id="button-addon4"><i
+                            class="material-icons vm">attachment</i></button>
+                </div>
+                <input type="text" class="form-control form-control-sm rounded" placeholder="-.-"
+                       aria-label="Message">
+                <div class="input-group-append ">
+                    <button class="btn btn-link py-0 " type="button" id="button-addon5">
+                        <i class="material-icons fs15 vm">send</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Setting -->
+<div class="wrap-fixed-float wrap-fixed-bottom-right" th:fragment="setting">
+    <button class="btn btn-primary btn-rounded-circle shadow" data-target="#themepicker" data-toggle="modal">
+        <i class="material-icons vm">style</i>
+        <span class="counter-small bg-danger"></span>
+    </button>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="themepicker" tabindex="-1" role="dialog" aria-hidden="true" th:fragment="modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg-dark overflow-hidden">
+            <button type="button" class="closePersonalize" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <div class="modal-body">
+                <div class="background h-320">
+                    <img src="/img/background-part.png" alt="">
+                </div>
+                <div class="text-center pb-5">
+                    <h1 class="mt-3 mb-0 text-white">主题</h1>
+                    <h4 class="mb-5 text-white font-weight-light">设置你的主题风格</h4>
+                </div>
+
+                <div class="row top-60">
+                    <div class="col-6 col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 shadow bg-white h-100">
+                            <div class="card-body text-center">
+                                <i class="avatar avatar-60 md-36 material-icons text-template-primary my-3">format_shapes</i>
+                                <h6 class="mb-3">字体大小</h6>
+                                <div class="row">
+                                    <div class="col-12 px-0">
+                                        <ul class="list-group list-group-flush mb-0 text-left">
+                                            <li class="list-group-item">
+                                                XS
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="fontsize" class="custom-control-input"
+                                                           id="xsmallfs">
+                                                    <label class="custom-control-label" for="xsmallfs"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                S
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="fontsize" class="custom-control-input"
+                                                           id="smallfs" checked>
+                                                    <label class="custom-control-label" for="smallfs"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                M
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="fontsize" class="custom-control-input"
+                                                           id="mediumfs">
+                                                    <label class="custom-control-label" for="mediumfs"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                L
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="fontsize" class="custom-control-input"
+                                                           id="largefs">
+                                                    <label class="custom-control-label" for="largefs"></label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 shadow bg-white h-100">
+                            <div class="card-body text-center">
+                                <i class="avatar avatar-60 md-36 material-icons bg-light-warning text-warning my-3">style</i>
+                                <h6 class="mb-3">菜单栏</h6>
+                                <div class="row">
+                                    <div class="col-12 px-0">
+                                        <ul class="list-group list-group-flush mb-0 text-left">
+                                            <li class="list-group-item">
+                                                正常
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="sidebar" class="custom-control-input"
+                                                           id="sidebarfull" checked>
+                                                    <label class="custom-control-label" for="sidebarfull"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                袖珍
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="sidebar" class="custom-control-input"
+                                                           id="sidebarCompact">
+                                                    <label class="custom-control-label" for="sidebarCompact"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                图形
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="radio" name="sidebar" class="custom-control-input"
+                                                           id="sidebarIconic">
+                                                    <label class="custom-control-label" for="sidebarIconic"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                填充
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="sidebarFill">
+                                                    <label class="custom-control-label" for="sidebarFill"></label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 shadow bg-white h-100">
+                            <div class="card-body text-center">
+                                <i class="avatar avatar-60 md-36 material-icons bg-light-danger text-danger my-3">menu</i>
+                                <h6 class="mb-3">页眉</h6>
+                                <div class="row">
+                                    <div class="col-12 px-0">
+                                        <ul class="list-group list-group-flush mb-0 text-left">
+                                            <li class="list-group-item">
+                                                固定上方
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="headerfixed">
+                                                    <label class="custom-control-label" for="headerfixed"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                固定宽度
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="headercontainer">
+                                                    <label class="custom-control-label" for="headercontainer"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                填充颜色
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           id="headerfillcolor">
+                                                    <label class="custom-control-label" for="headerfillcolor"></label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-lg-3 mb-4">
+                        <div class="card border-0 shadow bg-white h-100">
+                            <div class="card-body text-center">
+                                <i class="avatar avatar-60 md-36 material-icons bg-light-success text-success my-3">subtitles</i>
+                                <h6 class="mb-3">目录</h6>
+                                <div class="row">
+                                    <div class="col-12 px-0">
+                                        <ul class="list-group list-group-flush mb-0 text-left">
+                                            <li class="list-group-item">
+                                                正方形
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" name="sidebar" class="custom-control-input"
+                                                           id="wrapperCorner">
+                                                    <label class="custom-control-label" for="wrapperCorner"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                全宽
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" name="sidebar" class="custom-control-input"
+                                                           id="contentWidth">
+                                                    <label class="custom-control-label" for="contentWidth"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                无限宽
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" name="sidebar" class="custom-control-input"
+                                                           id="moderntouch">
+                                                    <label class="custom-control-label" for="moderntouch"></label>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                全屏
+                                                <div class="custom-control custom-switch float-right">
+                                                    <input type="checkbox" name="sidebar" class="custom-control-input"
+                                                           id="fullscreen">
+                                                    <label class="custom-control-label" for="fullscreen"></label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-12 col-md-6 text-center">
+                        <h6><i class="material-icons vm mr-1">brightness_2</i> 暗色</h6>
+                        <div class="avatar avatar-30 bg-dark style-picker" data-target='style-black-dark'></div>
+                        <div class="avatar avatar-30 bg-darkblue style-picker" data-target='style-darkblue-dark'></div>
+                        <div class="avatar avatar-30 bg-purple style-picker" data-target='style-purple-dark'></div>
+                        <div class="avatar avatar-30 bg-blue style-picker" data-target='style-blue-dark'></div>
+                        <div class="avatar avatar-30 bg-green style-picker" data-target='style-green-dark'></div>
+                        <div class="avatar avatar-30 bg-pista style-picker" data-target='style-pista-dark'></div>
+                        <div class="avatar avatar-30 bg-orange style-picker" data-target='style-orange-dark'></div>
+                        <div class="avatar avatar-30 bg-tomato style-picker" data-target='style-tomato-dark'></div>
+                    </div>
+                    <div class="col-12 col-md-6 text-center">
+                        <h6><i class="material-icons vm mr-1">brightness_7</i> 亮色</h6>
+                        <div class="avatar avatar-30 bg-dark style-picker" data-target='style-black-light'></div>
+                        <div class="avatar avatar-30 bg-darkblue style-picker" data-target='style-darkblue-light'></div>
+                        <div class="avatar avatar-30 bg-purple style-picker" data-target='style-purple-light'></div>
+                        <div class="avatar avatar-30 bg-blue style-picker" data-target='style-blue-light'></div>
+                        <div class="avatar avatar-30 bg-green style-picker" data-target='style-green-light'></div>
+                        <div class="avatar avatar-30 bg-pista style-picker" data-target='style-pista-light'></div>
+                        <div class="avatar avatar-30 bg-orange style-picker" data-target='style-orange-light'></div>
+                        <div class="avatar avatar-30 bg-tomato style-picker" data-target='style-tomato-light'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

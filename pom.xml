@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.yoooum</groupId>
+    <artifactId>lmz_terrace</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>lmz_terrace</name>
+    <description>This is lmz manage terrace.</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!--引入druid数据源 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.10</version>
+        </dependency>
+        <!-- 如果 不加入这依赖配置监控统计拦截的filters时   这个会报错 filters: stat,wall,log4j    -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <!--tars服务 -->
+        <dependency>
+            <groupId>com.tencent.tars</groupId>
+            <artifactId>tars-client</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <!--security-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        </dependency>
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.6</version>
+        </dependency>
+        <!--终极Excel操作工具-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.5.10</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--tars依赖配置 -->
+            <plugin>
+                <groupId>com.tencent.tars</groupId>
+                <artifactId>tars-maven-plugin</artifactId>
+                <version>1.0.3</version>
+                <configuration>
+                    <tars2JavaConfig>
+                        <!-- tars文件位置 -->
+                        <tarsFiles>
+                            <tarsFile>${basedir}/src/main/resources/tars/CSCommStruct.tars</tarsFile>
+                            <tarsFile>${basedir}/src/main/resources/tars/CommData.tars</tarsFile>
+                            <tarsFile>${basedir}/src/main/resources/tars/RouterServer.tars</tarsFile>
+                            <tarsFile>${basedir}/src/main/resources/tars/Account.tars</tarsFile>
+                            <tarsFile>${basedir}/src/main/resources/tars/IdipServant.tars</tarsFile>
+                        </tarsFiles>
+                        <!-- 源文件编码 -->
+                        <tarsFileCharset>UTF-8</tarsFileCharset>
+                        <!-- 生成服务端代码 -->
+                        <servant>false</servant>
+                        <!-- 生成源代码编码 -->
+                        <charset>UTF-8</charset>
+                        <!-- 生成的源代码目录 -->
+                        <srcPath>${basedir}/src/main/java</srcPath>
+                        <!-- 生成源代码包前缀 -->
+                        <packagePrefixName>com.yoooum.tars.</packagePrefixName>
+                    </tars2JavaConfig>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

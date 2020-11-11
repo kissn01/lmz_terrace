@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan("com/yoooum/dao")
 @SpringBootApplication
-public class LmzTerraceApplication
+public class MndxcTerraceApplication
 {
 
     public static void main(String[] args)
     {
-        SpringApplication.run(LmzTerraceApplication.class, args);
+        SpringApplication.run(MndxcTerraceApplication.class, args);
     }
 
 }

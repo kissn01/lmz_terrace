@@ -62,22 +62,21 @@ public class UtilController
         log.info("===全服邮件发送===");
         return "util/sendServerMail";
     }
+
+
+    @ResponseBody
     @PostMapping("sendServerMail")
-    public String sendServerMail(HttpServletRequest request, Mail mail)
+    public int sendServerMail(Mail mail)
     {
         System.out.println("=========全服邮件发送=========");
         System.out.println(mail);
+        int code = -1;
         if(null!=mail.getSendTime() &&  !"".equals(mail.getSendTime()))
         {
-            Map<String, List<TAccountID>> resultMap = utilService.sendServerMail(mail);
-            List<TAccountID> succList = resultMap.get("succValue");
-            List<TAccountID> failList = resultMap.get("failValue");
-
-            request.setAttribute("successData", succList);
-            request.setAttribute("errorData", failList);
+            code = utilService.sendServerMail(mail);
         }
 
-        return "util/sendServerMail";
+        return code;
     }
 
 

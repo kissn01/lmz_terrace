@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.yoooum</groupId>
-    <artifactId>lmz_terrace</artifactId>
+    <artifactId>mndxc_terrace</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>lmz_terrace</name>
-    <description>This is lmz manage terrace.</description>
+    <name>mndxc_terrace</name>
+    <description>This is mndxc manage terrace.</description>
 
     <properties>
         <java.version>1.8</java.version>

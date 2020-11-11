@@ -22,7 +22,12 @@ public class DateUtil
      */
     public static long StringToTimestamp(String time){
         //如果时间是"2020-11-11T14:24:00" 转为 "2020-11-11 14:24:00"
-        time = time.indexOf('T')!=-1? time.replace('T', ' '):time;
+        if(time.length()==16){
+            time = time.indexOf('T')!=-1? time.replace('T', ' ')+":00":time+":00";
+        }else{
+            time = time.indexOf('T')!=-1? time.replace('T', ' '):time;
+        }
+        System.out.println(time);
         long times = 0L;
         try {
              times = ((Timestamp.valueOf(time).getTime()) / 1000);
@@ -38,7 +43,11 @@ public class DateUtil
 
     public static void main(String[] args)
     {
-        System.out.println(StringToTimestamp("2020-11-11T14:24:00"));
+        String strTime = "2020-11-11T14:24";
+        String strTime2 = "2020-11-11T14:24:00";
+        System.out.println(strTime.length());
+        System.out.println(StringToTimestamp(strTime));
+        System.out.println(StringToTimestamp(strTime2));
     }
 
     /**

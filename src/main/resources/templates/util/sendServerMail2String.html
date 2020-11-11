@@ -43,7 +43,7 @@
         <!-- 内容  -->
         <div class="container main-container" id="main-container">
             <!--1.基础-->
-            <form>
+            <form method="post" action="/util/sendServerMail">
                 <div class="row">
                     <!--环境选择-->
                     <div class="col-lg-3 col-md-3">
@@ -90,7 +90,7 @@
                     <div class="col-9 col-md-9 col-lg-9">
                         <div class="page-subtitle">邮件内容:</div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="emailDesc" name="emailDesc">
+                            <input type="text" class="form-control" id="emailDesc" name="emailDesc" placeholder="">
                         </div>
 
                         <div class="page-subtitle">道具列表:</div>
@@ -107,12 +107,12 @@
                             <div class="input-group-append">
                                 <span class="input-group-text form-control ">-- --</span>
                             </div>
-                            <input name="endTime" th:id="endTime" th:onchange="checkExpirationDate()"  type="datetime-local" class="form-control ">
+                            <input name="endTime" th:onchange="checkExpirationDate()" th:id="endTime" type="datetime-local" class="form-control ">
                             <!--点击发送-->
                             <div class="col-lg-3 col-md-3">
                                 <div class="form-group ">
                                     <div class="input-group">
-                                        <button type="button" th:id="sendSubmit" th:name="sendSubmit" class="btn btn-danger float-right">点击发送</button>
+                                        <button type="submit" class="btn btn-danger float-right">点击发送</button>
                                     </div>
                                 </div>
                             </div>
@@ -120,6 +120,75 @@
                     </div>
                 </div>
             </form>
+
+            <!--2.发送成功列表-->
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="card border-0 shadow-sm overflow-hidden mb-4">
+                        <div class="card-header border-0 bg-none">
+                            <div class="row">
+                                <div class="col-12 col-md">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-info float-right" disabled="disabled">发送成功列表</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Uin</th>
+                                    <th>OSType</th>
+                                    <th>ZoneID</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="key:${successData}">
+                                    <td th:text="${key.uuin}"></td>
+                                    <td th:text="${key.sopenID}"></td>
+                                    <td th:text="${key.izoneId}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--3.发送失败列表-->
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="card border-0 shadow-sm overflow-hidden mb-4">
+                        <div class="card-header border-0 bg-none">
+                            <div class="row">
+                                <div class="col-12 col-md">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-danger float-right" disabled="disabled">发送失败列表</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Uin</th>
+                                    <th>OSType</th>
+                                    <th>ZoneID</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="key:${errorData}">
+                                    <td th:text="${key.uuin}"></td>
+                                    <td th:text="${key.sopenID}"></td>
+                                    <td th:text="${key.izoneId}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -149,8 +218,6 @@
 <div th:replace="~{common/public_main::modal}"></div>
 <div th:replace="~{common/public_main::warningModal(modalId='startDateModal',text='开始日期不能早于2020-01-01')}"></div>
 <div th:replace="~{common/public_main::warningModal(modalId='expirationDateModal',text='结束日期不能早于开始日期！')}"></div>
-<div th:replace="~{common/public_main::warningModal(modalId='successResult',text='发送成功!')}"></div>
-<div th:replace="~{common/public_main::warningModal(modalId='errorResult',text='发送失败,请稍后重试！')}"></div>
 
 <!-- ========================================================================= -->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -194,63 +261,6 @@
 <!-- ========================================================================= -->
 <script th:src="@{/custom/js/formatTime.js}"></script>
 <!-- ========================================================================= -->
-<script type="application/javascript">
-    $('#sendSubmit').click(function (e) {
-        //1.获取环境
-        var environmentId = document.getElementById("environmentId");
-        var index = environmentId.selectedIndex;
-        environmentId = environmentId.options[index].value;
-        //2.获取区服
-        var region = document.getElementById("region");
-        var index = region.selectedIndex;
-        region = region.options[index].value;
-        //3.获取邮件标题
-        var emailTitle = document.getElementById("emailTitle").value;
-        //4.获取邮件内容
-        var emailDesc = document.getElementById("emailDesc").value;
-        //5.获取道具列表
-        var itemList = document.getElementById("itemList").value;
-        //6.生效起始时间
-        var sendTime = document.getElementById("sendTime").value;
-        //7.生效结束时间
-        var endTime = document.getElementById("endTime").value;
-        $.ajax({
-            type: "post",
-            url: '/util/sendServerMail',
-            dataType: 'json',
-            data: {
-                environmentId: environmentId,
-                region: region,
-                emailTitle: emailTitle,
-                emailDesc: emailDesc,
-                itemList: itemList,
-                sendTime: sendTime,
-                endTime: endTime
-            },
-            success: function (data) {
-                console.log("===success===");
-                console.log(data);
-                if(data === 0){
-                    $('#successResult').modal('show');
-                }else{
-                    $('#errorResult').modal('show');
-                    console.log(data);
-                }
-
-
-            },error:function(data){
-                console.log("===error===");
-                console.log(data);
-                if(data === 0){
-                    $('#successResult').modal('show');
-                }else{
-                    $('#errorResult').modal('show');
-                    console.log(data);
-                }
-            }
-        });
-    });
-</script>
 </body>
 
 

@@ -1,8 +1,6 @@
 package com.yoooum.service;
 
-
-
-import com.yoooum.util.DateUtil;
+import cn.hutool.core.date.DateUtil;
 import com.yoooum.entity.util.Mail;
 import com.yoooum.tars.account.ServerMail;
 import com.yoooum.tars.account.TAccessoryItem;
@@ -27,7 +25,12 @@ import java.util.*;
 @Service
 public class UtilService
 {
-    private static String nowTime = DateUtil.getNowDate();
+    private static String  nowTime =DateUtil.now();
+
+    public static void main(String[] args)
+    {
+        System.out.println(nowTime);
+    }
     /**
      *  发送个人邮件
      * @param mail
@@ -77,7 +80,7 @@ public class UtilService
     }
 
 
-    public Map<String, List<TAccountID>> sendServerMail(Mail mail)
+    public int sendServerMail(Mail mail)
     {
         //1.生成代理对象 默认为114
         IdipServantPrx idipServantPrxs = TarsUtil.getIdipServantPrx(mail.getEnvironmentId());
@@ -89,9 +92,9 @@ public class UtilService
         zoneIDList.add(mail.getRegion());
         stServerMailData.setVecZoneID(zoneIDList);
         //2.2生效时间
-        stServerMailData.setLSendTime(DateUtil.StringToTimestamp(mail.getSendTime()));
+        stServerMailData.setLSendTime(com.yoooum.util.DateUtil.StringToTimestamp(mail.getSendTime()));
         //2.3结束时间
-        stServerMailData.setLOverTime(DateUtil.StringToTimestamp(mail.getEndTime()));
+        stServerMailData.setLOverTime(com.yoooum.util.DateUtil.StringToTimestamp(mail.getEndTime()));
         //2.4标题
         stServerMailData.setSTitle(mail.getEmailTitle());
         //2.5内容
@@ -121,16 +124,12 @@ public class UtilService
         map.put("failValue", FailValue);
 
         //6.状态码存入
-        String errorStr = TarsUtil.getError(code);
-        System.out.println("发送结果："+errorStr);
+        String statusStr = TarsUtil.getError(code);
+        System.out.println("发送结果："+statusStr);
 
-        return map;
+        return code;
     }
 
-    public static void main(String[] args)
-    {
-        System.out.println( DateUtil.getNowDate());
-    }
 
     /**
      * 删除邮件

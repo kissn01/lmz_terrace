@@ -48,7 +48,7 @@ public class TarsUtil
      */
     public static IdipServantPrx getIdipServantPrx(Integer environmentId)
     {
-        IdipServantPrx idipServantPrx ;
+        IdipServantPrx idipServantPrx;
         /**
          * 默认为112 -- jsx
          * 118-- 为外网正式环境
@@ -73,6 +73,7 @@ public class TarsUtil
             idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 192.168.18.112 -p 10078 ");
         }
 
+
         return idipServantPrx;
     }
 
@@ -93,9 +94,8 @@ public class TarsUtil
         {
             TAccountID ta=new TAccountID();
             ta.setUuin(Integer.parseInt(splitAddress[2*i]));
-            ta.setIosType(1);
             ta.setIzoneId(Integer.parseInt(splitAddress[2*i+1]));
-
+            ta.setSopenID("10001");
             vecAccountID.add(ta);
         }
 
@@ -121,17 +121,20 @@ public class TarsUtil
     public static List<TAccessoryItem> fmtItem(String itemList)
     {
         System.out.println("道具列表:"+itemList);
-        String[] splitAddress=itemList.split("\\||;");
-        List<TAccessoryItem> vaccessoryitem = new ArrayList<TAccessoryItem>();
-        for (int i = 0; i < splitAddress.length/2; i++)
-        {
-            TAccessoryItem ta=new TAccessoryItem();
+        List<TAccessoryItem> vaccessoryitem = new ArrayList<>();
+        if(null!=itemList &&  !"".equals(itemList)){
+            String[] splitAddress=itemList.split("\\||;");
+            for (int i = 0; i < splitAddress.length/2; i++)
+            {
+                TAccessoryItem ta=new TAccessoryItem();
 
-            ta.setIItemID(Integer.parseInt(splitAddress[2*i]));
-            ta.setIItemNum(Integer.parseInt(splitAddress[2*i+1]));
+                ta.setIItemID(Integer.parseInt(splitAddress[2*i]));
+                ta.setIItemNum(Integer.parseInt(splitAddress[2*i+1]));
 
-            vaccessoryitem.add(ta);
+                vaccessoryitem.add(ta);
+            }
         }
+
 
         return vaccessoryitem;
     }
@@ -143,7 +146,7 @@ public class TarsUtil
      * @return
      */
     public static String getError(Integer code) {
-        Map<Integer, String> codeMap = new HashMap<Integer, String>();
+        Map<Integer, String> codeMap = new HashMap<>();
         codeMap.put(0, "发送成功");
         codeMap.put(601, "邮件配置不存在");
         codeMap.put(602, "邮件不存在");

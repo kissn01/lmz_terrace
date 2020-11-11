@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,26 +38,22 @@ public class UtilController
         log.info("===个人邮件发送===");
         return "util/sendMail";
     }
-    @ResponseBody
+
     @PostMapping("sendMail")
-    public Map<String, List<TAccountID>> sendMail(Mail mail)
+    public  String sendMail(HttpServletRequest request, Mail mail)
     {
         System.out.println("========个人邮件发送==========");
         System.out.println(mail);
-        Map<String, List<TAccountID>> map = new HashMap<>();
-        if(null!=mail.getUserList() &&  null !=mail.getItemList())
+        if(null!=mail.getUserList() &&  !"".equals(mail.getUserList()))
         {
             Map<String, List<TAccountID>> resultMap = utilService.sendMail(mail);
             List<TAccountID> succList = resultMap.get("succValue");
             List<TAccountID> failList = resultMap.get("failValue");
-
-
-            map.put("successData", succList);
-            map.put("errorData", failList);
+            request.setAttribute("successData", succList);
+            request.setAttribute("errorData", failList);
         }
 
-
-        return map;
+        return "util/sendMail";
     }
 
     @GetMapping("sendServerMail")
@@ -64,27 +62,76 @@ public class UtilController
         log.info("===全服邮件发送===");
         return "util/sendServerMail";
     }
-    @ResponseBody
+    @PostMapping("sendServerMail")
+    public String sendServerMail(HttpServletRequest request, Mail mail)
+    {
+        System.out.println("=========全服邮件发送=========");
+        System.out.println(mail);
+        if(null!=mail.getSendTime() &&  !"".equals(mail.getSendTime()))
+        {
+            Map<String, List<TAccountID>> resultMap = utilService.sendServerMail(mail);
+            List<TAccountID> succList = resultMap.get("succValue");
+            List<TAccountID> failList = resultMap.get("failValue");
+
+            request.setAttribute("successData", succList);
+            request.setAttribute("errorData", failList);
+        }
+
+        return "util/sendServerMail";
+    }
+
+
+    /**
+     * @Description:  dataTable 方式
+     * @Date / 14:05
+     * @param mail
+     * @return
+     **/
+/*    @ResponseBody
+    @PostMapping("sendMail")
+    public  Map<String, List<TAccountID>> sendMail(Mail mail)
+    {
+        System.out.println("========个人邮件发送==========");
+        System.out.println(mail);
+        Map<String, List<TAccountID>> map = new HashMap<>();
+        if(null!=mail.getUserList() &&  !"".equals(mail.getUserList()))
+        {
+            Map<String, List<TAccountID>> resultMap = utilService.sendMail(mail);
+            List<TAccountID> succList = resultMap.get("succValue");
+            List<TAccountID> failList = resultMap.get("failValue");
+
+            map.put("data", succList);
+            map.put("errorData", failList);
+        }
+
+        return map;
+    }*/
+
+    /**
+     * @Description: dataTable 方式
+     * @Date 2020/11/11 14:13
+     * @param mail
+     * @return
+     **/
+    /*@ResponseBody
     @PostMapping("sendServerMail")
     public Map<String, List<TAccountID>> sendServerMail(Mail mail)
     {
         System.out.println("=========全服邮件发送=========");
         System.out.println(mail);
         Map<String, List<TAccountID>> map = new HashMap<>();
-        if(null!=mail.getUserList() &&  null !=mail.getItemList())
-        {
-            Map<String, List<TAccountID>> resultMap = utilService.sendServerMail(mail);
-            List<TAccountID> succList = resultMap.get("succValue");
-            List<TAccountID> failList = resultMap.get("failValue");
-
-
-            map.put("successData", succList);
-            map.put("errorData", failList);
-        }
-
+        Map<String, List<TAccountID>> resultMap = utilService.sendServerMail(mail);
+        List<TAccountID> succList = resultMap.get("succValue");
+        List<TAccountID> failList = resultMap.get("failValue");
+        map.put("successData", succList);
+        map.put("errorData", failList);
 
         return map;
-    }
+    }*/
+
+
+
+
 //
 //    @GetMapping("checkMailRecord")
 //    public String checkMailRecord()

@@ -20,9 +20,17 @@ public class TAccountID {
     @TarsStructProperty(order = 2, isRequire = true)
     public int iopenPlatType = 0;
     @TarsStructProperty(order = 3, isRequire = true)
-    public int iosType = 0;
-    @TarsStructProperty(order = 4, isRequire = true)
     public int izoneId = 0;
 
+    public TAccountID(long uuin, String sopenID, int iopenPlatType, int izoneId)
+    {
+        this.uuin = uuin;
+        this.sopenID = sopenID;
+        this.iopenPlatType = iopenPlatType;
+        this.izoneId = izoneId;
+    }
 
+    public TAccountID()
+    {
+    }
 }

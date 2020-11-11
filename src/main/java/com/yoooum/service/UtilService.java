@@ -1,6 +1,8 @@
 package com.yoooum.service;
 
 
+
+import com.yoooum.util.DateUtil;
 import com.yoooum.entity.util.Mail;
 import com.yoooum.tars.account.ServerMail;
 import com.yoooum.tars.account.TAccessoryItem;
@@ -12,9 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.qq.tars.common.support.Holder;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -27,6 +27,7 @@ import java.util.Map;
 @Service
 public class UtilService
 {
+    private static String nowTime = DateUtil.getNowDate();
     /**
      *  发送个人邮件
      * @param mail
@@ -39,7 +40,6 @@ public class UtilService
         //2.设值
         //uin
         List<TAccountID> vecAccountID = TarsUtil.fmtUserList(mail.getUserList());
-
         //邮件配置
         TMailItem stMailItem = new TMailItem();
         stMailItem.setIID(0);
@@ -56,51 +56,61 @@ public class UtilService
         Holder<List<TAccountID>> vecFailAccountID = new Holder<>();
 
         //4.调用接口
+        System.out.println(nowTime+"||"+sendName+"||"+vecAccountID+"||"+stMailItem);
         int code = idipServantPrxs.PlatSendMail(vecAccountID,stMailItem,sendName,vecSuccAccountID,vecFailAccountID);
-        System.out.println(code);
+        System.out.println("返回状态码："+code);
 
-        List<TAccountID> SuccValue = vecSuccAccountID.getValue();
-        List<TAccountID> FailValue = vecFailAccountID.getValue();
+        List<TAccountID> succValue = vecSuccAccountID.getValue();
+        List<TAccountID> failValue = vecFailAccountID.getValue();
 
         //5.结果存入map
         Map<String,List<TAccountID>> map=new HashMap<>();
-        map.put("succValue", SuccValue);
-        map.put("failValue", FailValue);
+        map.put("succValue", succValue);
+        map.put("failValue", failValue);
 
         //6.状态码存入
         String errorStr = TarsUtil.getError(code);
-        System.out.println(errorStr);
+        System.out.println("发送结果："+errorStr);
 
 
         return map;
     }
+
 
     public Map<String, List<TAccountID>> sendServerMail(Mail mail)
     {
         //1.生成代理对象 默认为114
         IdipServantPrx idipServantPrxs = TarsUtil.getIdipServantPrx(mail.getEnvironmentId());
-        //2.设值--构造参数
+        //2.设值
         ServerMail stServerMailData = new ServerMail();
         Map<String, String> ctx = new HashMap<>();
-
-        //邮件配置
-        TMailItem stMailItem = new TMailItem();
-        stMailItem.setIID(0);
-        stMailItem.setSContent(mail.getEmailDesc());
-        stMailItem.setSTitle(mail.getEmailTitle());
-        //道具列表
+        //2.1设置区ID
+        List<Integer> zoneIDList = new ArrayList<>();
+        zoneIDList.add(mail.getRegion());
+        stServerMailData.setVecZoneID(zoneIDList);
+        //2.2生效时间
+        stServerMailData.setLSendTime(DateUtil.StringToTimestamp(mail.getSendTime()));
+        //2.3结束时间
+        stServerMailData.setLOverTime(DateUtil.StringToTimestamp(mail.getEndTime()));
+        //2.4标题
+        stServerMailData.setSTitle(mail.getEmailTitle());
+        //2.5内容
+        stServerMailData.setSContent(mail.getEmailDesc());
+        //2.6邮件附件(道具列表)
         List<TAccessoryItem> vaccessoryitem = TarsUtil.fmtItem(mail.getItemList());
-        stMailItem.setVAccessoryItem(vaccessoryitem);
-        //3.发送用户
+        stServerMailData.setVAccessoryItem(vaccessoryitem);
+        //2.7发件人
         String sendName = SecurityContextHolder.getContext().getAuthentication().getName();
+        stServerMailData.setSSender(sendName);
 
-        //4.定义成功时和失败时接收的参数
+        //3.定义成功时和失败时接收的参数
         Holder<List<TAccountID>> vecSuccAccountID = new Holder<>();
         Holder<List<TAccountID>> vecFailAccountID = new Holder<>();
 
         //4.调用接口
+        System.out.println(nowTime+"||"+sendName+"||"+stServerMailData);
         int code =  idipServantPrxs.SendServerMail(stServerMailData,ctx);
-        System.out.println(code);
+        System.out.println("返回状态码："+code);
 
         List<TAccountID> SuccValue = vecSuccAccountID.getValue();
         List<TAccountID> FailValue = vecFailAccountID.getValue();
@@ -112,12 +122,15 @@ public class UtilService
 
         //6.状态码存入
         String errorStr = TarsUtil.getError(code);
-        System.out.println(errorStr);
-
+        System.out.println("发送结果："+errorStr);
 
         return map;
     }
 
+    public static void main(String[] args)
+    {
+        System.out.println( DateUtil.getNowDate());
+    }
 
     /**
      * 删除邮件

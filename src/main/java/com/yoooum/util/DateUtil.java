@@ -16,6 +16,32 @@ public class DateUtil
 {
 
     /**
+     * String(yyyy-MM-dd HH:mm:ss)转10位时间戳
+     * @param time
+     * @return
+     */
+    public static long StringToTimestamp(String time){
+        //如果时间是"2020-11-11T14:24:00" 转为 "2020-11-11 14:24:00"
+        time = time.indexOf('T')!=-1? time.replace('T', ' '):time;
+        long times = 0L;
+        try {
+             times = ((Timestamp.valueOf(time).getTime()) / 1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(times==0){
+            System.out.println("String转10位时间戳失败");
+        }
+        return times;
+
+    }
+
+    public static void main(String[] args)
+    {
+        System.out.println(StringToTimestamp("2020-11-11T14:24:00"));
+    }
+
+    /**
      * 获取两个日期字符串之间的日期集合
      * @param startTime:String
      * @param endTime:String

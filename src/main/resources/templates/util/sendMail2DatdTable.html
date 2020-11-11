@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>全服邮件--迷你地下城</title>
+    <title>个人邮件--迷你地下城</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="灵猫传 经营分析系统."
@@ -34,7 +34,7 @@
 <div th:replace="~{common/public_main::loader}"></div>
 
 <!-- 左侧菜单栏 -->
-<div th:replace="~{common/public_main::sidebar(isSelectParent='util',isSelect='sendServerMail')}"></div>
+<div th:replace="~{common/public_main::sidebar(isSelectParent='util',isSelect='sendMail')}"></div>
 
 <!-- 顶部+内容 -->
 <div class="wrapper">
@@ -43,7 +43,7 @@
         <!-- 内容  -->
         <div class="container main-container" id="main-container">
             <!--1.基础-->
-            <form method="post" action="/util/sendServerMail">
+            <form>
                 <div class="row">
                     <!--环境选择-->
                     <div class="col-lg-3 col-md-3">
@@ -60,20 +60,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3">
-                        <div class="form-group ">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-primary float-right" disabled="disabled">区服</button>
-                                </div>
-                                <select class="form-control" name="region" id="region">
-                                    <option VALUE="1">峡谷之巅</option>
-                                    <option VALUE="2">艾欧尼亚</option>
-                                    <option VALUE="3">黑色玫瑰</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <!--邮件标题-->
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group ">
@@ -85,37 +71,36 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-9 col-md-9 col-lg-9">
-                        <div class="page-subtitle">邮件内容:</div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="emailDesc" name="emailDesc" placeholder="">
+                    <!--道具列表-->
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group ">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-primary float-right" disabled="disabled">道具列表</button>
+                                </div>
+                                <input type="text" class="form-control"  id="itemList" name="itemList" placeholder="itemID|itemNum;" >
+                            </div>
                         </div>
-
-                        <div class="page-subtitle">道具列表:</div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="itemList" name="itemList" placeholder="itemID|itemNum;">
+                    </div>
+                    <!--点击发送-->
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group ">
+                            <div class="input-group">
+                                <button type="button" onclick="table.ajax.reload()"  class="btn btn-danger float-right">点击发送</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-8 col-md-8">
-                        <div class="page-subtitle">生效时间:</div>
-                        <div class="input-group">
-                            <input name="sendTime"  th:id="sendTime" type="datetime-local" class="form-control">
-                            <div class="input-group-append">
-                                <span class="input-group-text form-control ">-- --</span>
-                            </div>
-                            <input name="endTime" th:onchange="checkExpirationDate()" th:id="endTime" type="datetime-local" class="form-control ">
-                            <!--点击发送-->
-                            <div class="col-lg-3 col-md-3">
-                                <div class="form-group ">
-                                    <div class="input-group">
-                                        <button type="submit" class="btn btn-danger float-right">点击发送</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="page-subtitle">用户列表:</div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="userList" name="userList" placeholder="uin|iZoneID;">
+                        </div>
+
+                        <div class="page-subtitle">邮件内容:</div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="emailDesc" name="emailDesc" placeholder="">
                         </div>
                     </div>
                 </div>
@@ -135,22 +120,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Uin</th>
-                                    <th>OSType</th>
-                                    <th>ZoneID</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="key:${successData}">
-                                    <td th:text="${key.uuin}"></td>
-                                    <td th:text="${key.sopenID}"></td>
-                                    <td th:text="${key.izoneId}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <table id="table_success" class="table datatable display responsive w-100"></table>
                         </div>
                     </div>
                 </div>
@@ -169,22 +139,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>Uin</th>
-                                    <th>OSType</th>
-                                    <th>ZoneID</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="key:${errorData}">
-                                    <td th:text="${key.uuin}"></td>
-                                    <td th:text="${key.sopenID}"></td>
-                                    <td th:text="${key.izoneId}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <table id="table_error" class="table datatable display responsive w-100"></table>
                         </div>
                     </div>
                 </div>
@@ -218,6 +173,7 @@
 <div th:replace="~{common/public_main::modal}"></div>
 <div th:replace="~{common/public_main::warningModal(modalId='startDateModal',text='开始日期不能早于2020-01-01')}"></div>
 <div th:replace="~{common/public_main::warningModal(modalId='expirationDateModal',text='结束日期不能早于开始日期！')}"></div>
+<div th:replace="~{common/public_main::warningModal(modalId='noDateModal',text='所选日期暂无数据！')}"></div>
 
 <!-- ========================================================================= -->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -259,8 +215,89 @@
 <!-- ========================================================================= -->
 <script th:src="@{/js/networking-dashboard.js}"></script>
 <!-- ========================================================================= -->
-<script th:src="@{/custom/js/formatTime.js}"></script>
+<script th:src="@{/custom/js/formatDate.js}"></script>
 <!-- ========================================================================= -->
+<script>
+    $(document).ready(function () {
+        window.table = $('#table_success').DataTable({
+            language: {
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sProcessing": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                },
+            },fnServerData: function (sSource, aoData, fnCallback) {
+                //1.获取环境
+                var environmentId = document.getElementById("environmentId");
+                var index = environmentId.selectedIndex;
+                environmentId = environmentId.options[index].value;
+                //2.获取邮件标题
+                var emailTitle = document.getElementById("emailTitle").value;
+                //3.获取道具列表
+                var itemList = document.getElementById("itemList").value;
+                //4.获取用户列表
+                var userList = document.getElementById("userList").value;
+                //5.获取邮件内容
+                var emailDesc = document.getElementById("emailDesc").value;
+                $.ajax({
+                    type: "post",
+                    url: '/util/sendMail',
+                    dataType: 'json',
+                    data: {
+                        environmentId: environmentId,
+                        emailTitle: emailTitle,
+                        itemList: itemList,
+                        userList: userList,
+                        emailDesc: emailDesc
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        fnCallback(data);
+                    }
+                });
+            },
+            "bProcessing": true,
+            "searching": false,
+            "pagingType": "full_numbers",
+            "aLengthMenu": [5, 25, 50, 100, 500],
+            "columns": [
+                {
+                    "data": "uuin",
+                    title: "Uin",
+                    class: "info"
+                },
+                {
+                    "data": "sopenID",
+                    title: "OpenID",
+                    class: "info"
+                },
+
+                {
+                    "data": "izoneId",
+                    title: "ZoneID",
+                    class: "info"
+                }
+
+            ]
+        });
+    });
+</script>
 </body>
 
 

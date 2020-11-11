@@ -2,6 +2,7 @@ package com.yoooum.entity.util;
 
 import lombok.Data;
 
+
 /**
  * @ClassName Mail
  * @Description TODO
@@ -13,10 +14,13 @@ import lombok.Data;
 public class Mail
 {
     private Integer environmentId;
-    private Integer  region;
-    private String userList;
+    private Integer region;
+    private String  userList;
     private Integer emailId;
-    private String emailTitle;
-    private String emailDesc;
-    private String itemList;
+    private String  emailTitle;
+    private String  emailDesc;
+    private String  itemList;
+    private String  sendTime;
+    private String  endTime;
+
 }

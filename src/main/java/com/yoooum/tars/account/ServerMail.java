@@ -5,12 +5,12 @@
 
 package com.yoooum.tars.account;
 
-import com.qq.tars.protocol.util.*;
-import com.qq.tars.protocol.annotation.*;
-import com.qq.tars.protocol.tars.*;
+
 import com.qq.tars.protocol.tars.annotation.*;
+import lombok.Data;
 
 @TarsStruct
+@Data
 public class ServerMail {
 
 	@TarsStructProperty(order = 0, isRequire = false)
@@ -28,153 +28,5 @@ public class ServerMail {
 	@TarsStructProperty(order = 6, isRequire = false)
 	public String sSender = "";
 
-	public java.util.List<java.lang.Integer> getVecZoneID() {
-		return vecZoneID;
-	}
-
-	public void setVecZoneID(java.util.List<java.lang.Integer> vecZoneID) {
-		this.vecZoneID = vecZoneID;
-	}
-
-	public long getLSendTime() {
-		return lSendTime;
-	}
-
-	public void setLSendTime(long lSendTime) {
-		this.lSendTime = lSendTime;
-	}
-
-	public long getLOverTime() {
-		return lOverTime;
-	}
-
-	public void setLOverTime(long lOverTime) {
-		this.lOverTime = lOverTime;
-	}
-
-	public String getSTitle() {
-		return sTitle;
-	}
-
-	public void setSTitle(String sTitle) {
-		this.sTitle = sTitle;
-	}
-
-	public String getSContent() {
-		return sContent;
-	}
-
-	public void setSContent(String sContent) {
-		this.sContent = sContent;
-	}
-
-	public java.util.List<TAccessoryItem> getVAccessoryItem() {
-		return vAccessoryItem;
-	}
-
-	public void setVAccessoryItem(java.util.List<TAccessoryItem> vAccessoryItem) {
-		this.vAccessoryItem = vAccessoryItem;
-	}
-
-	public String getSSender() {
-		return sSender;
-	}
-
-	public void setSSender(String sSender) {
-		this.sSender = sSender;
-	}
-
-	public ServerMail() {
-	}
-
-	public ServerMail(java.util.List<java.lang.Integer> vecZoneID, long lSendTime, long lOverTime, String sTitle, String sContent, java.util.List<TAccessoryItem> vAccessoryItem, String sSender) {
-		this.vecZoneID = vecZoneID;
-		this.lSendTime = lSendTime;
-		this.lOverTime = lOverTime;
-		this.sTitle = sTitle;
-		this.sContent = sContent;
-		this.vAccessoryItem = vAccessoryItem;
-		this.sSender = sSender;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + TarsUtil.hashCode(vecZoneID);
-		result = prime * result + TarsUtil.hashCode(lSendTime);
-		result = prime * result + TarsUtil.hashCode(lOverTime);
-		result = prime * result + TarsUtil.hashCode(sTitle);
-		result = prime * result + TarsUtil.hashCode(sContent);
-		result = prime * result + TarsUtil.hashCode(vAccessoryItem);
-		result = prime * result + TarsUtil.hashCode(sSender);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof ServerMail)) {
-			return false;
-		}
-		ServerMail other = (ServerMail) obj;
-		return (
-			TarsUtil.equals(vecZoneID, other.vecZoneID) &&
-			TarsUtil.equals(lSendTime, other.lSendTime) &&
-			TarsUtil.equals(lOverTime, other.lOverTime) &&
-			TarsUtil.equals(sTitle, other.sTitle) &&
-			TarsUtil.equals(sContent, other.sContent) &&
-			TarsUtil.equals(vAccessoryItem, other.vAccessoryItem) &&
-			TarsUtil.equals(sSender, other.sSender) 
-		);
-	}
-
-	public void writeTo(TarsOutputStream _os) {
-		if (null != vecZoneID) {
-			_os.write(vecZoneID, 0);
-		}
-		_os.write(lSendTime, 1);
-		_os.write(lOverTime, 2);
-		if (null != sTitle) {
-			_os.write(sTitle, 3);
-		}
-		if (null != sContent) {
-			_os.write(sContent, 4);
-		}
-		if (null != vAccessoryItem) {
-			_os.write(vAccessoryItem, 5);
-		}
-		if (null != sSender) {
-			_os.write(sSender, 6);
-		}
-	}
-
-	static java.util.List<java.lang.Integer> cache_vecZoneID;
-	static { 
-		cache_vecZoneID = new java.util.ArrayList<java.lang.Integer>();
-		int var_56 = 0;
-		cache_vecZoneID.add(var_56);
-	}
-	static java.util.List<TAccessoryItem> cache_vAccessoryItem;
-	static { 
-		cache_vAccessoryItem = new java.util.ArrayList<TAccessoryItem>();
-		TAccessoryItem var_57 = new TAccessoryItem();
-		cache_vAccessoryItem.add(var_57);
-	}
-
-	public void readFrom(TarsInputStream _is) {
-		this.vecZoneID = (java.util.List<java.lang.Integer>) _is.read(cache_vecZoneID, 0, false);
-		this.lSendTime = _is.read(lSendTime, 1, false);
-		this.lOverTime = _is.read(lOverTime, 2, false);
-		this.sTitle = _is.readString(3, false);
-		this.sContent = _is.readString(4, false);
-		this.vAccessoryItem = (java.util.List<TAccessoryItem>) _is.read(cache_vAccessoryItem, 5, false);
-		this.sSender = _is.readString(6, false);
-	}
 
 }

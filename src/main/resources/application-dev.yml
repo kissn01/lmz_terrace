@@ -4,9 +4,10 @@ server:
 ###
 spring:
   datasource:
-    username: logsys
-    password: logsys@123
-    url: jdbc:mysql://49.234.35.67:3306/db_ymcx_log?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: root@appinside
+    url: jdbc:mysql://124.71.21.58:3306/db_mini_log?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    #url: jdbc:mysql://192.168.18.114:3306/db_mini_log?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     #   数据源其他配置

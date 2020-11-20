@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>运营数据总览--灵猫传</title>
+    <title>运营数据总览--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="灵猫传 经营分析系统."
+    <meta content="迷你星域冒险 经营分析系统."
           name="description"/>
     <meta content="" name="author"/>
     <link rel="shortcut icon" th:href="@{favicon.ico}">
@@ -45,8 +45,8 @@
             <!--1.新进数据总览折线图-->
             <div class="row">
                 <div class="col-12">
-                    <div class="card border-0 shadow-sm mb-4">
-                        <!--top-->
+                    <!--<div class="card border-0 shadow-sm mb-4">
+                        &lt;!&ndash;top&ndash;&gt;
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col">
@@ -79,11 +79,11 @@
                                 </div>
                             </div>
                         </div>
-                        <!--center-->
+                        &lt;!&ndash;center&ndash;&gt;
                         <div class="card-body">
                             <canvas id="registDatasLine" height="50"></canvas>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
 
@@ -112,7 +112,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-md text-center text-md-left align-self-center">
-                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
+                    <p><a href="http://www.gdreamart.com/" target="_blank">迷你星域冒险官网</a></p>
                 </div>
                 <div class="col-12 col-md-auto text-center text-md-right">
                     <ul class="nav justify-content-center justify-md-content-end">
@@ -233,7 +233,7 @@
                             labelList.push(data.data[i].myDate);
                             dataList.push(data.data[i].activeUser);
                         }
-                        new Chart(document.getElementById('registDatasLine').getContext('2d'), {
+                        /*new Chart(document.getElementById('registDatasLine').getContext('2d'), {
                             type: 'line',
                             data: {
                                 labels: labelList.reverse(),
@@ -251,7 +251,7 @@
                                     mode: 'index',
                                 },
                             }
-                        });
+                        });*/
 
                         fnCallback(data);
                     }
@@ -263,7 +263,7 @@
             "aLengthMenu": [5, 25, 50, 100, 500],
             "columns": [
                 {
-                    "data": "myDate",
+                    "data": "dateSign",
                     title: "日期",
                     class: "info"
                 },
@@ -278,31 +278,10 @@
                     title: "活跃玩家",
                     class: "info"
                 }, {
-                    "data": "topUpUser",
-                    title: "充值玩家",
+                    "data": "registSum",
+                    title: "总注册",
                     class: "info"
-                },
-                {
-                    "data": "topUpAmount",
-                    title: "充值金额",
-                    class: "info"
-                },
-                {
-                    "data": "arppu",
-                    title: "ARPPU",
-                    class: "info"
-                },
-                {
-                    "data": "arpu",
-                    title: "ARPU",
-                    class: "info"
-                },
-                {
-                    "data": "topUpPermeability",
-                    title: "充值渗透率",
-                    class: "info"
-                },
-                {
+                },{
                     "data": "morrowRetention",
                     title: "次日留存",
                     class: "info"
@@ -311,21 +290,29 @@
                     "data": "threeDayRetention",
                     title: "三日留存",
                     class: "info"
-                },
-                {
+                },{
+                    "data": "fourDayRetention",
+                    title: "四日留存",
+                    class: "info"
+                },{
+                    "data": "fiveDayRetention",
+                    title: "五日留存",
+                    class: "info"
+                },{
+                    "data": "sixDayRetention",
+                    title: "六日留存",
+                    class: "info"
+                },{
                     "data": "sevenDayRetention",
                     title: "七日留存",
-                    class: "info"
-                },
-                {
-                    "data": "fifteenDayRetention",
-                    title: "十五日留存",
                     class: "info"
                 }
 
             ]
         });
     });
+
+
 </script>
 </body>
 

@@ -53,9 +53,8 @@
                                     <button class="btn btn-primary float-right" disabled="disabled">环境选择</button>
                                 </div>
                                 <select class="form-control" name="environmentId" id="environmentId">
-                                    <option VALUE="114">开发环境</option>
-                                    <option VALUE="114">测试环境</option>
-                                    <option VALUE="114">预发布环境</option>
+                                    <option VALUE="114">内网开发环境</option>
+                                    <option VALUE="58">外网测试环境</option>
                                 </select>
                             </div>
                         </div>
@@ -90,12 +89,14 @@
                     <div class="col-9 col-md-9 col-lg-9">
                         <div class="page-subtitle">邮件内容:</div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="emailDesc" name="emailDesc">
+                            <!--<input type="text" class="form-control" id="emailDesc" name="emailDesc">-->
+                            <textarea class="form-control" rows="4" id="emailDesc" name="emailDesc"></textarea>
                         </div>
 
                         <div class="page-subtitle">道具列表:</div>
                         <div class="form-group">
                             <input type="text" class="form-control" id="itemList" name="itemList" placeholder="itemID|itemNum;">
+                            <!--<textarea class="form-control" rows="4" id="itemList" name="itemList" placeholder="itemID|itemNum;"></textarea>-->
                         </div>
                     </div>
                 </div>
@@ -236,8 +237,6 @@
                     $('#errorResult').modal('show');
                     console.log(data);
                 }
-
-
             },error:function(data){
                 console.log("===error===");
                 console.log(data);

@@ -12,6 +12,9 @@ public interface PublicDao
     //活跃玩家数量
     int queryLoginSum(@Param("tbName")String tbName,@Param("platformId")Integer platformId);
 
+    //累计注册人数
+    int queryregistTotal(@Param("expirationDateSign")long expirationDateSign,@Param("platformId")Integer platformId);
+
     //新增玩家uin
     List<Integer> queryRegisterUin(@Param("tbName") String tbName, @Param("platformId") Integer platformId);
 

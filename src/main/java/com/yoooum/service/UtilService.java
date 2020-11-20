@@ -27,10 +27,7 @@ public class UtilService
 {
     private static String  nowTime =DateUtil.now();
 
-    public static void main(String[] args)
-    {
-        System.out.println(nowTime);
-    }
+
     /**
      *  发送个人邮件
      * @param mail

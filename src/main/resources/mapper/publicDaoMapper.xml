@@ -21,9 +21,19 @@
         FROM ${tbName}
         <where>
             <if test="platformId != null and platformId != 0">
-                 platformId=#{platformId}
+                platformId=#{platformId}
             </if>
         </where>
+    </select>
+
+    <!--累计注册玩家-->
+    <select id="queryregistTotal" resultType="int">
+        SELECT  IFNULL( sum(registSum),0)
+        FROM registerTotal
+        where dataSign&lt;=#{expirationDateSign}
+        <if test="platformId != null and platformId != 0">
+            platformId=#{platformId}
+        </if>
     </select>
 
     <!--新增玩家uin-->

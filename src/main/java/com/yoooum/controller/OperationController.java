@@ -74,10 +74,10 @@ public class OperationController
 
     @ResponseBody
     @PostMapping("registData")
-    public Map<String, List<NewRegistData>> registData(String startDate, String expirationDate, Integer platformId)
+    public Map<String, List<TwoHourReg>> registData(String startDate, String expirationDate, Integer platformId)
     {
-        List<NewRegistData> regList = operationService.registData(startDate,expirationDate,platformId);
-        Map<String, List<NewRegistData>> map = new HashMap<>();
+        List<TwoHourReg> regList = operationService.queryHourPeopleNum(startDate,expirationDate,platformId);
+        Map<String, List<TwoHourReg>> map = new HashMap<>();
         map.put("data", regList);
 
         return map;

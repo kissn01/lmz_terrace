@@ -3,28 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yoooum.dao.OperationDao">
-    <!-- 查询所有 -->
-    <select id="operationData" resultType="com.yoooum.entity.operation.OperationData">
-        SELECT * FROM ${tbName}
-        WHERE myDate BETWEEN  #{startDate}  AND #{expirationDate}
-        <if test="platformId != null and platformId != 0">
-            platformId=#{platformId}
-        </if>
 
-        ORDER BY myDate DESC
-    </select>
 
     <!-- 查询每个小时注册的人数-->
-    <select id="queryHourPeopleNum" resultType="com.yoooum.entity.operation.HourNum">
-        SELECT HOUR(p.dtEventTime) AS hour,COUNT(*) AS peopleNum
+    <select id="queryRegistByHour" resultType="com.yoooum.entity.operation.RegistByHour">
+        SELECT HOUR(FROM_UNIXTIME(p.eventTime)) AS hourNum,
+        COUNT(*) AS peopleNum,
+        platformId AS platformId
         FROM ${tbName} AS p
-        <where>
-            <if test="platformId != null and platformId != 0">
-                p.platformId=#{platformId}
-            </if>
-        </where>
-        GROUP BY HOUR(p.dtEventTime)
-        ORDER BY HOUR(p.dtEventTime)
+        WHERE p.eventTime &gt;= #{begTime}
+        AND p.eventTime &lt;= #{endTime}
+        <if test="platformId != null and platformId != 0">
+            and platformId=#{platformId}
+        </if>
+        GROUP BY HOUR(FROM_UNIXTIME(p.eventTime))
     </select>
 
     <!-- 钻石产出或消耗 -->

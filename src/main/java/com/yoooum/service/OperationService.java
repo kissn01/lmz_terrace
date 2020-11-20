@@ -34,16 +34,195 @@ public class OperationService
     //运营数据总览
     public List<OperationData> operationData(String startDate, String expirationDate, Integer platformId)
     {
-
-        String tbName = "MyOperationDatas";
-        if (platformId != null && platformId != 0)
-        {
-            tbName = "MyOperationData";
+        List<OperationData> OperationDataList = new ArrayList<>();
+        List<String> betweenDate = DateUtil.getBetweenDateByString(startDate, expirationDate);
+        if(null==startDate || null==expirationDate){
+            betweenDate = DateUtil.getLastSevenDay(0,7);
         }
-        List<OperationData> OperationDataList = operationDao.operationData(tbName, startDate, expirationDate, platformId);
 
+
+        for (int i = 0; i <betweenDate.size() ; i++)
+        {
+            OperationData  operationData= new OperationData();
+            operationData.setDateSign(betweenDate.get(i));
+            String sufTbName = betweenDate.get(i).replace("-", "");
+
+            //1.查询新增用户
+            Integer register = 0;
+            try
+            {
+                register =  publicDao.queryRegisterSum("PlayerRegister_" + sufTbName, platformId);
+            }
+            catch (Exception e)
+            {
+                System.out.println("SQL查询异常！" + e.getMessage());
+            }
+            operationData.setNewAddUser(register);
+            //2.查询dau
+            Integer dau = 0;
+            try
+            {
+                dau =  publicDao.queryLoginSum("PlayerLogin_" + sufTbName, platformId);
+            }
+            catch (Exception e)
+            {
+                System.out.println("SQL查询异常！" + e.getMessage());
+            }
+
+            operationData.setActiveUser(dau);
+            //3.查询总注册人数=昨天总累计注册人数+今天累计注册人数  今天时间戳-86400得到昨天的时间戳
+            Integer registSum = register;
+            try
+            {
+                registSum +=  publicDao.queryregistTotal((DateUtil.StringToTimestamp(betweenDate.get(i)+" 23:59:59")-86400),platformId);
+                System.out.println("截止"+betweenDate.get(i)+"累计注册人数："+registSum);
+            }
+            catch (Exception e)
+            {
+                System.out.println("SQL查询异常！" + e.getMessage());
+            }
+            operationData.setRegistSum(registSum);
+            //4.查询次日留存
+            operationData.setMorrowRetention(register != 0
+                    ? df.format((float) queryRetention(betweenDate.get(i), 1, platformId) * 100 / register)
+                    : "0.00");
+            //5.查询3日留存
+            operationData.setThreeDayRetention(register != 0
+                    ? df.format((float) queryRetention(betweenDate.get(i), 2, platformId) * 100 / register)
+                    : "0.00");
+            //6.查询4日留存
+            operationData.setFourDayRetention(register != 0
+                    ? df.format((float) queryRetention(betweenDate.get(i), 3, platformId) * 100 / register)
+                    : "0.00");
+            //7.查询5日留存
+            operationData.setFiveDayRetention(register != 0
+                    ? df.format((float) queryRetention(betweenDate.get(i), 4, platformId) * 100 / register)
+                    : "0.00");
+            //8.查询6日留存
+            operationData.setSixDayRetention(register != 0
+                    ? df.format((float) queryRetention(betweenDate.get(i), 5, platformId) * 100 / register)
+                    : "0.00");
+            //9.查询7日留存
+            operationData.setSevenDayRetention(register != 0
+                    ? df.format((float) queryRetention(betweenDate.get(i), 6, platformId) * 100 / register)
+                    : "0.00");
+            OperationDataList.add(operationData);
+        }
 
         return OperationDataList;
+    }
+
+    //新进数据
+    public List<TwoHourReg> queryHourPeopleNum(String startDate, String expirationDate, Integer platformId) {
+        String startTime = DateUtil.getDays(7).get("begTime");
+        String endTime = DateUtil.getDays(1).get("endTime");
+        if (startDate != null) {
+            startTime = startDate + "  0:00:00";
+            endTime = expirationDate + "  23:59:59";
+        }
+
+        List<String> dateList = DateUtil.getBetweenDateByString(startTime, endTime);
+        List<TwoHourReg> regList = new ArrayList<>();
+
+        for (int i = dateList.size() - 1; i >= 0; i--) {
+            String tbName = "PlayerRegister_" + dateList.get(i).replace("-", "");
+            try {
+                TwoHourReg queryHourPeopleNum = queryHourPeoUtil(dateList.get(i), tbName, DateUtil.strToStamp(dateList.get(i) + " 0:00:00"), DateUtil.strToStamp(dateList.get(i) + " 23:59:59"), platformId);
+                regList.add(queryHourPeopleNum);
+            } catch (Exception e) {
+                System.out.println("SQL查询异常：" + e.getMessage());
+            }
+        }
+
+
+        return regList;
+    }
+
+    public TwoHourReg queryHourPeoUtil(String queryDate, String tbName, Integer begTime, Integer endTime, Integer platformId) {
+        List<RegistByHour> HourPeopleNum = operationDao.queryRegistByHour(tbName, begTime, endTime, platformId);
+        //声明12长度的数组  存放每2小时登陆的个数赋初值各为0
+        int s[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        for (int i = 0; i < HourPeopleNum.size(); i++) {
+            if (HourPeopleNum.get(i).getHourNum() == 0) {
+                s[0] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 1) {
+                s[0] = s[0] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 2) {
+                s[1] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 3) {
+                s[1] = s[1] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 4) {
+                s[2] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 5) {
+                s[2] = s[2] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 6) {
+                s[3] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 7) {
+                s[3] = s[3] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 8) {
+                s[4] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 9) {
+                s[4] = s[4] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 10) {
+                s[5] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 11) {
+                s[5] = s[5] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 12) {
+                s[6] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 13) {
+                s[6] = s[6] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 14) {
+                s[7] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 15) {
+                s[7] = s[7] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 16) {
+                s[8] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 17) {
+                s[8] = s[8] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 18) {
+                s[9] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 19) {
+                s[9] = s[9] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 20) {
+                s[10] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 21) {
+                s[10] = s[10] + HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 22) {
+                s[11] = HourPeopleNum.get(i).getPeopleNum();
+            }
+            else if (HourPeopleNum.get(i).getHourNum() == 23) {
+                s[11] = s[11] + HourPeopleNum.get(i).getPeopleNum();
+            }
+
+        }
+
+        //构造实体类
+        Integer peopleNum = s[0] + s[1] + s[2] + s[3] + s[4] + s[5] + s[6] + s[7] + s[8] + s[9] + s[10] + s[11];
+        TwoHourReg taTime = new TwoHourReg(queryDate, peopleNum, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11], platformId);
+
+        return taTime;
     }
 
     // 查询玩家留存
@@ -189,137 +368,6 @@ public class OperationService
         return sanmeSize;
     }
 
-    //每小时新增用户
-    public List<NewRegistData> registData(String startDate, String expirationDate, Integer platformId)
-    {
-        List<NewRegistData> regList = new ArrayList<>();
-        List<String> dateList = DateUtil.getBetweenDateByString(startDate, expirationDate);
-        for (int j = dateList.size() - 1; j >= 0; j--)
-        {
-            String tbName = ("PlayerRegister_" + dateList.get(j).replace("-", ""));
-            List<HourNum> HourPeopleNum = new ArrayList<>();
-            try
-            {
-                HourPeopleNum = operationDao.queryHourPeopleNum(tbName, platformId);
-            }
-            catch (Exception e)
-            {
-                System.out.println("SQL异常：" + e.getMessage());
-            }
-
-            //声明12长度的数组  存放每2小时登陆的个数赋初值各为0
-            int s[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            for (int i = 0; i < HourPeopleNum.size(); i++)
-            {
-                if (HourPeopleNum.get(i).getHour() == 0)
-                {
-                    s[0] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 1)
-                {
-                    s[0] = s[0] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 2)
-                {
-                    s[1] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 3)
-                {
-                    s[1] = s[1] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 4)
-                {
-                    s[2] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 5)
-                {
-                    s[2] = s[2] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 6)
-                {
-                    s[3] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 7)
-                {
-                    s[3] = s[3] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 8)
-                {
-                    s[4] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 9)
-                {
-                    s[4] = s[4] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 10)
-                {
-                    s[5] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 11)
-                {
-                    s[5] = s[5] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 12)
-                {
-                    s[6] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 13)
-                {
-                    s[6] = s[6] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 14)
-                {
-                    s[7] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 15)
-                {
-                    s[7] = s[7] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 16)
-                {
-                    s[8] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 17)
-                {
-                    s[8] = s[8] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 18)
-                {
-                    s[9] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 19)
-                {
-                    s[9] = s[9] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 20)
-                {
-                    s[10] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 21)
-                {
-                    s[10] = s[10] + HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 22)
-                {
-                    s[11] = HourPeopleNum.get(i).getPeopleNum();
-                }
-                else if (HourPeopleNum.get(i).getHour() == 23)
-                {
-                    s[11] = s[11] + HourPeopleNum.get(i).getPeopleNum();
-                }
-
-            }
-
-            //构造实体类
-            Integer peopleNum = s[0] + s[1] + s[2] + s[3] + s[4] + s[5] + s[6] + s[7] + s[8] + s[9] + s[10] + s[11];
-            NewRegistData taTime = new NewRegistData(dateList.get(j), peopleNum, s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8], s[9], s[10], s[11]);
-
-            regList.add(taTime);
-        }
-
-
-        return regList;
-    }
 
     //钻石数据总览
     public List<Diamond> queryPayDiamond(String startDate, String expirationDate, Integer platformId)

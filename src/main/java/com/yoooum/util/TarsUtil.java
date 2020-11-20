@@ -50,27 +50,15 @@ public class TarsUtil
     {
         IdipServantPrx idipServantPrx;
         /**
-         * 默认为112 -- jsx
-         * 118-- 为外网正式环境
+         * 默认为114 -- 内网环境
+         * 58-- 为外网正式环境
          */
 
-        if(environmentId==113)
+        if(environmentId==58)
         {
-            idipServantPrx=communicator.stringToProxy(IdipServantPrx.class,  "JSX.IdipSvr.IdipServantObj@tcp -h 192.168.18.114 -p 22312 ");
-        }else if(environmentId==114) {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "MiniGame.IdipSvr.IdipServantObj@tcp -h 192.168.18.114 -p 22312 ");
-        }else if(environmentId==118) {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 47.99.226.188 -p 10006 ");
-        }else if(environmentId==120) {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 47.111.119.39 -p 10020 ");
-        }else if(environmentId==121) {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 121.41.51.10 -p 10023 ");
-        }else if(environmentId==124) {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 124.156.200.40 -p 10008 ");
-        }else if(environmentId==210) {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 47.97.109.210 -p 10023 ");
+            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "MiniGame.IdipSvr.IdipServantObj@tcp -h 124.71.21.58 -p 11624 ");
         }else {
-            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "JSX.IdipSvr.IdipServantObj@tcp -h 192.168.18.112 -p 10078 ");
+            idipServantPrx = communicator.stringToProxy(IdipServantPrx.class, "MiniGame.IdipSvr.IdipServantObj@tcp -h 192.168.18.114 -p 22312 ");
         }
 
 
@@ -102,15 +90,26 @@ public class TarsUtil
         return vecAccountID;
     }
 
-    public static void main(String[] args)
-    {
-        String str = "134156|0;1|7;";
-        List<TAccountID> tAccountIDS = fmtUserList(str);
-        System.out.println(tAccountIDS.get(0).getUuin());
-        System.out.println(tAccountIDS);
-//        String strs = "1|100;2|100;1010105|100;";
-//        List<TAccessoryItem> tAccessoryItems = fmtItem(strs);
-//        System.out.println(tAccessoryItems.get(0).getIItemID());
+    //换行分隔
+    public static void main(String[] args) {
+
+        StringBuilder sb = new StringBuilder("");
+        sb.append("1|100\n");
+        sb.append("2|100\r\n");
+        sb.append("3|100\n");
+
+
+        String text = sb.toString();
+        System.out.println("---Original---");
+        System.out.println(text);
+
+        System.out.println("---Split---");
+        int count = 1;
+        String[] lines = text.split("\\r?\\n");
+        for (String line : lines) {
+            System.out.println("line " + count++ + " : " + line);
+        }
+
     }
 
     /**

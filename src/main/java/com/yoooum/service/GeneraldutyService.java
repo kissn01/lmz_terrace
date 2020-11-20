@@ -282,7 +282,7 @@ public class GeneraldutyService
         {
             begDay = searchDate;
         }
-        List<String> betweenDate = DateUtil.getBetweenDate(begDay, DateUtil.getDateByNum(begDay, 6));
+        List<String> betweenDate = DateUtil.getBetweenDateByString(begDay, DateUtil.getDateByNum(begDay, 6));
         Integer maxLev = 0;
 
         for (int i = 0; i < betweenDate.size(); i++)
@@ -395,14 +395,14 @@ public class GeneraldutyService
         String begRegTime = DateUtil.getPastDate(0) + " 00:00:00";
         String endRegTime = DateUtil.getPastDate(0) + " 23:59:59";
         // 获取当天到15日留存日期集合
-        List<String> betweenDate = DateUtil.getBetweenDate(DateUtil.getPastDate(0) + "", fiftenDate);
+        List<String> betweenDate = DateUtil.getBetweenDateByString(DateUtil.getPastDate(0) + "", fiftenDate);
         if (searchDate != null)
         {
             String begDate = searchDate.subSequence(0, 10) + "";
             fiftenDate = DateUtil.getDateAfter(begDate, 14, "yyyy-MM-dd");
             begRegTime = searchDate.subSequence(0, 10) + " 00:00:00";
             endRegTime = searchDate.subSequence(0, 10) + " 23:59:59";
-            betweenDate = DateUtil.getBetweenDate(begDate, fiftenDate);
+            betweenDate = DateUtil.getBetweenDateByString(begDate, fiftenDate);
 
         }
 

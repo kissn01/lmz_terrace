@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>新进数据--灵猫传</title>
+    <title>新进数据--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="灵猫传 经营分析系统."
@@ -269,7 +269,7 @@
                         var dataList = [];
                         for (var i = 0; i < data.data.length; i++) {
                             labelList.push(data.data[i].dateSign);
-                            dataList.push(data.data[i].peopleSum);
+                            dataList.push(data.data[i].peopleNum);
                         }
                         new Chart(document.getElementById('registDatasLine').getContext('2d'), {
                             type: 'line',
@@ -300,7 +300,7 @@
                                 borderWidth: '2',
                                 borderColor: sliceArr(colorArr,data.data.length)[i],
                                 backgroundColor: 'rgba(0, 0, 0, 0)',
-                                data: [data.data[i].zeroToTwoNum, data.data[i].twoAndFourNum, data.data[i].fourAndSixNum, data.data[i].sixAndEightNum, data.data[i].eightAndTenNum, data.data[i].tenAndTwelveNum, data.data[i].twelveAndFourteenNum, data.data[i].fourteenAndSixteeenNum, data.data[i].sixteeenAndEighteenNum, data.data[i].eighteenAndTwentyNum, data.data[i].twentyAndTwentyTwoNum, data.data[i].twentyTwoAndTwentyFourNum],
+                                data: [data.data[i].zeroToTwo, data.data[i].twoAndFour, data.data[i].fourAndSix, data.data[i].sixAndEight, data.data[i].eightAndTen, data.data[i].tenAndTwelve, data.data[i].twelveAndFourteen, data.data[i].fourteenAndSixteeen, data.data[i].sixteeenAndEighteen, data.data[i].eighteenAndTwenty, data.data[i].twentyAndTwentyTwo, data.data[i].twentyTwoAndTwentyFour],
                             }
                             datasets.push(tempJson);
                         }
@@ -333,66 +333,66 @@
                     class: "info"
                 },
                 {
-                    "data": "peopleSum",
+                    "data": "peopleNum",
                     title: "总人数",
                     class: "info"
                 },
                 {
-                    "data": "zeroToTwoNum",
+                    "data": "zeroToTwo",
                     title: "0:00-2:00",
                     class: "info"
                 },
                 {
-                    "data": "twoAndFourNum",
+                    "data": "twoAndFour",
                     title: "2:00-4:00",
                     class: "info"
                 }, {
-                    "data": "fourAndSixNum",
+                    "data": "fourAndSix",
                     title: "4:00-6:00",
                     class: "info"
                 },
                 {
-                    "data": "sixAndEightNum",
+                    "data": "sixAndEight",
                     title: "6:00-8:00",
                     class: "info"
                 },
                 {
-                    "data": "eightAndTenNum",
+                    "data": "eightAndTen",
                     title: "8:00-10:00",
                     class: "info"
                 },
                 {
-                    "data": "tenAndTwelveNum",
+                    "data": "tenAndTwelve",
                     title: "10:00-12:00",
                     class: "info"
                 },
                 {
-                    "data": "twelveAndFourteenNum",
+                    "data": "twelveAndFourteen",
                     title: "12:00-14:00",
                     class: "info"
                 },
                 {
-                    "data": "fourteenAndSixteeenNum",
+                    "data": "fourteenAndSixteeen",
                     title: "14:00-16:00",
                     class: "info"
                 },
                 {
-                    "data": "sixteeenAndEighteenNum",
+                    "data": "sixteeenAndEighteen",
                     title: "16:00-18:00",
                     class: "info"
                 },
                 {
-                    "data": "eighteenAndTwentyNum",
+                    "data": "eighteenAndTwenty",
                     title: "18:00-20:00",
                     class: "info"
                 },
                 {
-                    "data": "twentyAndTwentyTwoNum",
+                    "data": "twentyAndTwentyTwo",
                     title: "20:00-22:00",
                     class: "info"
                 },
                 {
-                    "data": "twentyTwoAndTwentyFourNum",
+                    "data": "twentyTwoAndTwentyFour",
                     title: "22:00-24:00",
                     class: "info"
                 }]

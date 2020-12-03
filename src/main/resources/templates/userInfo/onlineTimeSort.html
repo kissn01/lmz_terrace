@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>玩家基础行为--灵猫传</title>
+    <title>在线时长区间分布--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="灵猫传 经营分析系统."
+    <meta content="迷你星域冒险 经营分析系统."
           name="description"/>
     <meta content="" name="author"/>
     <link rel="shortcut icon" th:href="@{favicon.ico}">
@@ -34,7 +34,7 @@
 <div th:replace="~{common/public_main::loader}"></div>
 
 <!-- 左侧菜单栏 -->
-<div th:replace="~{common/public_main::sidebar(isSelectParent='userInfo',isSelect='basicBehavior')}"></div>
+<div th:replace="~{common/public_main::sidebar(isSelectParent='userInfo',isSelect='gameOnLineTime')}"></div>
 
 <!-- 顶部+内容 -->
 <div class="wrapper">
@@ -42,50 +42,6 @@
         <div th:replace="~{common/public_main::heard}"></div>
         <!-- 内容  -->
         <div class="container main-container" id="main-container">
-            <!--1.新进数据总览折线图-->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card border-0 shadow-sm mb-4">
-                        <!--top-->
-                        <div class="card-header border-0 bg-none">
-                            <div class="row">
-                                <div class="col">
-                                    <p class="fs15">运营数据总览折线图</p>
-                                </div>
-                                <form class="form-inline search align-self-center">
-                                    <input class="form-control form-control-sm" type="search" placeholder="搜索..."
-                                           aria-label="Search">
-                                    <button class="btn btn-link btn-sm" type="submit"><i
-                                            class="material-icons">search</i></button>
-                                </form>
-                                <div class="col-auto">
-                                    <button class="btn btn-sm btn-outline-template">
-                                        <i class="material-icons md-18 mr-2">print</i> 打印
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-template ml-2">
-                                        <i class="material-icons md-18 mr-2">cloud_download</i> 导出
-                                    </button>
-                                    <div class="dropdown d-inline-block  ml-2">
-                                        <button class="btn dropdown-toggle btn-sm btn-link" type="button"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="material-icons">more_horiz</i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                            <a class="dropdown-item" href="#">操作一</a>
-                                            <a class="dropdown-item" href="#">操作二</a>
-                                            <a class="dropdown-item" href="#">操作三</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--center-->
-                        <div class="card-body">
-                            <canvas id="registDatasLine" height="50"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!--2.table-->
             <div class="row">
@@ -94,9 +50,9 @@
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col-12 col-md">
-                                    <p class="fs15">运营数据总览</p>
+                                    <p class="fs15">在线时长</p>
                                 </div>
-                                <div th:replace="~{common/public_main::tbForm}"></div>
+                                <div th:replace="~{common/public_main::registOrActiveForm}"></div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -112,7 +68,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-md text-center text-md-left align-self-center">
-                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
+                    <p><a href="http://www.gdreamart.com/" target="_blank">迷你星域冒险官网</a></p>
                 </div>
                 <div class="col-12 col-md-auto text-center text-md-right">
                     <ul class="nav justify-content-center justify-md-content-end">
@@ -214,44 +170,23 @@
                 var platform = document.getElementById("platformId");
                 var index = platform.selectedIndex;
                 platformId = platform.options[index].value;
+                //4.获取活跃用户 activeUserId
+                var activeUser = document.getElementById("activeUserId");
+                var activeUserIndex = activeUser.selectedIndex;
+                activeUserId = activeUser.options[activeUserIndex].value;
                 $.ajax({
                     type: "post",
-                    url: '/operation/operationData',
+                    url: '/userInfo/onlineTimeSort',
                     dataType: 'json',
                     data: {
                         startDate: startDate,
                         expirationDate: expirationDate,
-                        platformId: platformId
+                        platformId: platformId,
+                        activeUserId: activeUserId
                     },
                     success: function (data) {
                         console.log('-------------------');
                         console.log(data);
-                        //1.数据总览折线图
-                        var labelList = [];
-                        var dataList = [];
-                        for (var i = 0; i < data.data.length; i++) {
-                            labelList.push(data.data[i].myDate);
-                            dataList.push(data.data[i].activeUser);
-                        }
-                        new Chart(document.getElementById('registDatasLine').getContext('2d'), {
-                            type: 'line',
-                            data: {
-                                labels: labelList.reverse(),
-                                datasets: [{
-                                    label: '数据总览',
-                                    borderWidth: '2',
-                                    borderColor: '#F85778',
-                                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                                    data: dataList.reverse(),
-                                }]
-                            },
-                            options: {
-                                tooltips: {
-                                    intersect: false,
-                                    mode: 'index',
-                                },
-                            }
-                        });
 
                         fnCallback(data);
                     }
@@ -263,67 +198,35 @@
             "aLengthMenu": [5, 25, 50, 100, 500],
             "columns": [
                 {
-                    "data": "myDate",
+                    "data": "dateSign",
                     title: "日期",
                     class: "info"
                 },
                 {
-                    "data": "newAddUser",
-                    title: "新增玩家",
+                    "data": "timeSort01",
+                    title: "0~10min",
                     class: "info"
                 },
 
                 {
-                    "data": "activeUser",
-                    title: "活跃玩家",
+                    "data": "timeSort02",
+                    title: "10min~1h",
                     class: "info"
                 }, {
-                    "data": "topUpUser",
-                    title: "充值玩家",
+                    "data": "timeSort03",
+                    title: "1h~2h",
                     class: "info"
                 },
                 {
-                    "data": "topUpAmount",
-                    title: "充值金额",
+                    "data": "timeSort04",
+                    title: "2h~3h",
                     class: "info"
                 },
                 {
-                    "data": "arppu",
-                    title: "ARPPU",
+                    "data": "timeSort05",
+                    title: "3h以上",
                     class: "info"
-                },
-                {
-                    "data": "arpu",
-                    title: "ARPU",
-                    class: "info"
-                },
-                {
-                    "data": "topUpPermeability",
-                    title: "充值渗透率",
-                    class: "info"
-                },
-                {
-                    "data": "morrowRetention",
-                    title: "次日留存",
-                    class: "info"
-                },
-                {
-                    "data": "threeDayRetention",
-                    title: "三日留存",
-                    class: "info"
-                },
-                {
-                    "data": "sevenDayRetention",
-                    title: "七日留存",
-                    class: "info"
-                },
-                {
-                    "data": "fifteenDayRetention",
-                    title: "十五日留存",
-                    class: "info"
-                }
-
-            ]
+                }]
         });
     });
 </script>

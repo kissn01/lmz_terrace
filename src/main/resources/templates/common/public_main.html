@@ -23,18 +23,18 @@
     <a href="#" class="logo">
         <img th:src="@{/img/logoicon.svg}" alt="" class="logo-icon">
         <div class="logo-text">
-            <h5 class="fs22 mb-0">迷你地下城 <!--<sup class="badge badge-danger">PRO</sup>--></h5>
-            <p class="text-uppercase fs11">MINI-DI-XIA-CHENG</p>
+            <h5 class="fs22 mb-0">迷你星域冒险</h5>
+            <p class="text-uppercase fs11">MINI-XING-YU-MAO-XIAN</p>
         </div>
     </a>
-    <!-- 游戏运营数据 -->
+    <!-- 通用运营数据 -->
     <div sec:authorize="hasRole('ROLE_OPERATION')">
         <h6 class="subtitle fs11">运营数据</h6>
         <ul class="nav flex-column">
             <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
                 <a class="nav-link dropdown-toggle" href="javascript:void(0)">
                     <i class="material-icons icon">widgets</i>
-                    <span>游戏运营数据</span>
+                    <span>通用运营数据</span>
                     <i class="material-icons arrow">expand_more</i>
                 </a>
                 <div class="nav flex-column" th:style="${isSelectParent=='operation'?'display: block':'display: none'}">
@@ -44,42 +44,311 @@
                             <span>运营数据总览</span>
                         </a>
                     </div>
-                    <div th:class="${isSelect=='retentionData'?'nav-item active':'nav-item'}">
-                        <a th:href="@{/operation/retentionData}"
-                           th:class="${isSelect=='retentionData'?'nav-link active':'nav-link'}">
-                            <span>用户留存</span>
-                        </a>
-                    </div>
                     <div th:class="${isSelect=='registData'?'nav-item active':'nav-item'}">
                         <a th:href="@{/operation/registData}"
                            th:class="${isSelect=='registData'?'nav-link active':'nav-link'}">
-                            <span>新进数据</span>
+                            <span>新进玩家数据</span>
                         </a>
                     </div>
-                    <div th:class="${isSelect=='diamodData'?'nav-item active':'nav-item'}">
-                        <a th:href="@{/operation/diamodData}"
-                           th:class="${isSelect=='diamodData'?'nav-link active':'nav-link'}">
-                            <span>钻石数据总览</span>
-                        </a>
-                    </div>
-                    <div th:class="${isSelect=='coinData'?'nav-item active':'nav-item'}">
-                        <a th:href="@{/operation/coinData}"
-                           th:class="${isSelect=='coinData'?'nav-link active':'nav-link'}">
-                            <span>金币数据总览</span>
-                        </a>
-                    </div>
-                    <div th:class="${isSelect=='diamodConsumptionData'?'nav-item active':'nav-item'}">
-                        <a th:href="@{/operation/diamodConsumptionData}"
-                           th:class="${isSelect=='diamodConsumptionData'?'nav-link active':'nav-link'}">
-                            <span>钻石消耗途径</span>
+                    <div th:class="${isSelect=='retentionData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/retentionData}"
+                           th:class="${isSelect=='retentionData'?'nav-link active':'nav-link'}">
+                            <span>玩家留存数据</span>
                         </a>
                     </div>
                 </div>
             </li>
         </ul>
     </div>
+
+    <!--资源数据-->
+    <div sec:authorize="hasRole('ROLE_OPERATION')">
+        <h6 class="subtitle fs11">资源数据</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">assessment</i>
+                    <span>通用资源数据</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='resource'?'display: block':'display: none'}">
+
+                    <div th:class="${isSelect=='diamodData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/diamodData}"
+                           th:class="${isSelect=='diamodData'?'nav-link active':'nav-link'}">
+                            <span>迷你币基本情况</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='diamodConsumptionData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/operation/diamodConsumptionData}"
+                           th:class="${isSelect=='diamodConsumptionData'?'nav-link active':'nav-link'}">
+                            <span>迷你币消耗途径</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!--玩家数据-->
+    <div sec:authorize="hasRole('ROLE_OPERATION')">
+        <h6 class="subtitle fs11">玩家数据</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">dehaze</i>
+                    <span>玩家基础行为</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='userInfo'?'display: block':'display: none'}">
+
+                    <div th:class="${isSelect=='basicBehavior'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/basicBehavior}"
+                           th:class="${isSelect=='basicBehavior'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为数据</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTimeSort'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTimeSort}"
+                           th:class="${isSelect=='onlineTimeSort'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='planTimeSort'?'nav-item active':'nav-item'}">
+                       <a th:href="@{/userInfo/planTimeSort}"
+                          th:class="${isSelect=='planTimeSort'?'nav-link active':'nav-link'}">
+                           <span>副本时长区间分布</span>
+                       </a>
+                   </div>
+                </div>
+            </li>
+
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">terrain</i>
+                    <span>玩家角色情况</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='roleInfo'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='roleUseCount'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/roleUseCount}"
+                           th:class="${isSelect=='roleUseCount'?'nav-link active':'nav-link'}">
+                            <span>角色使用情况</span>
+                        </a>
+                    </div>
+                    <!--<div th:class="${isSelect=='rolePlayCount'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/rolePlayCount}"
+                           th:class="${isSelect=='rolePlayCount'?'nav-link active':'nav-link'}">
+                            <span>角色出战频次</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='roleStarRating'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/roleStarRating}"
+                           th:class="${isSelect=='roleStarRating'?'nav-link active':'nav-link'}">
+                            <span>角色星级情况</span>
+                        </a>
+                    </div>-->
+                </div>
+            </li>
+            <!--<li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">toys</i>
+                    <span>关卡与任务分析</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='userInfo'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">star</i>
+                    <span>玩家小镇经营情况</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='userInfo'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">stars</i>
+                    <span>小镇功能使用</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div class="nav flex-column" th:style="${isSelectParent=='userInfo'?'display: block':'display: none'}">
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='onlineTime'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/onlineTime}"
+                           th:class="${isSelect=='onlineTime'?'nav-link active':'nav-link'}">
+                            <span>在线时长区间分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='userInfo'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/userInfo/userInfo}"
+                           th:class="${isSelect=='userInfo'?'nav-link active':'nav-link'}">
+                            <span>玩家基础行为</span>
+                        </a>
+                    </div>
+                </div>
+            </li>-->
+        </ul>
+    </div>
+
+
+ <!-- <div sec:authorize="hasRole('ROLE_TASK')">
+        <h6 class="subtitle fs11">委托任务</h6>
+        <ul class="nav flex-column">
+            <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
+                    <i class="material-icons icon">cake</i>
+                    <span>委托任务统计</span>
+                    <i class="material-icons arrow">expand_more</i>
+                </a>
+                <div th:style="${isSelectParent=='task'?'display: block':'display: none'}" class="nav flex-column">
+                    <div th:class="${isSelect=='firstPassData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/firstPassData}"
+                           th:class="${isSelect=='firstPassData'?'nav-link active':'nav-link'}">
+                            <span>委托首次通过情况统计</span>
+                        </a>
+                    </div>
+
+                    <div th:class="${isSelect=='everyDayPassData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/everyDayPassData}"
+                           th:class="${isSelect=='everyDayPassData'?'nav-link active':'nav-link'}">
+                            <span>委托关卡每日通过情况</span>
+                        </a>
+                    </div>
+
+                    <div th:class="${isSelect=='userLvlData'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/userLvlData}"
+                           th:class="${isSelect=='userLvlData'?'nav-link active':'nav-link'}">
+                            <span>委托通过玩家等级分布</span>
+                        </a>
+                    </div>
+                    <div th:class="${isSelect=='checkUser'?'nav-item active':'nav-item'}">
+                        <a th:href="@{/task/checkUser}"
+                           th:class="${isSelect=='checkUser'?'nav-link active':'nav-link'}">
+                            <span>指定玩家委托情况查询</span>
+                        </a>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+    </div>-->
     <!-- 付费数据 -->
-    <div sec:authorize="hasRole('ROLE_CHARGE')">
+<!--    <div sec:authorize="hasRole('ROLE_CHARGE')">
         <h6 class="subtitle fs11">付费数据</h6>
         <ul class="nav flex-column">
             <li th:class="${isSelect=='chargeData'?'nav-item dropdown show':'nav-item dropdown'}">
@@ -125,17 +394,17 @@
                             <span>指定用户查询</span>
                         </a>
                     </div>
-                    <!--<div th:class="${isSelect=='chargeSearchDate'?'nav-item active':'nav-item'}">
+                    &lt;!&ndash;<div th:class="${isSelect=='chargeSearchDate'?'nav-item active':'nav-item'}">
                         <a th:href="@{/charge/chargeSearchDate}"
                            th:class="${isSelect=='chargeSearchByDate'?'nav-link active':'nav-link'}">
                             <span>指定日期查询</span>
                         </a>
-                    </div>-->
+                    </div>&ndash;&gt;
                 </div>
             </li>
         </ul>
     </div>
-    <!-- 通用数据 -->
+    &lt;!&ndash; 通用数据 &ndash;&gt;
     <div sec:authorize="hasRole('ROLE_GENERALDUTY')">
         <h6 class="subtitle fs11">通用数据</h6>
         <ul class="nav flex-column">
@@ -175,7 +444,7 @@
             </li>
         </ul>
     </div>
-    <!-- 副本挑战 -->
+    &lt;!&ndash; 副本挑战 &ndash;&gt;
     <div sec:authorize="hasRole('ROLE_DUNGEON')">
         <h6 class="subtitle fs11">挑战副本</h6>
         <ul class="nav flex-column">
@@ -220,7 +489,7 @@
             </li>
         </ul>
     </div>
-    <!-- 剧情分析 -->
+    &lt;!&ndash; 剧情分析 &ndash;&gt;
     <div sec:authorize="hasRole('ROLE_SCENARIO')">
         <h6 class="subtitle fs11">剧情分析</h6>
         <ul class="nav flex-column">
@@ -246,7 +515,7 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </div>-->
     <!-- 任务分析 -->
 <!--    <div sec:authorize="hasRole('ROLE_TASK')">
         <h6 class="subtitle fs11">委托任务</h6>
@@ -335,9 +604,9 @@
             </li>
         </ul>
     </div>-->
-    <!--其他工具-->
+    <!--系统工具-->
     <div sec:authorize="hasRole('ROLE_UTIL')">
-        <h6 class="subtitle fs11">其他工具</h6>
+        <h6 class="subtitle fs11">系统工具</h6>
         <ul class="nav flex-column">
             <li th:class="${isSelect=='  '?'nav-item dropdown show':'nav-item dropdown'}">
                 <a class="nav-link dropdown-toggle" href="javascript:void(0)">
@@ -349,13 +618,13 @@
                     <div th:class="${isSelect=='sendMail'?'nav-item active':'nav-item'}">
                         <a th:href="@{/util/sendMail}"
                            th:class="${isSelect=='sendMail'?'nav-link active':'nav-link'}">
-                            <span>个人邮件</span>
+                            <span>个人邮件发送</span>
                         </a>
                     </div>
                     <div th:class="${isSelect=='sendServerMail'?'nav-item active':'nav-item'}">
                         <a th:href="@{/util/sendServerMail}"
                            th:class="${isSelect=='sendServerMail'?'nav-link active':'nav-link'}">
-                            <span>全服邮件</span>
+                            <span>全服邮件发送</span>
                         </a>
                     </div>
                     <!--<div th:class="${isSelect=='checkMailRecord'?'nav-item active':'nav-item'}">
@@ -398,7 +667,47 @@
         <button type="submit" onclick="table.ajax.reload()" class="btn  btn-outline-success ml-2 ">
             <i class="material-icons md-18">search</i>查询
         </button>
+    </div>
+    <div class="col-auto align-self-center">
+        <button class="btn btn-outline-danger ml-2">
+            <i class="material-icons md-18">cloud_download</i>导出
+        </button>
+    </div>
+</div>
 
+<!--registOrActiveForm-->
+<div th:fragment="registOrActiveForm" class="form-inline search col-auto align-self-center px-0">
+    <div class="input-group">
+        <input name="startDate" th:onchange="checkStartDate()" th:id="startDate" type="date" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text form-control ">-- --</span>
+        </div>
+        <input name="expirationDate" th:onchange="checkExpirationDate()" th:id="expirationDate" type="date" class="form-control ">
+    </div>
+    <select th:id="platformId" name="platformId" class="form-control  ml-2">
+        <option selected="selected" value='0'>All</option>
+        <option value="41">游梦初心</option>
+        <option value="1">微信</option>
+        <option value="2">手Q</option>
+        <option value="3">游客</option>
+        <option value="4">小游戏</option>
+        <option value="6">应用宝</option>
+        <option value="7">华为</option>
+        <option value="8">OPPO</option>
+        <option value="9">VIVO</option>
+        <option value="10">360</option>
+        <option value="11">百度</option>
+    </select>
+    <button type="button" th:disabled="disabled" class="form-control">渠道</button>
+    <select th:id="activeUserId" name="activeUserId" class="form-control  ml-2">
+        <option selected="selected" value="0">活跃用户</option>
+        <option value="1">新增用户</option>
+    </select>
+    <button type="button" th:disabled="disabled" class="form-control">选项</button>
+    <div class="col-auto align-self-center">
+        <button type="submit" onclick="table.ajax.reload()" class="btn  btn-outline-success ml-2 ">
+            <i class="material-icons md-18">search</i>查询
+        </button>
     </div>
     <div class="col-auto align-self-center">
         <button class="btn btn-outline-danger ml-2">
@@ -1170,6 +1479,25 @@
     </div>
 </div>
 
+<!--底部-->
+<div class="container-fluid header-container" th:fragment="footer">
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md text-center text-md-left align-self-center">
+                    <p><a href="http://www.gdreamart.com/" target="_blank">迷你星域冒险官网</a></p>
+                </div>
+                <div class="col-12 col-md-auto text-center text-md-right">
+                    <ul class="nav justify-content-center justify-md-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">版权所有@2018--2098游梦初心文化网络有限公司</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
 <!-- QQ -->
 <div class="wrap-fixed-float wrap-fixed-bottom-left" th:fragment="qq">
     <button class="btn btn-primary  btn-rounded-circle shadow chat-btn"><i class="material-icons vm">comment</i>
@@ -1229,7 +1557,7 @@
                         <div class="chat-block">
                             <div class="row">
                                 <div class="col">
-                                    你喜欢迷你地下城吗?
+                                    你喜欢迷你星域冒险吗?
                                     <p class="text-mute small mt-2">8:02 am</p>
                                 </div>
 

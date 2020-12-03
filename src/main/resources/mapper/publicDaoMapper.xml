@@ -26,6 +26,18 @@
         </where>
     </select>
 
+    <!--活跃玩家数量-->
+    <select id="queryLoginSumAndCount" resultType="com.yoooum.entity.common.Twos" >
+        SELECT  IFNULL(count(distinct uin),0) as levelId,
+        IFNULL(count(uin),0) as userNum
+        FROM ${tbName}
+        <where>
+            <if test="platformId != null and platformId != 0">
+                platformId=#{platformId}
+            </if>
+        </where>
+    </select>
+
     <!--累计注册玩家-->
     <select id="queryregistTotal" resultType="int">
         SELECT  IFNULL( sum(registSum),0)

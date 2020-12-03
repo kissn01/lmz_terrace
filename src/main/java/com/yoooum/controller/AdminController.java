@@ -38,7 +38,6 @@ public class AdminController
     @RequestMapping("/login")
     public String showLogin()
     {
-        log.info("===showLogin===");
         return "admin/login";
     }
 
@@ -54,6 +53,7 @@ public class AdminController
         adminService.saveSysUser(sysUser);
         return "redirect:/login";
     }
+
     @GetMapping("/updatePwd")
     public String updatePwd()
     {

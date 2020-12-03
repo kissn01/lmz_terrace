@@ -5,7 +5,7 @@
     <title>新进数据--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="灵猫传 经营分析系统."
+    <meta content="迷你星域冒险 经营分析系统."
           name="description"/>
     <meta content="" name="author"/>
     <link rel="shortcut icon" th:href="@{favicon.ico}">
@@ -153,22 +153,7 @@
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md text-center text-md-left align-self-center">
-                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
-                </div>
-                <div class="col-12 col-md-auto text-center text-md-right">
-                    <ul class="nav justify-content-center justify-md-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">版权所有@2018--2098游梦初心文化网络有限公司</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div th:replace="~{common/public_main::footer}"></div>
 </div>
 
 <div th:replace="~{common/public_main::qq}"></div>
@@ -276,7 +261,7 @@
                             data: {
                                 labels: labelList.reverse(),
                                 datasets: [{
-                                    label: '数据总览',
+                                    label: '总注册人数',
                                     borderWidth: '2',
                                     borderColor: '#F85778',
                                     backgroundColor: 'rgba(0, 0, 0, 0)',

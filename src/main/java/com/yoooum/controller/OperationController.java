@@ -93,10 +93,10 @@ public class OperationController
 
     @ResponseBody
     @PostMapping("diamodData")
-    public Map<String, List<Diamond>> diamodData(String startDate, String expirationDate, Integer platformId)
+    public Map<String, List<MiNiCoin>> diamodData(String startDate, String expirationDate, Integer platformId)
     {
-        List<Diamond> diamondList = operationService.queryPayDiamond(startDate,expirationDate,platformId);
-        Map<String, List<Diamond>> map = new HashMap<>();
+        List<MiNiCoin> diamondList = operationService.queryPayDiamond(startDate,expirationDate,platformId);
+        Map<String, List<MiNiCoin>> map = new HashMap<>();
         map.put("data", diamondList);
 
         return map;
@@ -111,11 +111,11 @@ public class OperationController
 
     @ResponseBody
     @PostMapping("diamodConsumptionData")
-    public Map<String, List<DiamondSub>> diamodConsumptionData(String startDate, String expirationDate, Integer platformId)
+    public Map<String, List<MiNiCoinSub>> diamodConsumptionData(String startDate, String expirationDate, Integer platformId)
     {
 
-        List<DiamondSub> subDiamondList = operationService.diamodConsumptionData(startDate, expirationDate, platformId);
-        Map<String, List<DiamondSub>> map = new HashMap<>();
+        List<MiNiCoinSub> subDiamondList = operationService.diamodConsumptionData(startDate, expirationDate, platformId);
+        Map<String, List<MiNiCoinSub>> map = new HashMap<>();
         map.put("data", subDiamondList);
 
         return map;

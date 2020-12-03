@@ -18,6 +18,23 @@
         </if>
         GROUP BY HOUR(FROM_UNIXTIME(p.eventTime))
     </select>
+    <!-- 查询迷你币总增量 -->
+    <select id="queryMiNiCharge" resultType="com.yoooum.entity.operation.MiNiTwos">
+        SELECT  ireason as reason,
+               IFNULL(sum(ichangecount),0) as sum
+        from ${tbName}
+        where 1=1
+        <if test="type==1">
+            AND ichangecount&gt;0
+        </if>
+        <if test="type==2">
+            AND ichangecount&lt;0
+        </if>
+        <if test="platformId != null and platformId != 0">
+            AND platformId=#{platformId}
+        </if>
+        group by ireason
+    </select>
 
     <!-- 钻石产出或消耗 -->
     <select id="queryDiamondCharge" resultType="com.yoooum.entity.operation.DiamodTwos">
@@ -39,19 +56,18 @@
     </select>
     <!-- 钻石存量  -->
     <select id="queryDiamondAfterCount" resultType="int">
-        SELECT IFNULL(SUM(afterCount),0)
+        SELECT IFNULL(SUM(iaftercount),0)
         FROM (
-        SELECT uin,afterCount
-        FROM(
-        SELECT uin,afterCount,dtEventTime
-        FROM ${tbName}
-        WHERE itemID = 2
-        AND dtEventTime BETWEEN #{begDate} AND #{endDate}
-        <if test="platformId != null and platformId != 0">
-            AND platformId=#{platformId}
-        </if>
-        ORDER BY dtEventTime DESC)AS t
-        GROUP BY uin)AS q
+            SELECT uin,iaftercount
+            FROM(
+                SELECT uin,iaftercount,dtEventTime
+                FROM ${tbName}
+                WHERE 1 = 1
+                <if test="platformId != null and platformId != 0">
+                    AND platformId=#{platformId}
+                </if>
+                ORDER BY dtEventTime DESC)AS t
+            GROUP BY uin)AS q
     </select>
 
     <!-- 金币产出或消耗 -->

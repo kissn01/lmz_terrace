@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>游戏在线时长--灵猫传</title>
+    <title>玩家基础行为--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="灵猫传 经营分析系统."
+    <meta content="迷你星域冒险 经营分析系统."
           name="description"/>
     <meta content="" name="author"/>
     <link rel="shortcut icon" th:href="@{favicon.ico}">
@@ -34,7 +34,7 @@
 <div th:replace="~{common/public_main::loader}"></div>
 
 <!-- 左侧菜单栏 -->
-<div th:replace="~{common/public_main::sidebar(isSelectParent='userInfo',isSelect='gameOnLineTime')}"></div>
+<div th:replace="~{common/public_main::sidebar(isSelectParent='userInfo',isSelect='basicBehavior')}"></div>
 
 <!-- 顶部+内容 -->
 <div class="wrapper">
@@ -42,15 +42,15 @@
         <div th:replace="~{common/public_main::heard}"></div>
         <!-- 内容  -->
         <div class="container main-container" id="main-container">
-            <!--1.新进数据总览折线图-->
-            <div class="row">
+            <!--1.玩家基础行为-->
+           <!-- <div class="row">
                 <div class="col-12">
                     <div class="card border-0 shadow-sm mb-4">
-                        <!--top-->
+                        &lt;!&ndash;top&ndash;&gt;
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col">
-                                    <p class="fs15">运营数据总览折线图</p>
+                                    <p class="fs15">玩家基础行为</p>
                                 </div>
                                 <form class="form-inline search align-self-center">
                                     <input class="form-control form-control-sm" type="search" placeholder="搜索..."
@@ -79,13 +79,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!--center-->
+                        &lt;!&ndash;center&ndash;&gt;
                         <div class="card-body">
                             <canvas id="registDatasLine" height="50"></canvas>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!--2.table-->
             <div class="row">
@@ -94,7 +94,7 @@
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col-12 col-md">
-                                    <p class="fs15">运营数据总览</p>
+                                    <p class="fs15">玩家基础行为</p>
                                 </div>
                                 <div th:replace="~{common/public_main::tbForm}"></div>
                             </div>
@@ -112,7 +112,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 col-md text-center text-md-left align-self-center">
-                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
+                    <p><a href="http://www.gdreamart.com/" target="_blank">迷你星域冒险</a></p>
                 </div>
                 <div class="col-12 col-md-auto text-center text-md-right">
                     <ul class="nav justify-content-center justify-md-content-end">
@@ -216,7 +216,7 @@
                 platformId = platform.options[index].value;
                 $.ajax({
                     type: "post",
-                    url: '/operation/operationData',
+                    url: '/userInfo/basicBehavior',
                     dataType: 'json',
                     data: {
                         startDate: startDate,
@@ -226,32 +226,32 @@
                     success: function (data) {
                         console.log('-------------------');
                         console.log(data);
-                        //1.数据总览折线图
-                        var labelList = [];
-                        var dataList = [];
-                        for (var i = 0; i < data.data.length; i++) {
-                            labelList.push(data.data[i].myDate);
-                            dataList.push(data.data[i].activeUser);
-                        }
-                        new Chart(document.getElementById('registDatasLine').getContext('2d'), {
-                            type: 'line',
-                            data: {
-                                labels: labelList.reverse(),
-                                datasets: [{
-                                    label: '数据总览',
-                                    borderWidth: '2',
-                                    borderColor: '#F85778',
-                                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                                    data: dataList.reverse(),
-                                }]
-                            },
-                            options: {
-                                tooltips: {
-                                    intersect: false,
-                                    mode: 'index',
-                                },
-                            }
-                        });
+                        // //1.数据总览折线图
+                        // var labelList = [];
+                        // var dataList = [];
+                        // for (var i = 0; i < data.data.length; i++) {
+                        //     labelList.push(data.data[i].myDate);
+                        //     dataList.push(data.data[i].activeUser);
+                        // }
+                        // new Chart(document.getElementById('registDatasLine').getContext('2d'), {
+                        //     type: 'line',
+                        //     data: {
+                        //         labels: labelList.reverse(),
+                        //         datasets: [{
+                        //             label: '数据总览',
+                        //             borderWidth: '2',
+                        //             borderColor: '#F85778',
+                        //             backgroundColor: 'rgba(0, 0, 0, 0)',
+                        //             data: dataList.reverse(),
+                        //         }]
+                        //     },
+                        //     options: {
+                        //         tooltips: {
+                        //             intersect: false,
+                        //             mode: 'index',
+                        //         },
+                        //     }
+                        // });
 
                         fnCallback(data);
                     }
@@ -263,67 +263,35 @@
             "aLengthMenu": [5, 25, 50, 100, 500],
             "columns": [
                 {
-                    "data": "myDate",
+                    "data": "dateSign",
                     title: "日期",
                     class: "info"
                 },
                 {
-                    "data": "newAddUser",
-                    title: "新增玩家",
-                    class: "info"
-                },
-
-                {
-                    "data": "activeUser",
+                    "data": "dau",
                     title: "活跃玩家",
                     class: "info"
-                }, {
-                    "data": "topUpUser",
-                    title: "充值玩家",
-                    class: "info"
                 },
-                {
-                    "data": "topUpAmount",
-                    title: "充值金额",
-                    class: "info"
-                },
-                {
-                    "data": "arppu",
-                    title: "ARPPU",
-                    class: "info"
-                },
-                {
-                    "data": "arpu",
-                    title: "ARPU",
-                    class: "info"
-                },
-                {
-                    "data": "topUpPermeability",
-                    title: "充值渗透率",
-                    class: "info"
-                },
-                {
-                    "data": "morrowRetention",
-                    title: "次日留存",
-                    class: "info"
-                },
-                {
-                    "data": "threeDayRetention",
-                    title: "三日留存",
-                    class: "info"
-                },
-                {
-                    "data": "sevenDayRetention",
-                    title: "七日留存",
-                    class: "info"
-                },
-                {
-                    "data": "fifteenDayRetention",
-                    title: "十五日留存",
-                    class: "info"
-                }
 
-            ]
+                {
+                    "data": "loginCount",
+                    title: "登录次数",
+                    class: "info"
+                }, {
+                    "data": "gameTime",
+                    title: "游戏时长",
+                    class: "info"
+                },
+                {
+                    "data": "planTime",
+                    title: "副本时长",
+                    class: "info"
+                },
+                {
+                    "data": "cityTime",
+                    title: "小镇时长",
+                    class: "info"
+                }]
         });
     });
 </script>

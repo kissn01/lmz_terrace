@@ -1,0 +1,77 @@
+###数据库信息
+	数据库名称: 
+		db_mini_log
+	用户名: 
+		root
+    密码: 
+    	root@appinside
+	地址： 
+		124.71.21.58:3306
+	文件： 
+		db_mini_log.sql
+	数据表:
+		sys_user -- 用户名密码
+		sys_role -- 权限
+		sys_user_role -- 用户权限关联表
+		其他表 -- 为每天凌晨5点创建第二天日期的表
+
+###入库脚本信息
+	1)日志
+		位置： 
+			/data/tlog/log
+		格式： 
+			ymcx_20201117_1600.log
+	2)创建脚本存放文件夹
+		mkdir -vf /home/sy/writelog/mini/conf
+		mkdir -vf /home/sy/writelog/mini/log
+		mkdir -vf /home/sy/writelog/mini/runbyevenyhour
+		mkdir -vf /home/sy/writelog/mini/runbyfivehour
+	3)配置文件	
+		位置：
+			/home/sy/writelog/mini/conf
+		文件：
+			db.cnf -- 数据库连接信息 
+			TlogMini.xml --数据表结构	
+	4)日志文件
+		位置：
+			/home/sy/writelog/mini/log
+		文件：  
+			 createtable.log --建表日志
+			 invokelogDb.log --入库日志	
+	5)入库文件     
+		位置：
+			/home/sy/writelog/mini/runbyevenyhour
+		文件：
+			invokelogDb.sh -- 入口文件 
+			logDb.py --主处理文件
+			ymcxtlog.py --解析表结构文件(TlogMini.xml文件)
+	6)建表文件
+		位置：
+			/home/sy/writelog/mini/runbyfivehour
+		文件：
+			createtable.sh -- 每天定时创建数据表 
+	7)定时器
+		#每天1点统计累计注册
+	    0 1 * * * /home/yoooum/mini/runbyonehour/main.sh >/home/yoooum/mini/log/main.log 2>&1 &
+	    #mini每天5点 创建第二天需要的数据表
+	    0 5 * * * /home/yoooum/mini/runbyfivehour/createtable.sh >/home/yoooum/mini/log/createtable.log 2>&1 &
+	    #每小时的第30分钟写日志
+	    30 * * * * /home/yoooum/mini/runbyevenyhour/invokelogDb.sh >/home/yoooum/mini/log/invokelogDb.log 2>&1 &
+
+###服务器信息
+	1)位置：
+		/home/yoooum/webapp
+	2)文件：
+		mndxc_terrace-0.0.1-SNAPSHOT.jar  --主程序
+		nohup.out --日志输入文件
+		start.sh  --服务启动
+		shutdown.sh --服务停止 
+	3)端口号：
+		20000
+	4)访问地址：
+		http://124.71.21.58:20000/login
+		超级账号： admin
+		密码：	  mini@123
+		查询：目前数据仅有20号--22号 查询时请选择日期
+	5)玩家注册后需到数据库添加权限
+		根据玩家注册的id添加相应权限id 到sys_user_role 表

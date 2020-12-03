@@ -41,8 +41,11 @@
 		createtable.sh -- 每天定时创建数据表 
 		
 7.定时器
-	#mini每天5点 创建第二天需要的数据表
-	0 5 * * * /home/sy/writelog/mini/runbyfivehour/createtable.sh >/home/sy/writelog/mini/log/createtable.log 2>&1 &
+	#每天1点统计累计注册
+    0 1 * * * /home/yoooum/mini/runbyonehour/main.sh >/home/yoooum/mini/log/main.log 2>&1 &
 
-	#每小时的第30分钟写日志
-	30 * * * * /home/sy/writelog/mini/runbyevenyhour/invokelogDb.sh >/home/sy/writelog/mini/log/invokelogDb.log 2>&1 &
+    #mini每天5点 创建第二天需要的数据表
+    0 5 * * * /home/yoooum/mini/runbyfivehour/createtable.sh >/home/yoooum/mini/log/createtable.log 2>&1 &
+
+    #每小时的第30分钟写日志
+    30 * * * * /home/yoooum/mini/runbyevenyhour/invokelogDb.sh >/home/yoooum/mini/log/invokelogDb.log 2>&1 &

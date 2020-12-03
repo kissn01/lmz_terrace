@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>会员注册</title>
+    <title>会员注册--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="Worlds Best Admin UX Dashbaoard PRO version for bootstrap template, Select, Calandar, Report, Charts, Tables etc."
@@ -37,8 +37,8 @@
                         <a href="" class="logo text-white">
                             <img th:src="@{/img/logoicon.svg}" alt="" class="logo-icon">
                             <div class="logo-text">
-                                <h5 class="fs22 mb-0">迷你地下城<!--<sup class="badge badge-danger">PRO</sup>--></h5>
-                                <p class="text-uppercase fs11">MINI-DI-XIA-CHENG</p>
+                                <h5 class="fs22 mb-0">迷你星域冒险</h5>
+                                <p class="text-uppercase fs11">MINI-XING-YU-MAO-XIAN</p>
                             </div>
                         </a>
                     </div>
@@ -74,14 +74,16 @@
                                 </div>
                             </div>
                             <div class="my-3 row">
-                                <div class="col-12 py-1">
+                                <div class="col-12 col-md  py-1">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="customCheck1"
                                                checked="">
                                         <label class="custom-control-label" for="customCheck1">同意用户协议</label>
                                     </div>
                                 </div>
-
+                                <div class="col-12 col-md py-1 text-left text-md-right">
+                                    <a th:href="@{/login}" style="color: white;" class="template-primary">前往登录</a>
+                                </div>
                             </div>
                             <div class="text-left mb-4">
                                 <button type="button" th:onclick="userRegist()" class=" btn btn-primary btn-block">注册<i

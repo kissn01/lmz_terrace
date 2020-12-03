@@ -82,6 +82,7 @@ public class OperationService
                 System.out.println("SQL查询异常！" + e.getMessage());
             }
             operationData.setRegistSum(registSum);
+            System.out.println("注册人数:"+register);
             //4.查询次日留存
             operationData.setMorrowRetention(register != 0
                     ? df.format((float) queryRetention(betweenDate.get(i), 1, platformId) * 100 / register)
@@ -338,13 +339,16 @@ public class OperationService
         String today = cn.hutool.core.date.DateUtil.today();
         String checksDate = DateUtil.getDateAfter(checkDate, passDate, "yyyy-MM-dd");
         int sanmeSize = 0;
-        if (today.compareTo(checksDate) > 0)
+        if (today.compareTo(checksDate) >= 0)
         {
             // 1)获取当天注册uin
             List<Integer> regUinList = new ArrayList();
             try
             {
                 regUinList = publicDao.queryRegisterUin("PlayerRegister_" + checkDate.replace("-", ""), platformId);
+                System.out.println("======当天注册uin======");
+                System.out.println(regUinList.size());
+                System.out.println(regUinList);
             }
             catch (Exception e)
             {
@@ -356,6 +360,9 @@ public class OperationService
             {
                 loginUinList = publicDao
                         .queryLoginUin("PlayerLogin_" + DateUtil.getDateAfter(checkDate, passDate, "yyyyMMdd"), platformId);
+                System.out.println("======次日登陆uin======");
+                System.out.println(loginUinList.size());
+                System.out.println(loginUinList);
             }
             catch (Exception e)
             {
@@ -363,179 +370,140 @@ public class OperationService
             }
             // 3)获取集合中相同元素的个数
             sanmeSize = CollectionUtil.getSame(regUinList, loginUinList).size();
+            System.out.println("集合中相同元素的个数:"+sanmeSize);
         }
 
         return sanmeSize;
     }
 
 
-    //钻石数据总览
-    public List<Diamond> queryPayDiamond(String startDate, String expirationDate, Integer platformId)
+    //迷你币数据总览
+    public List<MiNiCoin> queryPayDiamond(String startDate, String expirationDate, Integer platformId)
     {
-        List<Diamond> diamondList = new ArrayList<>();
+        List<MiNiCoin> miNiCoinList = new ArrayList<>();
         // 获取需要查询的日期
         List<String> dateList = DateUtil.getBetweenDateByString(startDate, expirationDate);
         for (int i = 0; i < dateList.size(); i++)
         {
-            Diamond diamond = new Diamond();
-            diamond.setDateSign(dateList.get(i));
+            MiNiCoin miNiCoin = new MiNiCoin();
+            miNiCoin.setDateSign(dateList.get(i));
             long addSum = 0;
             long subSum = 0;
             long chargeSum = 0;
             long welfareSum = 0;
+            long planSum = 0;
 
             int dau = 0;
-            List<DiamodTwos> diamondAdd = new ArrayList<>();
-            List<DiamodTwos> diamondSub = new ArrayList<>();
+            List<MiNiTwos> miNiTwosAdd = new ArrayList<>();
+            List<MiNiTwos> miNiTwosSub = new ArrayList<>();
             int iAfterCount = 0;
             // 1.查询dau
-            try
-            {
+            try{
                 dau = publicDao.queryLoginSum("PlayerLogin_" + dateList.get(i).replace("-", ""), platformId);
-            }
-            catch (Exception e)
-            {
+            }catch (Exception e){
                 System.out.println("SQL查询异常：" + e.getMessage());
             }
-            // 2.钻石产出
-            try
-            {
-                diamondAdd = operationDao.queryDiamondCharge("DiamondChangeFlow_" + dateList.get(i).replace("-", ""),
-                        1, platformId);
-            }
-            catch (Exception e)
-            {
+            // 2.迷你币产出
+            try{
+                miNiTwosAdd = operationDao.queryMiNiCharge("DiamondChangeFlow_" + dateList.get(i).replace("-", ""),
+                        1,platformId);
+            }catch (Exception e){
                 System.out.println("SQL查询异常：" + e.getMessage());
             }
-            for (int j = 0; j < diamondAdd.size(); j++)
+            for (int j = 0; j < miNiTwosAdd.size(); j++)
             {
-                int reason = diamondAdd.get(j).getReason();
-                addSum += diamondAdd.get(j).getSum();
-                // 39充值
-                if (reason == 39)
-                {
-                    chargeSum = diamondAdd.get(j).getSum();
-                }
-                // 福利产生钻石量 1、2、3、4、25、26、27、30、32、33、44、89、110、114、115、128、129、130、135、138
-                if (reason == 1 || reason == 2 || reason == 3 || reason == 4 || reason == 25 || reason == 26
-                        || reason == 27 || reason == 30 || reason == 32 || reason == 33 || reason == 44
-                        || reason == 89 || reason == 110 || reason == 114 || reason == 115 || reason == 128
-                        || reason == 129 || reason == 130 || reason == 135 || reason == 138)
-                {
-                    welfareSum += diamondAdd.get(j).getSum();
+                int reason = miNiTwosAdd.get(j).getReason();
+                //获取总产生的--去除GM(reason==1000)添加的
+                if(reason!=1000){addSum += miNiTwosAdd.get(j).getSum();}
+
+                // 获取充值产生的
+                if (reason == 16){chargeSum = miNiTwosAdd.get(j).getSum();}
+
+                //获取副本产生的 13
+                if (reason == 13){planSum = miNiTwosAdd.get(j).getSum();}
+
+                //获取福利产生的 reason非13   16  1000
+                if (reason != 13 && reason != 16 && reason != 1000 ){
+                    welfareSum += miNiTwosAdd.get(j).getSum();
                 }
             }
-            try
-            {// 3.钻石消耗
-                diamondSub = operationDao.queryDiamondCharge("DiamondChangeFlow_" + dateList.get(i).replace("-", ""),
+            try{// 3.迷你币消耗
+                miNiTwosSub = operationDao.queryMiNiCharge("DiamondChangeFlow_" + dateList.get(i).replace("-", ""),
                         2, platformId);
-                // 4.钻石存量
+                // 4.迷你币存量
                 iAfterCount = operationDao.queryDiamondAfterCount(
                         "DiamondChangeFlow_" + dateList.get(i).replace("-", ""), dateList.get(i) + " 0:00:00",
                         dateList.get(i) + " 23:59:59", platformId);
-            }
-            catch (Exception e)
-            {
+                System.out.println("============迷你币存量============");
+                System.out.println(iAfterCount);
+            }catch (Exception e){
                 System.out.println("SQL查询异常：" + e.getMessage());
             }
-            for (int k = 0; k < diamondSub.size(); k++)
+            for (int k = 0; k < miNiTwosSub.size(); k++)
             {
-                subSum += diamondSub.get(k).getSum();
+                subSum += miNiTwosSub.get(k).getSum();
             }
             // 设值
-            diamond.setAddSum(addSum);
-            diamond.setSubSum(-subSum);
-            diamond.setChargeSum(chargeSum);
-            diamond.setWelfareSum(welfareSum);
-            diamond.setSubAvg(dau == 0 ? "0" : df.format((float) -subSum / dau));
-            diamond.setWelfareSumAvg(dau == 0 ? "0" : df.format((float) welfareSum / dau));
-            diamond.setStorageAvg(dau == 0 ? "0" : df.format((float) iAfterCount / dau));
-            diamondList.add(diamond);
+            miNiCoin.setAddSum(addSum);
+            miNiCoin.setSubSum(-subSum);
+            miNiCoin.setChargeSum(chargeSum);
+            miNiCoin.setWelfareSum(welfareSum);
+            miNiCoin.setPlanSum(planSum);
+            miNiCoin.setSubSumAvg(dau == 0 ? "0" : df.format((float) -subSum / dau));
+            miNiCoin.setPlanSumAvg(dau == 0 ? "0" : df.format((float) planSum / dau));
+            miNiCoin.setStorageAvg(dau == 0 ? "0" : df.format((float) iAfterCount / dau));
+            miNiCoinList.add(miNiCoin);
         }
 
-        return diamondList;
+        return miNiCoinList;
     }
 
     //钻石消耗途径分布
-    public List<DiamondSub> diamodConsumptionData(String startDate, String expirationDate, Integer platformId)
+    public List<MiNiCoinSub> diamodConsumptionData(String startDate, String expirationDate, Integer platformId)
     {
-        List<DiamondSub> DiamondSubs = new ArrayList<>();
+        List<MiNiCoinSub> miNiCoinSubList = new ArrayList<>();
         // 获取需要查询的日期
         List<String> dateList = DateUtil.getBetweenDateByString(startDate, expirationDate);
         for (int i = 0; i < dateList.size(); i++)
         {
-            DiamondSub DiamondSub = new DiamondSub(dateList.get(i), 0, 0, "0.00", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0);
-            Integer subSum = 0;
-            Integer subPlaySum = 0;
-            List<DiamodTwos> diamondSub = new ArrayList<>();
+            MiNiCoinSub miNiCoinSub = new MiNiCoinSub(dateList.get(i),0,0,0,0,0,0);
+            List<MiNiTwos> miNiTwos = new ArrayList<>();
             try{
-                diamondSub = operationDao.queryDiamondCharge("DiamondChangeFlow_" + dateList.get(i).replace("-", ""),
+                miNiTwos = operationDao.queryMiNiCharge("DiamondChangeFlow_" + dateList.get(i).replace("-", ""),
                         2, platformId);
             }catch (Exception e){
                 System.out.println("SQL查询异常：" + e.getMessage());
             }
 
-            for (int k = 0; k < diamondSub.size(); k++)
+            for (int k = 0; k < miNiTwos.size(); k++)
             {
-                subSum += diamondSub.get(k).getSum();
-                subPlaySum += diamondSub.get(k).getPlayNum();
-                if (diamondSub.get(k).getReason() == 31)
+                if (miNiTwos.get(k).getReason() == 31)
                 {
-                    DiamondSub.setRetroactive(-diamondSub.get(k).getSum());
-                    DiamondSub.setRetroactivePlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 51)
+                    miNiCoinSub.setUnlockCharacter(-miNiTwos.get(k).getSum());
+                }else if (miNiTwos.get(k).getReason() == 20)
                 {
-                    DiamondSub.setMerchantExchange(-diamondSub.get(k).getSum());
-                    DiamondSub.setMerchantExchangePlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 53)
+                    miNiCoinSub.setRisingStarRole(-miNiTwos.get(k).getSum());
+                }else if (miNiTwos.get(k).getReason() == 46)
                 {
-                    DiamondSub.setBuyItem(-diamondSub.get(k).getSum());
-                    DiamondSub.setBuyItemPlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 98)
+                    miNiCoinSub.setRefreshStore(-miNiTwos.get(k).getSum());
+                }else if (miNiTwos.get(k).getReason() == 4)
                 {
-                    DiamondSub.setAddStar(-diamondSub.get(k).getSum());
-                    DiamondSub.setAddStarPlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 119)
+                    miNiCoinSub.setShopPurchase(-miNiTwos.get(k).getSum());
+                }else if (miNiTwos.get(k).getReason() == 25)
                 {
-                    DiamondSub.setEveryDayTranscript(-diamondSub.get(k).getSum());
-                    DiamondSub.setEveryDayTranscriptPlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 122)
+                    miNiCoinSub.setUnlockedFarmland(-miNiTwos.get(k).getSum());
+                }else if (miNiTwos.get(k).getReason() == 36)
                 {
-                    DiamondSub.setHarvestCat(-diamondSub.get(k).getSum());
-                    DiamondSub.setHarvestCatPlay(diamondSub.get(k).getPlayNum());
+                    miNiCoinSub.setRanchUpgrade(-miNiTwos.get(k).getSum());
                 }
-                if (diamondSub.get(k).getReason() == 126)
-                {
-                    DiamondSub.setDilatationCatHome(-diamondSub.get(k).getSum());
-                    DiamondSub.setDilatationCatHomePlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 136)
-                {
-                    DiamondSub.setUnlockHostStory(-diamondSub.get(k).getSum());
-                    DiamondSub.setUnlockHostStoryPlay(diamondSub.get(k).getPlayNum());
-                }
-                if (diamondSub.get(k).getReason() == 137)
-                {
-                    DiamondSub.setBuyBag(-diamondSub.get(k).getSum());
-                    DiamondSub.setBuyBagPlay(diamondSub.get(k).getPlayNum());
-                }
-            }
-            DiamondSub.setSubSum(-subSum);
-            DiamondSub.setSubPlaySum(subPlaySum);
-            DiamondSub.setSubPlayAvg(DiamondSub.getSubPlaySum() != 0
-                    ? df.format((float) DiamondSub.getSubSum() / DiamondSub.getSubPlaySum())
-                    : "0.00");
 
-            DiamondSubs.add(DiamondSub);
+            }
+
+
+            miNiCoinSubList.add(miNiCoinSub);
         }
 
-        return DiamondSubs;
+        return miNiCoinSubList;
     }
 
     //金币查询

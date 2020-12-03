@@ -984,6 +984,36 @@ public class DateUtil
 
         return map;
     }
+    /**
+     * @Description: 整数(秒数)转换为时分秒格式
+     * @Date 2020/11/26 16:31
+     * @param time
+     * @return
+    **/
+    public static String secToTime(long time) {
+        String timeStr = null;
+        long hour = 0;
+        long minute = 0;
+        long second = 0;
+        if (time <= 0){
+            return "0小时:00分钟:00秒";
+        }else {
+            minute = time / 60;
+            if (minute < 60) {
+                second = time % 60;
+                timeStr = "0小时:"+ minute + "分:" + second+ "秒";
+            } else {
+                hour = minute / 60;
+                if(hour > 99){
+                return "99:59:59"; }
+                minute = minute % 60;
+                second = time - hour * 3600 - minute * 60;
+                timeStr = hour + "小时:" + minute + "分:" + second+ "秒";
+
+            }
+        }
+        return timeStr;
+    }
 
 
 }

@@ -12,6 +12,9 @@ public interface OperationDao
     //查询每个小时注册的人数
     List<RegistByHour> queryRegistByHour(@Param("tbName") String tbName, @Param("begTime") Integer begTime, @Param("endTime") Integer endTime, @Param("platformId") Integer platformId);
 
+    //查询迷你币各种方式的产出或消耗
+    List<MiNiTwos>  queryMiNiCharge(@Param("tbName")String tbName, @Param("type")int type,@Param("platformId")Integer platformId);
+
     //钻石产出或消耗
     List<DiamodTwos>  queryDiamondCharge(@Param("tbName")String tbName, @Param("type")int type, @Param("platformId")Integer platformId);
 

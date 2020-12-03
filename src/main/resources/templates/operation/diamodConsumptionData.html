@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>钻石消耗途径--灵猫传</title>
+    <title>迷你币消耗途径--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="灵猫传 经营分析系统."
+    <meta content="迷你星域冒险 经营分析系统."
           name="description"/>
     <meta content="" name="author"/>
     <link rel="shortcut icon" th:href="@{favicon.ico}">
@@ -34,7 +34,7 @@
 <div th:replace="~{common/public_main::loader}"></div>
 
 <!-- 左侧菜单栏 -->
-<div th:replace="~{common/public_main::sidebar(isSelectParent='main',isSelect='main')}"></div>
+<div th:replace="~{common/public_main::sidebar(isSelectParent='resource',isSelect='diamodConsumptionData')}"></div>
 
 <!-- 顶部+内容 -->
 <div class="wrapper">
@@ -42,14 +42,14 @@
         <div th:replace="~{common/public_main::heard}"></div>
         <!-- 内容  -->
         <div class="container main-container" id="main-container">
-            <div class="row">
+           <!-- <div class="row">
                 <div class="col-12">
                     <div class="card border-0 shadow-sm mb-4">
-                        <!--top-->
+                        &lt;!&ndash;top&ndash;&gt;
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col">
-                                    <p class="fs15">钻石消耗途径折线图</p>
+                                    <p class="fs15">迷你币消耗途径折线图</p>
                                 </div>
                                 <form class="form-inline search align-self-center">
                                     <input class="form-control form-control-sm" type="search" placeholder="搜索..."
@@ -78,13 +78,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!--center-->
+                        &lt;!&ndash;center&ndash;&gt;
                         <div class="card-body">
                             <canvas id="registDataLine" height="50"></canvas>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!--2.table-->
             <div class="row">
@@ -93,7 +93,7 @@
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col-12 col-md">
-                                    <p class="fs15">钻石基本情况</p>
+                                    <p class="fs15">迷你币消耗</p>
                                 </div>
                                 <div th:replace="~{common/public_main::tbForm}"></div>
                             </div>
@@ -107,22 +107,7 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md text-center text-md-left align-self-center">
-                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
-                </div>
-                <div class="col-12 col-md-auto text-center text-md-right">
-                    <ul class="nav justify-content-center justify-md-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">版权所有@2018--2098游梦初心文化网络有限公司</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div th:replace="~{common/public_main::footer}"></div>
 </div>
 
 <div th:replace="~{common/public_main::qq}"></div>
@@ -221,7 +206,7 @@
                         console.log('-------------------');
                         console.log(data);
                         //1.新进数据总览折线图(单线)
-                        var labelList = [];
+                        /*var labelList = [];
                         var dataList = [];
                         for (var i = 0; i < data.data.length; i++) {
                             labelList.push(data.data[i].dateSign);
@@ -232,7 +217,7 @@
                             data: {
                                 labels: labelList,
                                 datasets: [{
-                                    label: '钻石总消耗',
+                                    label: '迷你币总消耗',
                                     borderWidth: '2',
                                     borderColor: '#F85778',
                                     backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -245,7 +230,7 @@
                                     mode: 'index',
                                 },
                             }
-                        });
+                        });*/
 
 
                         fnCallback(data);
@@ -263,74 +248,32 @@
                     class: "info"
                 },
                 {
-                    "data": "subSum",
-                    title: "钻石总消耗",
+                    "data": "unlockCharacter",
+                    title: "解锁角色",
                     class: "danger"
                 },
                 {
-                    "data": "subPlaySum",
-                    title: "钻石消耗总人数",
+                    "data": "risingStarRole",
+                    title: "升星角色",
                     class: "danger"
                 },
                 {
-                    "data": "subPlayAvg",
-                    title: "人均消耗",
+                    "data": "refreshStore",
+                    title: "刷新商店",
                     class: "danger"
                 }, {
-                    "data": "retroactive",
-                    title: "补签 ",
+                    "data": "shopPurchase",
+                    title: "商店购买",
                     class: "danger"
                 },
                 {
-                    "data": "retroactivePlay",
-                    title: "补签人数 ",
+                    "data": "unlockedFarmland",
+                    title: "商店购买 ",
                     class: "danger"
                 },
                 {
-                    "data": "merchantExchange",
-                    title: "普通商人npc交易",
-                    class: "danger"
-                },
-                {
-                    "data": "merchantExchangePlay",
-                    title: "普通商人npc交易人数",
-                    class: "danger"
-                },
-                {
-                    "data": "buyItem",
-                    title: "购买体力",
-                    class: "danger"
-                }, {
-                    "data": "buyItemPlay",
-                    title: "购买体力人数",
-                    class: "danger"
-                }, {
-                    "data": "buyBag",
-                    title: "购买礼包",
-                    class: "danger"
-                }, {
-                    "data": "buyBagPlay",
-                    title: "购买礼包人数",
-                    class: "danger"
-                },
-                {
-                    "data": "harvestCat",
-                    title: "快速敷奶猫",
-                    class: "danger"
-                },
-                {
-                    "data": "harvestCatPlay",
-                    title: "快速敷奶猫人数",
-                    class: "danger"
-                },
-                {
-                    "data": "dilatationCatHome",
-                    title: "扩容猫容量",
-                    class: "danger"
-                },
-                {
-                    "data": "dilatationCatHomePlay",
-                    title: "扩容猫容量人数",
+                    "data": "ranchUpgrade",
+                    title: "牧场升级",
                     class: "danger"
                 }]
         });

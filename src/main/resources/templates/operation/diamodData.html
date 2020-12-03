@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>钻石数据总览--灵猫传</title>
+    <title>迷你币数据总览--迷你星域冒险</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <meta content="灵猫传 经营分析系统."
+    <meta content="迷你星域冒险 经营分析系统."
           name="description"/>
     <meta content="" name="author"/>
     <link rel="shortcut icon" th:href="@{favicon.ico}">
@@ -34,7 +34,7 @@
 <div th:replace="~{common/public_main::loader}"></div>
 
 <!-- 左侧菜单栏 -->
-<div th:replace="~{common/public_main::sidebar(isSelectParent='operation',isSelect='diamodData')}"></div>
+<div th:replace="~{common/public_main::sidebar(isSelectParent='resource',isSelect='diamodData')}"></div>
 
 <!-- 顶部+内容 -->
 <div class="wrapper">
@@ -43,10 +43,10 @@
         <!-- 内容  -->
         <div class="container main-container" id="main-container">
             <!--1.钻石基本情况总览折线图-->
-            <div class="row">
+           <!-- <div class="row">
                 <div class="col-12">
                     <div class="card border-0 shadow-sm mb-4">
-                        <!--top-->
+                        &lt;!&ndash;top&ndash;&gt;
                         <div class="card-header border-0 bg-none">
                             <div class="row">
                                 <div class="col">
@@ -79,13 +79,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!--center-->
+                        &lt;!&ndash;center&ndash;&gt;
                         <div class="card-body">
                             <canvas id="registDataLine" height="50"></canvas>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!--2.table-->
             <div class="row">
@@ -108,22 +108,7 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md text-center text-md-left align-self-center">
-                    <p><a href="http://www.gdreamart.com/" target="_blank">灵猫传官网</a></p>
-                </div>
-                <div class="col-12 col-md-auto text-center text-md-right">
-                    <ul class="nav justify-content-center justify-md-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">版权所有@2018--2098游梦初心文化网络有限公司</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <div th:replace="~{common/public_main::footer}"></div>
 </div>
 
 <div th:replace="~{common/public_main::qq}"></div>
@@ -222,7 +207,7 @@
                         console.log('-------------------');
                         console.log(data);
 
-                        var dataList = [];var addList = [];var subList = [];var chargeList = [];
+                       /* var dataList = [];var addList = [];var subList = [];var chargeList = [];
                         var subAvgList = [];var welfareSumList = [];var welfareSumAvgList = [];
                         var storageAvgList = [];
                         for (var i = 0; i < data.data.length; i++) {
@@ -290,7 +275,7 @@
                                     mode: 'index',
                                 },
                             }
-                        });
+                        });*/
 
                         fnCallback(data);
                     }
@@ -307,31 +292,31 @@
                     class: "info"
                 },{
                     "data": "addSum",
-                    title: "钻石总增量",
+                    title: "迷你币总增量",
                     class: "info"
                 },{
                     "data": "subSum",
-                    title: "钻石总消耗",
-                    class: "info"
-                },{
-                    "data": "chargeSum",
-                    title: "充值产出钻石量",
-                    class: "info"
-                },{
-                    "data": "subAvg",
-                    title: "人均钻石消耗量",
+                    title: "迷你币总消耗",
                     class: "info"
                 },{
                     "data": "welfareSum",
-                    title: "福利产出钻石量",
+                    title: "福利产出迷你币量",
                     class: "info"
                 },{
-                    "data": "welfareSumAvg",
-                    title: "",
+                    "data": "planSum",
+                    title: "副本产生迷你币量",
+                    class: "info"
+                },{
+                    "data": "subSumAvg",
+                    title: "人均迷你币消耗",
+                    class: "info"
+                },{
+                    "data": "planSumAvg",
+                    title: "人均副本迷你币量",
                     class: "info"
                 }, {
                     "data": "storageAvg",
-                    title: "人均钻石存量",
+                    title: "人均迷你币存量",
                     class: "info"
                 }]
         });

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoooum.dao.UserInfoDao">
+
+    <!-- 游戏时长 -->
+    <select id="queryGameTime" resultType="java.lang.Long">
+        SELECT IFNULL(SUM(idayonline),0)
+        FROM (
+            SELECT uin,idayonline
+            FROM(
+                SELECT uin,idayonline,eventTime
+                FROM ${tbName}
+                WHERE 1 = 1
+                <if test="platformId!=null and platformId!=0">
+                    AND platformId = #{platformId}
+                </if>
+                ORDER BY dtEventTime DESC)AS t
+            GROUP BY uin)AS q
+    </select>
+
+    <!-- 副本时长 -->
+    <select id="queryPlanTime" resultType="java.lang.Long">
+        SELECT IFNULL(SUM(battleTime),0)
+        FROM ${tbName}
+        WHERE 1 = 1
+        <if test="platformId!=null and platformId!=0">
+            AND platformId = #{platformId}
+        </if>
+    </select>
+
+
+    <!-- 游戏时长区间分布 -->
+    <select id="queryGameTimeSort" resultType="com.yoooum.entity.userinfo.TimeSort">
+        select
+        IFNULL(sum(t.planTime&gt;=0 AND t.planTime&lt;=600),0)AS timeSort01,
+        IFNULL(sum(t.planTime&gt;600 AND t.planTime&lt;=3600),0)AS timeSort02,
+        IFNULL(sum(t.planTime&gt;3600 AND t.planTime&lt;=7200),0)AS timeSort03,
+        IFNULL(sum(t.planTime&gt;7200 AND t.planTime&lt;=10800),0)AS timeSort04,
+        IFNULL(sum(t.planTime&gt;10800),0)AS timeSort05
+        from
+        (SELECT uin,idayonline as planTime
+        FROM(
+        SELECT uin,idayonline
+        FROM ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId = #{platformId}
+            </if>
+            <if test="activeUserId==1">
+                AND registertime &gt;= #{begRegTs}
+                AND registertime &lt;= #{endRegTs}
+            </if>
+        </where>
+        ORDER BY dtEventTime DESC)AS s
+        GROUP BY uin) as t
+    </select>
+
+    <!-- 副本时长区间分布 -->
+    <select id="queryPlanTimeSort" resultType="com.yoooum.entity.userinfo.TimeSort">
+        select
+        IFNULL(sum(t.planTime&gt;=0 AND t.planTime&lt;=600),0)AS timeSort01,
+        IFNULL(sum(t.planTime&gt;600 AND t.planTime&lt;=1800),0)AS timeSort02,
+        IFNULL(sum(t.planTime&gt;1800 AND t.planTime&lt;=3600),0)AS timeSort03,
+        IFNULL(sum(t.planTime&gt;3600),0)AS timeSort04
+        from
+        (select uin,sum(battleTime) as planTime
+        from ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId = #{platformId}
+            </if>
+            <if test="activeUserId==1">
+                AND registryTime &gt;= #{begRegTs}
+                AND registryTime &lt;= #{endRegTs}
+            </if>
+        </where>
+        group by uin) as t
+    </select>
+
+    <!--玩家角色使用情况-->
+    <select id="queryRoleUseCount" resultType="com.yoooum.entity.common.Twos">
+        select
+               roleID as levelId,
+               IFNULL(count(distinct uin),0)AS userNum
+        From ${tbName}
+        <where>
+            <if test="platformId!=null and platformId!=0">
+                platformId = #{platformId}
+            </if>
+        </where>
+        group by roleID
+    </select>
+
+    <!--角色出战频次-->
+    <select id="queryRolePlayCount" resultType="com.yoooum.entity.common.Twos">
+        select
+            t.s as levelId,
+            count(t.s) as userNum
+        from (
+            select
+                count(*) as s
+            From ${tbName}
+            where roleID = #{roleId}
+            <if test="platformId!=null and platformId!=0">
+                and platformId = #{platformId}
+            </if>
+            GROUP BY uin) as t
+        GROUP BY t.s
+    </select>
+
+    <!--角色平均出战频次-->
+    <select id="queryRolePlayCountAvg" resultType="java.lang.String">
+        select
+            IFNULL(CONVERT(count(uin)/count(distinct uin),DECIMAL(10,2)),0)
+        From ${tbName}
+        where roleID = #{roleId}
+        <if test="platformId!=null and platformId!=0">
+            and platformId = #{platformId}
+        </if>
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,48 @@
+###迷你项目入库脚本操作步骤
+
+1.日志
+	位置： 
+		/data/tlog/log
+	格式： 
+		ymcx_20201117_1600.log
+
+2.创建脚本存放文件夹
+	mkdir -vf /home/sy/writelog/mini/conf
+	mkdir -vf /home/sy/writelog/mini/log
+	mkdir -vf /home/sy/writelog/mini/runbyevenyhour
+	mkdir -vf /home/sy/writelog/mini/runbyfivehour
+
+3.配置文件	
+	位置：
+		/home/sy/writelog/mini/conf
+	文件：
+		db.cnf -- 数据库连接信息 
+		TlogMini.xml --数据表结构	
+
+4.日志文件
+	位置：
+		/home/sy/writelog/mini/log
+	文件：  
+		 createtable.log --建表日志
+		 invokelogDb.log --入库日志	
+
+5.入库文件     
+	位置：
+		/home/sy/writelog/mini/runbyevenyhour
+	文件：
+		invokelogDb.sh -- 入口文件 
+		logDb.py --主处理文件
+		ymcxtlog.py --解析表结构文件(TlogMini.xml文件)
+
+6.建表文件
+	位置：
+		/home/sy/writelog/mini/runbyfivehour
+	文件：
+		createtable.sh -- 每天定时创建数据表 
+		
+7.定时器
+	#mini每天5点 创建第二天需要的数据表
+	0 5 * * * /home/sy/writelog/mini/runbyfivehour/createtable.sh >/home/sy/writelog/mini/log/createtable.log 2>&1 &
+
+	#每小时的第30分钟写日志
+	30 * * * * /home/sy/writelog/mini/runbyevenyhour/invokelogDb.sh >/home/sy/writelog/mini/log/invokelogDb.log 2>&1 &

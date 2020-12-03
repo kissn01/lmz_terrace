@@ -44,3 +44,6 @@ logging:
       example:
         mapper : debug
 
+project:
+    projectName: "迷你星域冒险"
+    abbreviationName: "MINI-XING-YU-MAO-XIAN"

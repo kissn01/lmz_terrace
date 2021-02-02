@@ -58,7 +58,7 @@
 	    #每小时的第30分钟写日志
 	    30 * * * * /home/yoooum/mini/runbyevenyhour/invokelogDb.sh >/home/yoooum/mini/log/invokelogDb.log 2>&1 &
 
-###服务器信息
+###服务器信息【yoooum  yoooum@1234#  】
 	1)位置：
 		/home/yoooum/webapp
 	2)文件：
